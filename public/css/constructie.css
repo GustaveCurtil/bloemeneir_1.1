@@ -1,0 +1,139 @@
+@import url('https://fonts.googleapis.com/css2?family=Mynerve&display=swap');
+
+*, html {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    overscroll-behavior: none;
+}
+
+
+
+html {
+    font-family: "Mynerve", cursive;
+}
+
+h1, h2, h3 {
+    font-family: "Mynerve", cursive;
+}
+
+:root {
+    --height-header: 8rem;
+    --height-footer: 2.8rem;
+
+    --gap-big: 2.4rem;
+    --gap-small: 0.6rem;
+    --gap-mini: 0.2rem;
+
+    --color-bg:#f3e8ca;
+    --color-text: #354604;
+    --color-black: black;
+    --color-green: #a3b17e;
+    --color-yellow: #e7b92d;
+    --color-red: #e32138;
+    --color-purple: #a77db3;
+
+}
+
+.desktop {display: none;}
+
+body {
+    width: 100vw;
+    height: 100svh;
+
+    overflow: hidden;
+
+    background-color: var(--color-bg);
+    color: #354604;
+}
+
+header {
+    width: 100%;
+    height: var(--height-header);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+h1 {
+    height: 2.6rem;
+    
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+h1 a{
+ display: block;
+ height: 2.6rem;
+}
+svg {
+    padding: 0.6rem;
+    height: 8rem;
+width: 90%;
+}
+
+main {
+    width: 100%;
+    height: calc(100% - var(--height-header) - var(--height-footer));
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+nav {
+    font-size: 0.9rem;
+}
+
+
+footer {
+    height: var(--height-footer);
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    font-size: 0.9rem;
+}
+
+footer p {
+    line-height: 1rem;
+    font-size: 0.9rem;
+}
+
+footer p span{
+    font-size: 0.7rem;
+}
+
+footer a {
+    font-weight: 600;
+    text-decoration: none;
+}
+
+
+a {
+    color: var(--color-text);
+}
+
+img#logo {
+    width: 100%;
+    max-width: 350px;
+    aspect-ratio: 1/1;
+    object-fit: contain;
+    padding: var(--gap-mini);
+    background-color: var(--color-yellow);
+    border-radius: 50%;
+    border: 1px solid var(--color-text);
+    animation: rotate 6s ease-in-out infinite alternate;
+}
+
+@keyframes rotate {
+    from {
+        transform: rotate(1deg);
+    }
+    to {
+        transform: rotate(-1deg);
+    }
+}
