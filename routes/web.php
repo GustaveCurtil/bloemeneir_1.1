@@ -10,7 +10,7 @@ Route::get('/landing', function () {
     return view('landing');
 })->name('landing');
 
-Route::get('/petra-en-anne-sophie', function () {
+Route::get('/sfeer', function () {
     return view('over');
 })->name('over');
 

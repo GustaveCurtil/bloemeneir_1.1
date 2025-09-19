@@ -33,9 +33,9 @@
             <img id="logo" src="{{ asset('media/boeketje.png') }}" alt="">
         </div>
         <nav>
-            <a href="{{ route('over') }}" class="{{ request()->routeIs('over') ? 'actief' : '' }}">Petra & Anne-sophie</a>
-            <a href="{{ route('aanbod') }}" class="{{ request()->routeIs('aanbod') ? 'actief' : '' }}">bestellen</a>
-            <a href="{{ route('contact') }}" class="{{ request()->routeIs('contact') ? 'actief' : '' }}">info</a>
+            <a href="{{ route('over') }}" class="{{ request()->routeIs('over') ? 'actief' : '' }}">sfeer</a>
+            <a href="{{ route('aanbod') }}" class="{{ request()->routeIs('aanbod') ? 'actief' : '' }}">boeket bestellen</a>
+            <a href="{{ route('contact') }}" class="{{ request()->routeIs('contact') ? 'actief' : '' }}">info<span class="desktop">rmatie</span></a>
         </nav>
     </header>
     <div>
