@@ -58,8 +58,6 @@ body {
 }
 
 header {
-    position: sticky;
-    top: -4.6rem;
     width: 100%;
     max-width: var(--width-max);
     height: var(--height-header);
@@ -359,6 +357,9 @@ input {
     font-family: var(--font);
     padding: 0 var(--gap-mini);
     font-size: 1.1rem;
+
+    accent-color: var(--color-text);
+    caret-color: var(--color-text);
 }
 
 input[type="submit"] {
@@ -427,12 +428,41 @@ fieldset#aantal input {
 }
 
 main#gallerij>section:first-of-type {
-    display: flex;
-    flex-wrap: wrap;
+    columns: 3 150px;
+    column-gap: var(--gap-small);
 }
 
 main#gallerij>section:first-of-type img {
-    width: 50%;
-    object-fit: contain;
-    padding: var(--gap-small);
+    display: block;
+    width: 100%;
+    margin-bottom: var(--gap-small);
+}
+
+div#omhoog {
+    cursor: pointer;
+
+    position:fixed;
+    bottom: var(--gap-small);
+    right: var(--gap-small);
+
+    display: none;
+    justify-content: center;
+    align-items:center;
+
+    border: 1px solid var(--color-text);
+    animation: wobble 18s ease-in-out alternate-reverse infinite;
+    width: var(--gap-big);
+    height: auto;
+    min-height: var(--gap-big);
+    aspect-ratio: 1/1;
+    background-color: var(--color-bg);
+}
+
+div#omhoog:hover {
+    background-color: var(--color-text);
+    color: var(--color-bg);
+}
+
+div#omhoog.show{
+    display: flex;
 }
