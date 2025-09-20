@@ -1,6 +1,6 @@
 @extends('_layout')
 
-@section('title', 'landing')
+@section('title', '')
 
 @section('main')
 

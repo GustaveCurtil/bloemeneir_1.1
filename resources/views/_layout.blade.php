@@ -22,6 +22,7 @@
 </head>
 
 <body>
+  <div>
     <header>
         <div>
             {{-- <img id="logo" src="{{ asset('media/boeketje.png') }}" alt=""> --}}
@@ -49,6 +50,8 @@
     <div id="omhoog">
         <p>↑</p>
     </div>
+  </div>
+    
 </body>
 
 <script>
