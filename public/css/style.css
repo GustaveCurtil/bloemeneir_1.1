@@ -8,16 +8,12 @@
     overscroll-behavior: none;
 }
 
-
-html, h1, h2, h3 {
-    font-family: "Mynerve", cursive;
-}
-
-
 :root {
     --width-max: 800px;
     --height-header: 8rem;
     --height-footer: 4rem;
+
+    --height-line: 1.6rem;
 
     --gap-big: 2.4rem;
     --gap-medium: 1.2rem;
@@ -32,6 +28,15 @@ html, h1, h2, h3 {
     --color-red: #e32138;
     --color-purple: #a77db3;
 
+    --font: "Mynerve", cursive;
+}
+
+html, h1, h2, h3 {
+    font-family: var(--font);
+}
+
+h2 {
+    margin-bottom: var(--gap-small);
 }
 
 .desktop {display: none;}
@@ -54,7 +59,7 @@ body {
 
 header {
     position: sticky;
-    top: -4.4rem;
+    top: -4.6rem;
     width: 100%;
     max-width: var(--width-max);
     height: var(--height-header);
@@ -71,12 +76,12 @@ header>div {
     gap: 1rem;
     height: 4rem;
         width: 100%;
-    justify-content: space-between;
+    justify-content: space-evenly;
 }
 
 
 header svg {
-    height: 2.6rem;
+    height: 3rem;
         width: auto;
     
     filter: drop-shadow( 1px 1px 0px var(--color-bg)) drop-shadow( -1px 1px 0px var(--color-bg)) drop-shadow( 1px -1px 0px var(--color-bg)) drop-shadow( -1px -1px 0px var(--color-bg)) drop-shadow( 1px 0px 0px var(--color-bg)) drop-shadow( 0px 1px 0px var(--color-bg)) drop-shadow( 0px -1px 0px var(--color-bg)) drop-shadow( -1px -1px 0px var(--color-bg));
@@ -120,7 +125,7 @@ main#landing img {
     max-width: 400px;
 }
 
-main div {
+main>div {
     min-height: 3rem;
     display: flex;
     justify-content: center;
@@ -128,9 +133,9 @@ main div {
     padding: 0.4rem;
 }
 
-main div p {
+main>div>p {
     text-align: center;
-    font-family: "Mynerve", cursive;
+    font-family: var(--font);
 }
 
 
@@ -206,9 +211,13 @@ nav a:nth-child(3) {animation: wobble 18s ease-in-out alternate-reverse infinite
   }
 }
 
+img {
+    width: 100%;
+}
+
 section {
-    margin-top: 0.4rem;
-    margin-bottom: 0.8rem;
+    margin-top: var(--gap-small);
+    margin-bottom: var(--gap-medium);
     width: 100%;
 }
 
@@ -302,13 +311,27 @@ section.gallerij img {
     width: calc( (100% - var(--gap-small)) / 2 );
 }
 
+section#contact {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+section#contact p {
+    text-align: center;
+}
+
+section#kaart {
+    margin-bottom: 0;
+}
 
 footer {
     min-height: var(--height-footer);
 
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: start;
     align-items: center;
 }
 
@@ -323,4 +346,93 @@ footer p span{
 
 footer a {
     text-underline-offset: var(--gap-mini);
+}
+
+input {
+    height: var(--height-line);
+    border: 1px solid var(--color-text);
+    border-radius: 0;
+    color: var(--color-text);
+    margin-bottom: var(--gap-small);
+    background-color: var(--color-bg);
+
+    font-family: var(--font);
+    padding: 0 var(--gap-mini);
+    font-size: 1.1rem;
+}
+
+input[type="submit"] {
+    width: 100%;
+    background-color: var(--color-green);
+    color: var(--color-tekst);
+    font-weight: 600;
+    margin-bottom: 0;
+}
+
+
+input[type="checkbox"] {
+    
+    height: var(--height-line);
+    width: var(--height-line);
+
+    border: 1px solid var(--color-text);
+    border-radius: 0;
+    color: var(--color-text);
+}
+
+label {
+    line-height: var(--height-line);
+}
+
+form {
+    width: 100%;
+}
+
+fieldset {
+    width: 100%;
+    border: 0;
+
+    display: flex;
+    flex-direction: column;
+    margin-bottom: var(--gap-medium);
+}
+
+fieldset#aantal>div {
+    display: flex;
+    justify-content: space-between;
+}
+
+fieldset#aantal>div:not(:last-child) {
+    margin-bottom: var(--gap-small);
+}
+
+fieldset#aantal>div>img {
+    height: calc( 2 * var(--height-line));
+    width: calc( 2 * var(--height-line));
+    margin-right: var(--gap-small);
+}
+
+fieldset#aantal>div>label {
+        flex-grow: 1;
+}
+
+fieldset#aantal input {
+    height: calc( 2 * var(--height-line));
+    width: calc( 2 * var(--height-line));
+    aspect-ratio: 1/1;
+    text-align: center;
+    font-size: 2rem;
+    font-family: var(--font);
+    margin-bottom: 0
+}
+
+main#gallerij>section:first-of-type {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+main#gallerij>section:first-of-type img {
+    width: 50%;
+    object-fit: contain;
+    padding: var(--gap-small);
 }
