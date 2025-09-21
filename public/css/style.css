@@ -155,7 +155,7 @@ main {
 
 footer {
     min-height: var(--height-footer);
-    display: flex; flex-direction: column; justify-content: start; align-items: center;
+    display: flex; flex-direction: column; justify-content: center; align-items: center;
 }
 footer p { line-height: calc((var(--height-footer) / 3)); font-size: 0.9rem;}
 footer p span{font-size: 0.8rem;}
@@ -349,8 +349,16 @@ input {
     padding: 0 var(--gap-mini);
     font-size: 1.1rem;
 
+    background-color: #36460416;
+
     accent-color: var(--color-text);
     caret-color: var(--color-text);
+}
+input#nummer::placeholder {
+    font-size: 0.8rem;
+    color: var(--color-text);
+    opacity: 0.69;
+    font-family: var(--font2);
 }
 
 input[type="submit"] {
@@ -361,18 +369,38 @@ input[type="submit"] {
     margin-bottom: 0;
 }
 
-input[type="checkbox"] {
-    
+input[type="checkbox"], input[type="radio"] {
+    -webkit-appearance: none;
+    appearance: none;
     height: var(--height-line);
     width: var(--height-line);
+
+    margin-bottom: 0;
+    margin-right: var(--gap-small);
 
     border: 1px solid var(--color-text);
     border-radius: 0;
     color: var(--color-text);
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    font-family: var(--font);
+    font-size: 1.4rem;
+}
+
+
+input[type="checkbox"]:checked::before, input[type="radio"]:checked::before {
+  content: "v";
 }
 
 label {
     line-height: var(--height-line);
+}
+
+label.rij {
+    display: inline-flex;
 }
 
 fieldset#aantal>div {
@@ -392,6 +420,7 @@ fieldset#aantal>div>img {
 
 fieldset#aantal>div>label {
         flex-grow: 1;
+        margin-left: var(--gap-small);
 }
 
 fieldset#aantal input {
@@ -401,14 +430,59 @@ fieldset#aantal input {
     text-align: center;
     font-size: 2rem;
     font-family: var(--font);
-    margin-bottom: 0
+    margin-bottom: 0;
+    color: var(--color-text);
+}
+fieldset#aantal input::placeholder {color: var(--color-text);}
+
+fieldset#aantal>div:nth-child(1) input {background-color: var(--color-yellow);}
+fieldset#aantal>div:nth-child(2) input {background-color: var(--color-green);}
+fieldset#aantal>div:nth-child(3) input {background-color: var(--color-purple);}
+
+#aantal > div > div {
+    height: calc( (2* var(--height-line)));
+    aspect-ratio: 1/1;
+    -webkit-mask-image: url("/public/media/boeket.png");
+    -webkit-mask-repeat: no-repeat;
+    -webkit-mask-size: contain;
+    mask-image: url("/media/boeket.png");
+    mask-repeat: no-repeat;
+    mask-size: contain;
+    z-index: 20;
+}
+
+#aantal > div:nth-child(1) > div {background-color: var(--color-yellow); transform: rotate(-1deg);}
+#aantal > div:nth-child(2) > div {background-color: var(--color-green); transform: rotate(0deg) scaleX(-1);}
+#aantal > div:nth-child(3) > div {background-color: var(--color-purple); transform: rotate(1deg);}
+
+fieldset.vraag>*:not(:last-child) {
+    margin-bottom: var(--gap-small);
+}   
+
+
+/* CHECKOUT */
+ul {
+    list-style-position: inside;
+    list-style-type: '❀ ';
+    margin-bottom: var(--gap-small);
+}
+
+button {
+    height: var(--height-line);
+
+    border: 1px solid var(--color-text);
+    border-radius: 0;
+    background-color: var(--color-bg);
+    color: var(--color-text);
+
+    font-size: 1.1rem;
+    font-family: var(--font);
+    padding: 0 var(--gap-mini);
 }
 
 
-
-
 @media screen and (min-width: 800px) {
-    .mobile {display: none;}
+    span.mobile {display: none;}
     .desktop {display: flex;}
     span.desktop {display: inline;}
     section#aanbod {

@@ -20,6 +20,10 @@ public function store(Request $request)
             'option3' => 'nullable|integer|min:0',
         ]);
 
+        $validated['option1'] = $validated['option1'] ?? 0;
+        $validated['option2'] = $validated['option2'] ?? 0;
+        $validated['option3'] = $validated['option3'] ?? 0;
+
         // Create or find the client (based on email to avoid duplicates)
         $client = Client::firstOrCreate(
             ['email' => $validated['email']],
@@ -40,6 +44,9 @@ public function store(Request $request)
             'wich_friday' => now()->toDateString(), // or let user pick
         ]);
 
-        return redirect()->back()->with('success', 'Bestelling geplaatst!');
+        return redirect()->route('checkout', [
+            'client_id' => $client->id,
+            'order_id'  => $order->id,
+        ]);
     }
 }

@@ -1,7 +1,9 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\PageController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\PaymentController;
 
 Route::get('/', function () {
     return view('constructie');
@@ -27,4 +29,14 @@ Route::get('/boeketten/bestellen', function () {
     return view('boeket');
 });
 
-Route::post('/orders', [OrderController::class, 'store'])->name('order');
+
+Route::get('/checkout', [PageController::class, 'checkout'])->name('checkout');
+
+Route::post('/order', [OrderController::class, 'store'])->name('order');
+
+
+
+
+Route::get('/order', [PaymentController::class, 'orderForm']);
+// Route::post('/order', [PaymentController::class, 'processOrder'])->name('order');
+Route::get('/success', [PaymentController::class, 'success']);

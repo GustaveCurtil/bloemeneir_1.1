@@ -43,7 +43,7 @@
         @yield('main')
 
         <footer>
-            <p>🏵 <a href="">afspraken</a> 🏵</p>
+            {{-- <p>🏵 <a href="">afspraken</a> 🏵</p> --}}
             <p>website gemaakt met ♥ door <a href="https://kurtgustil.be/">kurtgustil</a></p>
         </footer>
     </div>
