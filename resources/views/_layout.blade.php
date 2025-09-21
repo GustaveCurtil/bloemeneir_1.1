@@ -53,26 +53,4 @@
   </div>
     
 </body>
-
-<script>
-  const omhoog = document.getElementById("omhoog");
-
-  // Show/hide based on scroll
-  window.addEventListener("scroll", () => {
-    if (window.scrollY > window.innerHeight) {
-      // fully past the first viewport
-      omhoog.classList.add("show");
-    } else {
-      omhoog.classList.remove("show");
-    }
-  });
-
-  // Scroll to top on click
-  omhoog.addEventListener("click", () => {
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth"
-    });
-  });
-</script>
 </html>

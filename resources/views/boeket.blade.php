@@ -7,7 +7,7 @@
     <main>
         <h2>boeketten bestellen</h2>
         <section>
-            <p>De boeketten kunnen vrijdag 26 september bij ons worden afgehaald in de <a href="https://maps.app.goo.gl/Hf76uVXTM3qEuUUi9" target="_blank">Stijn steruvelslaan 24</a> in Kessel-Lo</p>
+            <p>De boeketten kunnen vrijdag 26 september bij ons worden afgehaald in de <a href="https://maps.app.goo.gl/iUWhrSP8kW5jb1JJ6" target="_blank">Koning Albertlaan 77</a> in Kessel-Lo</p>
         </section>
         
             <form action="{{ route('order') }}" method="POST" >

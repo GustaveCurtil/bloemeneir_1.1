@@ -2,6 +2,10 @@
 
 @section('title', 'landing')
 
+@section('links')
+<script src="{{asset('/js/omhoog.js')}}" defer></script>
+@endsection
+
 @section('main')
 
     <main id="gallerij">
