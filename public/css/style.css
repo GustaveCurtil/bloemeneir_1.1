@@ -1,5 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Mynerve&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Comic+Relief:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&display=swap');
 
 *, html {
     padding: 0;
@@ -14,9 +15,11 @@
     --height-footer: 4rem;
 
     --height-line: 1.6rem;
+    --height-field: 2rem;
 
     --gap-big: 2.4rem;
-    --gap-medium: 1.2rem;
+    --gap-medium: 1.4rem;
+    --gap-normal: 1rem;
     --gap-small: 0.6rem;
     --gap-mini: 0.2rem;
 
@@ -29,7 +32,8 @@
     --color-purple: #a77db3;
 
     --font: "Mynerve", cursive;
-    --font2: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    /* --font2: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif; */
+    --font2: "DM Mono", monospace;
 }
 
 html, h1, h2, h3 {font-family: var(--font);}
@@ -37,6 +41,7 @@ h2 {margin-bottom: var(--gap-small);}
 h3 {text-align: center;}
 a {color: var(--color-text);}
 img {width: 100%;}
+i.small {font-size: 0.8rem; opacity: .69; font-style: normal;}
 
 section {width: 100%; margin-top: var(--gap-small); margin-bottom: var(--gap-medium);}
 
@@ -144,7 +149,7 @@ body>div>div {
 }
 
 main {
-    padding: var(--gap-medium) 0;
+    padding: var(--gap-medium) 0 0 0;
     flex-grow: 1;
     width: calc(100% - 2 * var(--gap-small));
     max-width: var(--width-max);
@@ -184,9 +189,16 @@ main#landing {
     align-items: center;
 }
 
+p.slogan {
+    font-size: 1.1rem;
+    font-family: var(--font2);
+    text-align: center;
+    font-weight: 600;
+}
+
 main#landing img {
-    width: 69%;
-    max-width: 400px;
+    width: 75%;
+    max-width: 380px;
 }
 
 img#logo {
@@ -334,15 +346,15 @@ fieldset {
 
     display: flex;
     flex-direction: column;
-    margin-bottom: var(--gap-medium);
+    margin-bottom: var(--gap-big);
 }
 
-input {
-    height: var(--height-line);
+input, select {
+    height: var(--height-field);
     border: 1px solid var(--color-text);
     border-radius: 0;
     color: var(--color-text);
-    margin-bottom: var(--gap-small);
+    margin-bottom: var(--gap-medium);
     background-color: var(--color-bg);
 
     font-family: var(--font);
@@ -354,11 +366,76 @@ input {
     accent-color: var(--color-text);
     caret-color: var(--color-text);
 }
-input#nummer::placeholder {
+fieldset.lijnen input::placeholder {
     font-size: 0.8rem;
     color: var(--color-text);
     opacity: 0.69;
     font-family: var(--font2);
+}
+fieldset.lijnen>input{
+    border: 0;
+    border-bottom: 2px dashed var(--color-text);
+    border-radius: 0;
+    color: var(--color-text);
+    margin-bottom: var(--gap-medium);
+    background-color: var(--color-bg);
+    padding: 0;
+
+    font-family: var(--font);
+    font-size: 1.4rem;
+
+    accent-color: var(--color-text);
+    caret-color: var(--color-text);
+}
+textarea:focus, input:focus{
+    outline: none;
+}
+
+select {
+    font-family: var(--font2);
+    font-size: 0.9rem;
+}
+select:focus {
+    background-color: #e3dab8;
+}
+
+
+
+/* WebKit and Blink */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type="number"] {
+  display: inline-flex;
+  align-items: center;
+  background-color: rgba(245, 222, 179, 0);
+  -moz-appearance: textfield;
+}
+
+.plusmin {
+    display: flex;
+    height: calc(2 * var(--height-line));
+    width: calc(3 * var(--height-line));
+    flex-direction: column;
+    flex-wrap: wrap;
+}
+
+.plusmin div {
+    width: var(--height-line);
+    height: var(--height-line);
+    aspect-ratio: 1/1;
+    border: 1px solid var(--color-text);
+    border-left: 0;
+    text-align: center;
+    font-family: var(--font);
+}
+
+.plusmin div:first-of-type {
+    border-bottom: 0;
 }
 
 input[type="submit"] {
@@ -409,7 +486,7 @@ fieldset#aantal>div {
 }
 
 fieldset#aantal>div:not(:last-child) {
-    margin-bottom: var(--gap-small);
+    margin-bottom: var(--gap-medium);
 }
 
 fieldset#aantal>div>img {
@@ -420,7 +497,7 @@ fieldset#aantal>div>img {
 
 fieldset#aantal>div>label {
         flex-grow: 1;
-        margin-left: var(--gap-small);
+        margin-left: var(--gap-mini);
 }
 
 fieldset#aantal input {
@@ -435,11 +512,11 @@ fieldset#aantal input {
 }
 fieldset#aantal input::placeholder {color: var(--color-text);}
 
-fieldset#aantal>div:nth-child(1) input {background-color: var(--color-yellow);}
-fieldset#aantal>div:nth-child(2) input {background-color: var(--color-green);}
-fieldset#aantal>div:nth-child(3) input {background-color: var(--color-purple);}
+fieldset#aantal>div:nth-child(1) .plusmin {background-color: var(--color-yellow);}
+fieldset#aantal>div:nth-child(2) .plusmin {background-color: var(--color-green);}
+fieldset#aantal>div:nth-child(3) .plusmin {background-color: var(--color-purple);}
 
-#aantal > div > div {
+#aantal div.afbeelding {
     height: calc( (2* var(--height-line)));
     aspect-ratio: 1/1;
     -webkit-mask-image: url("/public/media/boeket.png");
@@ -451,12 +528,12 @@ fieldset#aantal>div:nth-child(3) input {background-color: var(--color-purple);}
     z-index: 20;
 }
 
-#aantal > div:nth-child(1) > div {background-color: var(--color-yellow); transform: rotate(-1deg);}
-#aantal > div:nth-child(2) > div {background-color: var(--color-green); transform: rotate(0deg) scaleX(-1);}
-#aantal > div:nth-child(3) > div {background-color: var(--color-purple); transform: rotate(1deg);}
+#aantal div:nth-child(1) > div.afbeelding {background-color: var(--color-yellow); transform: rotate(-1deg);}
+#aantal div:nth-child(2) > div.afbeelding {background-color: var(--color-green); transform: rotate(0deg) scaleX(-1);}
+#aantal div:nth-child(3) > div.afbeelding {background-color: var(--color-purple); transform: rotate(1deg);}
 
 fieldset.vraag>*:not(:last-child) {
-    margin-bottom: var(--gap-small);
+    margin-bottom: var(--gap-normal);
 }   
 
 
@@ -468,7 +545,7 @@ ul {
 }
 
 button {
-    height: var(--height-line);
+    height: var(--height-field);
 
     border: 1px solid var(--color-text);
     border-radius: 0;

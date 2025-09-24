@@ -10,7 +10,7 @@
     <meta property="og:type" content="website" />
     <meta property="og:url" content="{{ url()->current() }}" />
     <meta property="og:image" content="{{ url('media/logo.png') }}" />
-    <meta property="og:description" content="Prikkelarm platform voor evenementen te ontdekken en te organiseren." />
+    <meta property="og:description" content="Bleoemenier is een bloemist in Kessel-Lo en maakt prachtige boeketten op bestelling." />
     <meta name="keywords" content="bloemen , boeketten , bloem , boeket , cadeau , Holsbeek , Leuven , bestellen , online">
 
     <link rel="shortcut icon" href="{{ asset('media/logo.png') }}" type="image/x-icon">

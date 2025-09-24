@@ -14,7 +14,7 @@ class Order extends Model
         'option1',
         'option2',
         'option3',
-        'wich_friday',
+        'day',
     ];
 
     // Each order belongs to one client

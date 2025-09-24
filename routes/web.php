@@ -25,10 +25,7 @@ Route::get('/info', function () {
     return view('contact');
 })->name('contact');
 
-Route::get('/boeketten/bestellen', function () {
-    return view('boeket');
-});
-
+Route::get('/boeketten/bestellen', [PageController::class, 'bestellen'])->name('checkout.backToForm');
 
 Route::get('/checkout', [PageController::class, 'checkout'])->name('checkout');
 

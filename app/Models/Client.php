@@ -14,8 +14,13 @@ class Client extends Model
         'last_name',
         'phone',
         'email',
+        'nieuwsbrief',
         'device_id',
     ];
+
+    protected $casts = [
+    'nieuwsbrief' => 'boolean',
+];
 
     public function orders()
     {

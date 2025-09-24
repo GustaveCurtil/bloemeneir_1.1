@@ -1,71 +1,86 @@
 @extends('_layout')
 
 @section('title', 'bestellen')
-
+{{-- 
 @section('links')
 <script src="{{asset('/js/autofill.js')}}" defer></script>
-@endsection
+@endsection --}}
 
 @section('main')
 
     <main>
         <h2>boeketten bestellen</h2>
-        <section>
-            <p>De boeketten kunnen vrijdag 26 september bij ons worden afgehaald in de <a href="https://maps.app.goo.gl/iUWhrSP8kW5jb1JJ6" target="_blank">Koning Albertlaan 77</a> in Kessel-Lo</p>
-        </section>
-        
             <form action="{{ route('order') }}" method="POST" >
                 @csrf
                 <fieldset id="aantal">
                     <div>
-                        <div></div>
+                        <div class="afbeelding"></div>
                         <label for="boeket1">
-                            <p>Aantal schattige boeketten</p>
+                            <p>Schattige boeketten</p>
                             <p>30 euro</p>
                         </label>
-                        <input type="number" name="option1" id="boeket1" placeholder="0" min="0" value="{{ old('option1') }}">
+                        <div class="plusmin">
+                            <input type="number" name="option1" id="boeket1" placeholder="0" min="0" value="{{ old('option1', $order->option1 ?? '') }}">
+                            <div onclick="this.parentNode.querySelector('input[type=number]').stepUp()">+</div>
+                            <div onclick="this.parentNode.querySelector('input[type=number]').stepDown()">-</div>
+                        </div>
                     </div>
                     <div>
-                        <div></div>
+                        <div class="afbeelding"></div>
                         <label for="boeket2">
-                            <p>Aantal charmante boeketten</p>
+                            <p>Charmante boeketten</p>
                             <p>50 euro</p>
                         </label>
-                        <input type="number" name="option2" id="boeket2" placeholder="0" min="0" value="{{ old('option2') }}">                      
+                        <div class="plusmin">
+                            <input type="number" name="option2" id="boeket2" placeholder="0" min="0" value="{{ old('option2', $order->option2 ?? '') }}">
+                            <div onclick="this.parentNode.querySelector('input[type=number]').stepUp()">+</div>
+                            <div onclick="this.parentNode.querySelector('input[type=number]').stepDown()">-</div>
+                        </div>                      
                     </div>
                     <div>
-                        <div></div>
+                        <div class="afbeelding"></div>
                         <label for="boeket3">
-                            <p>Aantal magnifieke boeketten</p>
+                            <p>Magnifieke boeketten</p>
                             <p>60 euro</p>
                         </label>
-                        <input type="number" name="option3" id="boeket3" placeholder="0"  min="0" value="{{ old('option3') }}">                        
+                        <div class="plusmin">
+                            <input type="number" name="option3" id="boeket3" placeholder="0" min="0" value="{{ old('option3', $order->option3 ?? '') }}">
+                            <div onclick="this.parentNode.querySelector('input[type=number]').stepUp()">+</div>
+                            <div onclick="this.parentNode.querySelector('input[type=number]').stepDown()">-</div>
+                        </div>                        
                     </div>
                 </fieldset>
                 <fieldset class="vraag">
-                    <p>Ik kom mijn bestelling ophalen:</p>
-                    <label class="rij">
-                        <input type="radio" name="day" value="friday" required>
-                        vrijdag 26 september (tussen 16u en 19u)
-                    </label>
-                    <label class="rij">
-                        <input type="radio" name="day" value="saturday" required>
-                        zaterdag 27 september (tussen 9u en 11u)
-                    </label>
+                    <p>Ik kom mijn bestelling ophalen op:</p>
+                    <select name="day" id="" required>
+                            <option></option>
+                            @foreach ($data as $datum)
+                            <option value="{{$datum['date']}}" {{ old('day', $order->day ?? '') == $datum['date'] ? 'selected' : '' }}>
+                                {{$datum['day']}} {{$datum['formatted']}}
+                                @if ($datum['day'] === 'vrijdag')
+                                (16u - 19u)
+                                @else
+                                (10u - 13u)
+                                @endif
+                            </option>
+                            @endforeach                      
+                    </select>
+                    <p><i class="small">Adres: <a href="https://maps.app.goo.gl/iUWhrSP8kW5jb1JJ6" target="_blank">Koning Albertlaan 77</a> in Kessel-Lo</i></p>
+                    <p><i class="small">Je ontvangt nog een mail met alle informatie.</i></p>
                 </fieldset>
                 <fieldset>
-                    <label for="naam">naam*</label>
-                    <input type="text" name="first_name" id="naam" value="{{ old('first_name') }}">
-                    <label for="nummer">telefoonnummer (optioneel)</label>
-                    <input type="tel" name="phone" id="nummer" value="{{ old('phone') }}" placeholder="voor eventuele last minute aanpassingen">
-                    <label for="email">email*</label>
-                    <input type="email" name="email" id="email" value="{{ old('email') }}">
-                </fieldset>
-                {{-- <fieldset>
-                    <label for="akkoord" class="rij">
-                    <input type="checkbox" name="akkoord" id="akkoord"> Ik kom mijn bestelling vrijdag 26 september halen.
+                    <label for="naam">jouw naam*:</label>
+                    <input type="text" name="first_name" id="naam" value="{{ old('first_name', $client->first_name ?? '') }}" placeholder="vul hier in">
+                    <label for="email">email*:</label>
+                    <input type="email" name="email" id="email" value="{{ old('email', $client->email ?? '') }}" placeholder="vul hier in" required>
+                    <label for="nummer">telefoonnummer <i class="small">(in case of)</i>:</label>
+                    <input type="tel" name="phone" id="nummer" value="{{ old('phone', $client->phone ?? '') }}" placeholder="vul hier in">
+                    <label class="rij">
+                        <input type="checkbox" name="nieuwsbrief" value="1"
+                            {{ old('nieuwsbrief', $client->nieuwsbrief ?? 0) == 1 ? 'checked' : '' }}>
+                        nieuwsbrief&nbsp;<i class="small">(max 4x per jaar)</i>
                     </label>
-                </fieldset> --}}
+                </fieldset>
                 <input type="submit" value="bestellen">
             </form>
     </main>

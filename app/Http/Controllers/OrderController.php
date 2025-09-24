@@ -5,43 +5,173 @@ namespace App\Http\Controllers;
 use App\Models\Order;
 use App\Models\Client;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Cookie;
 
 class OrderController extends Controller
 {
-public function store(Request $request)
+
+    public function store(Request $request)
     {
         // Validate input
         $validated = $request->validate([
             'first_name' => 'required|string|max:255',
-            'phone' => 'required|max:20',
-            'email' => 'required|email|max:255',
-            'option1' => 'nullable|integer|min:0',
-            'option2' => 'nullable|integer|min:0',
-            'option3' => 'nullable|integer|min:0',
+            'phone'      => 'nullable|max:20',
+            'email'      => 'required|email|max:255',
+            'nieuwsbrief'=> 'nullable|boolean',
+            'option1'    => 'nullable|integer|min:0',
+            'option2'    => 'nullable|integer|min:0',
+            'option3'    => 'nullable|integer|min:0',
+            'day'        => 'required|date'
         ]);
+
+        $validated['nieuwsbrief'] = $request->has('nieuwsbrief') ? 1 : 0;
 
         $validated['option1'] = $validated['option1'] ?? 0;
         $validated['option2'] = $validated['option2'] ?? 0;
         $validated['option3'] = $validated['option3'] ?? 0;
 
-        // Create or find the client (based on email to avoid duplicates)
-        $client = Client::firstOrCreate(
-            ['email' => $validated['email']],
-            [
-                'first_name' => $validated['first_name'],
-                'last_name' => '', // you could split naam if you want
-                'phone' => $validated['phone'],
-                'device_id' => uniqid(), // or something meaningful
-            ]
-        );
+        $sessionClient = $request->session()->get('client');
+        $sessionOrder = $request->session()->get('order');
 
-        // Create the order
-        $order = Order::create([
-            'client_id' => $client->id,
-            'option1'   => $validated['option1'] ?? 0,
-            'option2'   => $validated['option2'] ?? 0,
-            'option3'   => $validated['option3'] ?? 0,
-            'wich_friday' => now()->toDateString(), // or let user pick
+        if ($sessionClient) {
+            // 🔹 Case 1: Session client exists
+            $sessionClient = Client::find($sessionClient->id);
+
+            if ($sessionClient && $sessionClient->email === $validated['email']) {
+                // ✅ Same email → update existing client
+                $sessionClient->update([
+                    'first_name' => $validated['first_name'],
+                    'phone'      => $validated['phone'],
+                    'nieuwsbrief'=> $validated['nieuwsbrief'],
+                ]);
+                $client = $sessionClient;
+
+            } else {
+                // 🚨 Email changed
+                $existingClient = Client::where('email', $validated['email'])->first();
+
+                if ($existingClient) {
+                    // ✅ Extra safety: check phone
+                    if (
+                        $validated['phone'] &&
+                        $existingClient->phone &&
+                        $existingClient->phone === $validated['phone']
+                    ) {
+                        // Phone matches → reuse existing client
+                        $existingClient->update([
+                            'device_id'  => uniqid(),
+                            'first_name' => $validated['first_name'],
+                            'nieuwsbrief'=> $validated['nieuwsbrief']
+                        ]);
+                        $client = $existingClient;
+                    } else {
+                        // 🚨 Phone mismatch or missing → create new client
+                        $client = Client::create([
+                            'first_name' => $validated['first_name'],
+                            'last_name'  => '',
+                            'phone'      => $validated['phone'],
+                            'email'      => $validated['email'],
+                            'nieuwsbrief'=> $validated['nieuwsbrief'],
+                            'device_id'  => uniqid(),
+                        ]);
+                    }
+                } else {
+                    // ✅ No client with that email → create new one
+                    $client = Client::create([
+                        'first_name' => $validated['first_name'],
+                        'last_name'  => '',
+                        'phone'      => $validated['phone'],
+                        'email'      => $validated['email'],
+                        'nieuwsbrief'=> $validated['nieuwsbrief'],
+                        'device_id'  => uniqid(),
+                    ]);
+                }
+            }
+
+        } else {
+            // 🔹 Case 2: No session client
+            $existingClient = Client::where('email', $validated['email'])->first();
+
+            if (!$existingClient) {
+                // 2.1 Email does not exist → create new client
+                $client = Client::create([
+                    'first_name' => $validated['first_name'],
+                    'last_name'  => '',
+                    'phone'      => $validated['phone'],
+                    'email'      => $validated['email'],
+                    'nieuwsbrief' => $validated['nieuwsbrief'],
+                    'device_id'  => uniqid(),
+                ]);
+
+            } else {
+                // 2.2 Email exists → check phone
+                if (
+                    $validated['phone'] &&
+                    $existingClient->phone &&
+                    $existingClient->phone === $validated['phone']
+                ) {
+                    // ✅ Safe reuse → update client
+                    $existingClient->update([
+                        'first_name' => $validated['first_name'],
+                        'device_id'  => uniqid(),
+                    ]);
+                    $client = $existingClient;
+                } else {
+                    // 🚨 Phone mismatch/missing → create new client (duplicate email allowed)
+                    $client = Client::create([
+                        'first_name' => $validated['first_name'],
+                        'last_name'  => '',
+                        'phone'      => $validated['phone'],
+                        'email'      => $validated['email'],
+                        'nieuwsbrief'=> $validated['nieuwsbrief'],
+                        'device_id'  => uniqid(),
+                    ]);
+                }
+            }
+        }
+
+        // ✅ Always refresh cookie with latest device_id
+        Cookie::queue(cookie('device_id', $client->device_id, 60 * 24 * 365));
+
+        if ($sessionOrder) {
+            // Fetch the order from DB
+            $order = Order::find($sessionOrder->id);
+
+            if ($order) {
+                // Update the existing order
+                $order->update([
+                    'option1' => $validated['option1'],
+                    'option2' => $validated['option2'],
+                    'option3' => $validated['option3'],
+                    'day'     => $validated['day'],
+                ]);
+            } else {
+                // Session has invalid order id → create new order
+                $order = Order::create([
+                    'client_id' => $client->id,
+                    'option1'   => $validated['option1'],
+                    'option2'   => $validated['option2'],
+                    'option3'   => $validated['option3'],
+                    'day'       => $validated['day'],
+                ]);
+            }
+        } else {
+            // No session order → create new
+            $order = Order::create([
+                'client_id' => $client->id,
+                'option1'   => $validated['option1'],
+                'option2'   => $validated['option2'],
+                'option3'   => $validated['option3'],
+                'day'       => $validated['day'],
+            ]);
+        }
+
+
+        // ✅ Update session
+        session([
+            'order'  => $order,
+            'client' => $client,
         ]);
 
         return redirect()->route('checkout', [
