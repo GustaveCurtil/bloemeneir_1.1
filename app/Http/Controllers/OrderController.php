@@ -23,6 +23,9 @@ class OrderController extends Controller
             'option2'    => 'nullable|integer|min:0',
             'option3'    => 'nullable|integer|min:0',
             'day'        => 'required|date'
+        ], [
+            'day.required' => 'Selecteer een moment waarop je jouw bestelling kan komen ophalen.',
+            'day.date' => 'Selecteer een moment waarop je jouw bestelling kan komen ophalen.',
         ]);
 
         $validated['nieuwsbrief'] = $request->has('nieuwsbrief') ? 1 : 0;
@@ -30,6 +33,16 @@ class OrderController extends Controller
         $validated['option1'] = $validated['option1'] ?? 0;
         $validated['option2'] = $validated['option2'] ?? 0;
         $validated['option3'] = $validated['option3'] ?? 0;
+
+        if (
+            ($request->input('option1') == 0 || $request->input('option1') === null) &&
+            ($request->input('option2') == 0 || $request->input('option2') === null) &&
+            ($request->input('option3') == 0 || $request->input('option3') === null)
+        ) {
+            return back()
+                ->withErrors(['options' => 'Je hebt nog geen bestelling gemaakt.'])
+                ->withInput();
+        }
 
         $sessionClient = $request->session()->get('client');
         $sessionOrder = $request->session()->get('order');

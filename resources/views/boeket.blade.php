@@ -12,6 +12,11 @@
         <h2>boeketten bestellen</h2>
             <form action="{{ route('order') }}" method="POST" >
                 @csrf
+                @error('options')
+                    <br>
+                    <p class="error">⚠️ <b>{{ $message }}</b></p>
+                    <br>
+                @enderror
                 <fieldset id="aantal">
                     <div>
                         <div class="afbeelding"></div>
@@ -52,8 +57,11 @@
                 </fieldset>
                 <fieldset class="vraag">
                     <p>Ik kom mijn bestelling ophalen op:</p>
-                    <select name="day" id="" required>
-                            <option></option>
+                    @error('day')
+                        <p class="error">⚠️ <b>{{ $message }}</b></p>
+                    @enderror
+                    <select name="day" id="" required @error('day') class="error" @enderror>
+                            <option>kies een moment*</option>
                             @foreach ($data as $datum)
                             <option value="{{$datum['date']}}" {{ old('day', $order->day ?? '') == $datum['date'] ? 'selected' : '' }}>
                                 {{$datum['day']}} {{$datum['formatted']}}
@@ -70,7 +78,7 @@
                 </fieldset>
                 <fieldset>
                     <label for="naam">jouw naam*:</label>
-                    <input type="text" name="first_name" id="naam" value="{{ old('first_name', $client->first_name ?? '') }}" placeholder="vul hier in">
+                    <input type="text" name="first_name" id="naam" value="{{ old('first_name', $client->first_name ?? '') }}" placeholder="vul hier in" required>
                     <label for="email">email*:</label>
                     <input type="email" name="email" id="email" value="{{ old('email', $client->email ?? '') }}" placeholder="vul hier in" required>
                     <label for="nummer">telefoonnummer <i class="small">(in case of)</i>:</label>

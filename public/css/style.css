@@ -42,6 +42,8 @@ h3 {text-align: center;}
 a {color: var(--color-text);}
 img {width: 100%;}
 i.small {font-size: 0.8rem; opacity: .69; font-style: normal;}
+p.error {color: var(--color-red);}
+select.error {background-color: var(--color-yellow);}
 
 section {width: 100%; margin-top: var(--gap-small); margin-bottom: var(--gap-medium);}
 
@@ -185,7 +187,7 @@ div#omhoog.show{opacity: 1; pointer-events: auto;}
 /* LANDINGSPAGINA */
 
 main#landing {
-    justify-content: center;
+    justify-content: start;
     align-items: center;
 }
 
@@ -197,8 +199,12 @@ p.slogan {
 }
 
 main#landing img {
-    width: 75%;
-    max-width: 380px;
+    position: absolute;
+    bottom: 0;
+    width: 90%;
+    max-width: var(--width-max);
+    max-height: calc(100svh - var(--height-header) - 200px);
+    object-fit: contain;
 }
 
 img#logo {
