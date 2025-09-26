@@ -2,27 +2,69 @@
 
 @section('title', 'informatie')
 
-@section('links')
+{{-- @section('links')
 <script src="{{asset('/js/zoom-kaart.js')}}" defer></script>
-@endsection
+@endsection --}}
 
 @section('main')
 
     <main>
         <section id="contact">
-            <p><a href="tel:+32477983300">0477983300</a></p>
-            <p><a href="mailto:bloemenier@gmail.com">bloemenier@gmail.com</a></p>
+            <p><a href="mailto:info@bloemenier.be">info@bloemenier.be</a></p>
             <br>
             <p><a href="">instagram pagina</a></p>
-            <p><a href="">facebook pagina</a></p>
+            {{-- <p><a href="">facebook pagina</a></p> --}}
             <br>
-            <p><a href="https://maps.app.goo.gl/iUWhrSP8kW5jb1JJ6" target="_blank">Koning Albertlaan 77</a><br>3010 Kessel-Lo</p>
+            <p><a href="https://maps.app.goo.gl/JDseT2JZkdJH9eRp9" target="_blank">Koning Albertlaan 77</a><br>3010 Kessel-Lo</p>
         </section>
         <section id="kaart">
-            {{-- <a href="https://maps.app.goo.gl/iUWhrSP8kW5jb1JJ6" target="_blank"> --}}
-            <img src="{{asset('/media/kaart.png')}}" alt="">
-            {{-- </a> --}}
+            <a href="https://maps.app.goo.gl/JDseT2JZkdJH9eRp9" target="_blank">
+            <img src="{{asset('/media/kaart1.png')}}" alt="">
+            </a>
         </section>
     </main>
+
+ <script>
+const img = document.querySelector("#kaart img");
+const link = document.querySelector("#kaart a");
+
+// Mouse events
+img.addEventListener('mouseenter', () => img.classList.add('mouse'));
+img.addEventListener('mouseleave', () => img.classList.remove('mouse'));
+
+// Touch events
+img.addEventListener('touchstart', () => {
+  img.classList.add('mouse');
+});
+
+img.addEventListener('touchend', (e) => {
+  img.classList.remove('mouse');
+  // If the user just tapped (not scrolled), follow the link
+  if (e.changedTouches.length === 1 && !didScroll) {
+    window.open(link.href, link.target || "_self");
+  }
+  didScroll = false; // reset
+});
+
+img.addEventListener('touchcancel', () => {
+  img.classList.remove('mouse');
+});
+
+// Detect scroll during touch
+let startY = 0;
+let didScroll = false;
+
+img.addEventListener('touchstart', (e) => {
+  startY = e.touches[0].clientY;
+  didScroll = false;
+});
+
+img.addEventListener('touchmove', (e) => {
+  const currentY = e.touches[0].clientY;
+  if (Math.abs(currentY - startY) > 10) {
+    didScroll = true; // mark as scroll, not a tap
+  }
+});
+</script>
 
 @endsection

@@ -21,7 +21,7 @@
         <h2>Jouw bestelling</h2>
         <ul>
             <li>Schattig boeket x {{ $order->option1 }} = €{{ number_format(30 * $order->option1, 2 , ',')}}</li>
-            <li>Prachtig boeket x {{ $order->option2 }} = €{{ number_format(50 * $order->option2, 2 , ',')}}</li>
+            <li>Charmant boeket x {{ $order->option2 }} = €{{ number_format(50 * $order->option2, 2 , ',')}}</li>
             <li>Magnifiek boeket x {{ $order->option3 }} = €{{ number_format(60 * $order->option3, 2 , ',')}}</li>
         </ul>
         <p><strong>Totaal: €{{ number_format((30 * $order->option1) + (50 * $order->option2) + (60 * $order->option3), 2, ',') }}</strong></p>

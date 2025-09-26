@@ -11,7 +11,7 @@
 
 :root {
     --width-max: 800px;
-    --height-header: 8rem;
+    --height-header: 14rem;
     --height-footer: 4rem;
 
     --height-line: 1.6rem;
@@ -90,12 +90,17 @@ header {
 }
 
 header>div {
-    display: inline-flex;
+    display: flex;
+    flex-direction: column;
     align-items: center;
-    gap: 1rem;
-    height: 4rem;
-        width: 100%;
+    height: 10rem;
+    width: 100%;
     justify-content: space-evenly;
+}
+
+header>div>img {
+    height: 6rem;
+    width: auto;
 }
 
 header svg {
@@ -130,9 +135,9 @@ nav a.actief {
     color: #f3e8ca;
 }
 
-nav a:first-child {animation: wobble 16s ease-in-out infinite;}
-nav a:nth-child(2) {animation: wobble 20s ease-in-out infinite;}
-nav a:nth-child(3) {animation: wobble 18s ease-in-out alternate-reverse infinite;}
+nav a:first-child {animation: wobble 16s ease-in-out infinite; }
+nav a:nth-child(2) {animation: wobble 20s ease-in-out infinite; transform: translateY(0.6rem);}
+nav a:nth-child(3) {animation: wobble 18s ease-in-out alternate-reverse infinite;  transform: translateY(0.2rem);}
 
 @keyframes wobble {
   0% {border-radius: 45% 19% 50% 70% / 69% 50% 70% 60%;}
@@ -203,7 +208,7 @@ main#landing img {
     bottom: 0;
     width: 90%;
     max-width: var(--width-max);
-    max-height: calc(100svh - var(--height-header) - 200px);
+    max-height: calc(100svh - var(--height-header) - 150px);
     object-fit: contain;
 }
 
@@ -245,7 +250,7 @@ main#gallerij>section:first-of-type img {
 
 /* AANBODPAGINA */
 
-section#aanbod {
+section#aanbod, section#fichkes {
     flex-grow: 1;
     display: flex;
     flex-direction: column;
@@ -270,9 +275,28 @@ section#aanbod>a {
     padding: var(--gap-small);
 }
 
+section#fichkes>a {
+    display: block;
+    height: fit-content;
+    max-width: calc(100% - 2 * var(--gap-big) + 2 * var(--gap-mini));
+    text-decoration: none;
+}
+
 section#aanbod img {
     width: 69%;
     max-width: 180px;
+}
+
+#fichkes a[data-boeket="boeket1"]:hover img {
+    content: url("/media/aanbod/schattig2.png");
+}
+
+#fichkes a[data-boeket="boeket2"]:hover img {
+    content: url("/media/aanbod/schattig2.png");
+}
+
+#fichkes a[data-boeket="boeket3"]:hover img {
+    content: url("/media/aanbod/schattig2.png");
 }
 
 section#aanbod p {
@@ -316,23 +340,29 @@ section#contact p {
 }
 
 section#kaart {
-    aspect-ratio: 1847 / 1300;
+    width: 100%;
     margin-bottom: 0;
-    position: relative;
-    overflow: hidden;
-    cursor: grab;
-    touch-action: none;
+}
+
+section#kaart a {
+    height: 100%;
+    display: block;
+}
+
+section#kaart img.mouse {
+    content: url("/media/kaart2.png");
 }
 
 section#kaart img {
-    transform-origin: center center; 
-    transition: transform 0.05s linear;
+    width: 100%;
+    object-fit: cover;
+
+    -webkit-user-drag: none;   /* Safari/Chrome */
+    -webkit-touch-callout: none; /* Disable save/copy on long-press */
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
     user-select: none;
-    -webkit-user-drag: none;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%) scale(1);
 }
 
 #kaart.dragging {
@@ -568,10 +598,13 @@ button {
     span.mobile {display: none;}
     .desktop {display: flex;}
     span.desktop {display: inline;}
-    section#aanbod {
+    section#aanbod, section#fichkes {
         flex-direction: row;
     }
 
+    section#fichkes a {
+            width: 33%;
+    }
     section#aanbod>div {
         width: 400px;
     }
