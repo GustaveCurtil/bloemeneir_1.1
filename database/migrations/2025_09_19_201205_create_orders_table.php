@@ -18,6 +18,7 @@ return new class extends Migration
             $table->tinyInteger('option2')->nullable();
             $table->tinyInteger('option3')->nullable();
             $table->date('day');
+            $table->boolean('payed')->default(false);
             $table->timestamps();
         });
     }

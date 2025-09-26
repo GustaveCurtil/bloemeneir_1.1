@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Stripe\Stripe;
 use Stripe\PaymentIntent;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 
 class PaymentController extends Controller
 {
@@ -88,12 +89,42 @@ class PaymentController extends Controller
 
         $paymentIntent = \Stripe\PaymentIntent::retrieve($paymentIntentId);
 
+        $clientId = $paymentIntent->metadata->client_id ?? null;
+        $orderId  = $paymentIntent->metadata->order_id ?? null;
+
+        if (!$clientId || !$orderId) {
+            return "Geen klant- of bestelgegevens gevonden.";
+        }
+
+        // Fetch client and order
+        $client = \App\Models\Client::find($clientId);
+        $order  = \App\Models\Order::find($orderId);
+    
         if ($paymentIntent->status === 'succeeded') {
-            return "✅ Betaling succesvol! Bedankt voor je bestelling.";
+            $order->payed = true;
+            // $order->stripe_payment_intent_id = $paymentIntent->id;
+            $order->save();
+            $request->session()->forget('order');
+
+            $orderDate = Carbon::parse($order->day);
+            Carbon::setLocale('nl');
+            $weekday = $orderDate->translatedFormat('l'); // "vrijdag", "maandag", etc.
+            $formattedDate = $orderDate->translatedFormat('d F'); // "26 september"
+
+
+
+            return view('succes', [
+                'client' => $client,
+                'dag' => $weekday,
+                'datum' => $formattedDate
+            ]);
         } elseif ($paymentIntent->status === 'processing') {
             return "⏳ Je betaling wordt nog verwerkt. Even geduld!";
         } elseif ($paymentIntent->status === 'requires_payment_method') {
-            return "❌ Betaling mislukt of geannuleerd. Probeer opnieuw.";
+            return redirect()->route('checkout', [
+                'client_id' => $order->client_id,
+                'order_id' => $order->id
+            ])->with('message', 'Betaling mislukt of geannuleerd.');
         } else {
             return "⚠️ Onbekende status: {$paymentIntent->status}";
         }

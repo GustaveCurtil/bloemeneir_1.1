@@ -40,7 +40,36 @@
             klik hier om nog even iets aanpassen
         </a>
     </section>
-    <input type="submit" id="payButton" value="betaal met Bancontact">
+    <input type="submit" id="payButton" value="Betaal met Bancontact">
+    @if(session('message'))
+    <br>
+    <p class="error">⚠️ <b>{{ session('message') }}</b></p>
+    @endif
 </main>
+<script src="https://js.stripe.com/v3/"></script>
+<script>
+    const stripe = Stripe('{{ env('STRIPE_KEY') }}');
+    const payButton = document.getElementById('payButton');
 
+    payButton.addEventListener('click', async (e) => {
+        e.preventDefault();
+
+        const {error} = await stripe.confirmBancontactPayment(
+            '{{ $clientSecret }}', {
+                payment_method: {
+                    billing_details: {
+                        name: '{{ $client->first_name }} {{ $client->last_name ?? "" }}',
+                        email: '{{ $client->email }}',
+                        phone: '{{ $client->phone }}',
+                    }
+                },
+                return_url: '{{ route("checkout.success") }}'
+            }
+        );
+
+        if (error) {
+            alert(error.message);
+        }
+    });
+</script>
 @endsection

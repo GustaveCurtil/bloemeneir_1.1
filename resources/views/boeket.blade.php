@@ -73,7 +73,7 @@
                             </option>
                             @endforeach                      
                     </select>
-                    <p><i class="small">Adres: <a href="https://maps.app.goo.gl/iUWhrSP8kW5jb1JJ6" target="_blank">Koning Albertlaan 77</a> in Kessel-Lo</i></p>
+                    <p><i class="small">Adres: <a href="https://maps.app.goo.gl/qAkeHriBos8S4XMcA" target="_blank">Koning Albertlaan 77</a> in Kessel-Lo</i></p>
                     <p><i class="small">Je ontvangt nog een mail met alle informatie.</i></p>
                 </fieldset>
                 <fieldset>

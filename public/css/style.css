@@ -37,9 +37,11 @@
 }
 
 html, h1, h2, h3 {font-family: var(--font);}
+html {cursor: url('../boeket.cur'), auto;}
 h2 {margin-bottom: var(--gap-small);}
 h3 {text-align: center;}
-a {color: var(--color-text);}
+a {color: var(--color-text); cursor: url('../boeket2.cur'), auto;}
+label, .plusmin div, select, input {  cursor: url('../boeket2.cur'), auto;}
 img {width: 100%;}
 i.small {font-size: 0.8rem; opacity: .69; font-style: normal;}
 p.error {color: var(--color-red);}
@@ -49,6 +51,21 @@ section {width: 100%; margin-top: var(--gap-small); margin-bottom: var(--gap-med
 
 .desktop {display: none;}
 span.mobile {display: inline;}
+
+/* WebKit browsers (Chrome, Edge, Safari) */
+::-webkit-scrollbar {
+  width: 0.4rem; 
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-bg); 
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-green);  
+  border-radius: 25%;
+}
+
 
 
 
@@ -156,7 +173,7 @@ body>div>div {
 }
 
 main {
-    padding: var(--gap-medium) 0 0 0;
+    padding: var(--gap-big) 0 0 0;
     flex-grow: 1;
     width: calc(100% - 2 * var(--gap-small));
     max-width: var(--width-max);
@@ -257,7 +274,6 @@ section#aanbod, section#fichkes {
 
     justify-content: space-between;
     align-items: center;
-    gap: var(--gap-big);
     margin-bottom: 0;
 
 }
@@ -340,8 +356,23 @@ section#contact p {
 }
 
 section#kaart {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--gap-medium);
     width: 100%;
     margin-bottom: 0;
+}
+
+section#kaart>div {
+    flex-grow: 1;
+    height: 100%;
+}
+
+section#kaart>img {
+    height: 100%;
+    width: auto;
+    max-width: 100%;
 }
 
 section#kaart a {
@@ -349,13 +380,10 @@ section#kaart a {
     display: block;
 }
 
-section#kaart img.mouse {
-    content: url("/media/kaart2.png");
-}
-
-section#kaart img {
-    width: 100%;
+section#kaart>div img {
+    height: 100%;
     object-fit: cover;
+    aspect-ratio: 4 / 3;
 
     -webkit-user-drag: none;   /* Safari/Chrome */
     -webkit-touch-callout: none; /* Disable save/copy on long-press */
@@ -365,9 +393,6 @@ section#kaart img {
     user-select: none;
 }
 
-#kaart.dragging {
-    cursor: grabbing;
-}
 
 
 /* BESTELLEN */
@@ -607,5 +632,10 @@ button {
     }
     section#aanbod>div {
         width: 400px;
+    }
+
+    section#kaart {
+        height: 400px;
+        flex-direction: row;
     }
 }

@@ -15,16 +15,21 @@
             <p><a href="">instagram pagina</a></p>
             {{-- <p><a href="">facebook pagina</a></p> --}}
             <br>
-            <p><a href="https://maps.app.goo.gl/JDseT2JZkdJH9eRp9" target="_blank">Koning Albertlaan 77</a><br>3010 Kessel-Lo</p>
+            <p><a href="https://maps.app.goo.gl/qAkeHriBos8S4XMcA" target="_blank">Koning Albertlaan 77</a><br>3010 Kessel-Lo</p>
+            
         </section>
         <section id="kaart">
-            <a href="https://maps.app.goo.gl/JDseT2JZkdJH9eRp9" target="_blank">
+          <div>
+            <a href="https://maps.app.goo.gl/qAkeHriBos8S4XMcA" target="_blank">
             <img src="{{asset('/media/kaart1.png')}}" alt="">
             </a>
+          </div>
+          <img src="{{asset('/media/huis.png')}}" alt="">
+            
         </section>
     </main>
 
- <script>
+ {{-- <script>
 const img = document.querySelector("#kaart img");
 const link = document.querySelector("#kaart a");
 
@@ -65,6 +70,6 @@ img.addEventListener('touchmove', (e) => {
     didScroll = true; // mark as scroll, not a tap
   }
 });
-</script>
+</script> --}}
 
 @endsection

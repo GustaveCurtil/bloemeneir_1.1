@@ -36,4 +36,4 @@ Route::post('/order', [OrderController::class, 'store'])->name('order');
 
 Route::get('/order', [PaymentController::class, 'orderForm']);
 // Route::post('/order', [PaymentController::class, 'processOrder'])->name('order');
-Route::get('/success', [PaymentController::class, 'success']);
+Route::get('/success', [PaymentController::class, 'success'])->name('checkout.success');

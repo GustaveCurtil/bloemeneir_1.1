@@ -15,6 +15,7 @@ class Order extends Model
         'option2',
         'option3',
         'day',
+        'payed',
     ];
 
     // Each order belongs to one client

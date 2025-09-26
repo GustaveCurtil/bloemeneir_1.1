@@ -158,6 +158,7 @@ class OrderController extends Controller
                     'option2' => $validated['option2'],
                     'option3' => $validated['option3'],
                     'day'     => $validated['day'],
+                    'payed'   => false
                 ]);
             } else {
                 // Session has invalid order id → create new order
@@ -167,6 +168,7 @@ class OrderController extends Controller
                     'option2'   => $validated['option2'],
                     'option3'   => $validated['option3'],
                     'day'       => $validated['day'],
+                    'payed'   => false
                 ]);
             }
         } else {
@@ -177,6 +179,7 @@ class OrderController extends Controller
                 'option2'   => $validated['option2'],
                 'option3'   => $validated['option3'],
                 'day'       => $validated['day'],
+                'payed'     => false
             ]);
         }
 
