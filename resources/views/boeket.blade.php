@@ -10,6 +10,8 @@
 
     <main>
         <h2>boeketten bestellen</h2>
+            <p>Boeket voor deze week graag vòòr woensdag 18u bestellen.</p>
+            <br>
             <form action="{{ route('order') }}" method="POST" >
                 @csrf
                 @error('options')

@@ -257,32 +257,30 @@ section.fototekst {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    margin-top: var(--gap-medium);
 }
 
 section.fototekst div {
     padding: var(--gap-big);
 }
 
+section.fototekst p {
+    width: 100%;
+}
+
 section.gallerij {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
+    flex-wrap: wrap;
     gap: var(--gap-small);
+    margin: 0;
 }
 
-section.gallerij img {
+img.verticaal {
+    width: calc((100% - var(--gap-small))/2);
 }
 
 
-main#gallerij>section:first-of-type {
-    columns: 3 150px;
-    column-gap: var(--gap-small);
-}
-
-main#gallerij>section:first-of-type img {
-    display: block;
-    width: 100%;
-    margin-bottom: var(--gap-small);
-}
 
 
 
@@ -664,8 +662,11 @@ button {
     }
 
     section#kaart {
-        height: 400px;
+        height: 300px;
         flex-direction: row;
+        max-width: 600px;
+        margin-left: auto;
+        margin-right: auto;
     }
 
     section#fichkes>div>p {
@@ -687,6 +688,7 @@ button {
 
     section.fototekst {
         flex-direction: row;
+
     }
 
     section.fototekst img {
@@ -709,7 +711,7 @@ button {
     }
 
     section.gallerij {
-        flex-direction: row;
+        flex-wrap: nowrap;
         gap: var(--gap-medium);
     }
 

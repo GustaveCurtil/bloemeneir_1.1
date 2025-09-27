@@ -17,6 +17,21 @@
                         Petra en Anne-Sophie.<br>
                         Welkom.
                     </p>
+                    <br>
+                    <p>
+                        We werken op bestelling<br>
+                        beperkt overschot en afval.<br>
+                        Geïnspireerd op het aanbod<br>
+                        van het seizoen en<br>
+                        steeds kakelverse bloemen<br>
+                        want we bestellen ze
+                    </p>
+                    <br>
+                    <p>
+                        enkel voor jullie<br>
+                        Ecologisch doordacht.<br>
+                        Prijs in evenwicht.
+                    </p>
                 </div> 
         </section>
         <section class="gallerij">
@@ -27,38 +42,20 @@
         <section class="fototekst">
             <div>
                 <p>
-                    We werken op bestelling<br>
-                    beperkt overschot en afval.<br>
-                    Geïnspireerd op het aanbod<br>
-                    van het seizoen en<br>
-                    steeds kakelverse bloemen<br>
-                    want we bestellen ze
+                    Het seizoen bepaalt de bloemen,<br>
+                    fris en vers bepalen wij. <br>
+                    Kromme stengels, speelse kleuren<br>
+                    grijpen hun kans, horen erbij.
+                </p>
+                <br>
+                <p>
+                    Zot van bloemen, net als wij?<br>
+                    Goesting gekregen, kriebelt iets blij?<br>
+                    Jij kiest ‘schattig’, ‘charmant’ of ‘magnifiek’.<br>
+                    Wij zorgen voor iets magique.
                 </p>
             </div> 
             <img src="{{asset('media/over/bloemenier-72.jpg')}}" alt="" class="horizontaal">  
-        </section>
-        <section>
-            <p>
-                enkel voor jullie<br>
-                Ecologisch doordacht.<br>
-                Prijs in evenwicht.
-            </p>
-        </section>
-        <section>
-            <p>
-                Het seizoen bepaalt de bloemen,<br>
-                fris en vers bepalen wij. <br>
-                Kromme stengels, speelse kleuren<br>
-                grijpen hun kans, horen erbij.
-            </p>
-        </section>
-        <section>
-            <p>
-                Zot van bloemen, net als wij?<br>
-                Goesting gekregen, kriebelt iets blij?<br>
-                Jij kiest ‘schattig’, ‘charmant’ of ‘magnifiek’.<br>
-                Wij zorgen voor iets magique.
-            </p>
         </section>
     </main>
 

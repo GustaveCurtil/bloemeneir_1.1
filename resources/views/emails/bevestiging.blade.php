@@ -4,9 +4,9 @@
 
 <p>We hebben je bestelling goed ontvangen:</p>
 <ul>
-    <li>Schattig boeket x {{ $order->option1 }} = €{{ number_format(30 * $order->option1, 2 , ',')}}</li>
-    <li>Charmant boeket x {{ $order->option2 }} = €{{ number_format(50 * $order->option2, 2 , ',')}}</li>
-    <li>Magnifiek boeket x {{ $order->option3 }} = €{{ number_format(60 * $order->option3, 2 , ',')}}</li>
+    <li>Schattig boeket x {{ $order->option1 }} = €{{ number_format(29 * $order->option1, 2 , ',')}}</li>
+    <li>Charmant boeket x {{ $order->option2 }} = €{{ number_format(39 * $order->option2, 2 , ',')}}</li>
+    <li>Magnifiek boeket x {{ $order->option3 }} = €{{ number_format(49 * $order->option3, 2 , ',')}}</li>
 </ul>
 <p>We verwachten jou <b>{{$weekday}} {{$formattedDate}}
     @if ($weekday === 'vrijdag')
