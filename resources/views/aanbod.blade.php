@@ -33,7 +33,7 @@
                 </a>
         </section> --}}
         <section id="intro">
-           <p>we werken alleen op bestelling om overschotten en afval zoveel mogelijk te beperken.<br>Ook kromme stengels en speelse bloemen krijgen een kans in onze boeketjes</p> 
+           <p>We werken alleen op bestelling om overschotten en afval zoveel mogelijk te beperken.<br>Ook kromme stengels en speelse bloemen krijgen een kans in onze boeketjes.</p> 
         </section>
         
         <section id="fichkes">
@@ -53,17 +53,23 @@
                     Ons lief boeketje, <br>
                     voor een kleine gelegenheid,<br>
                     een tussendoortje voor jezelf<br>
-                    of wie weet een eerste date.
+                    of wie weet een eerste date.<br>
+                    <br>
+                    <span class="mobile"><a href="boeketten/bestellen" data-boeket="boeket1">bestel</a></span>
                 </p>
                 <p>
                     Ons boeket gevuld <br>
                     met speelse elegantie<br>
-                    een fleurige verwennerij.
+                    een fleurige verwennerij.<br>
+                    <br>
+                    <span class="mobile"><a href="boeketten/bestellen" data-boeket="boeket2">bestel</a></span>
                 </p>
                 <p>
                     Ons florissant boeket <br>
                     om mee uit te pakken, <br>
-                    waarvan harten sneller slaan.
+                    waarvan harten sneller slaan.<br>
+                    <br>
+                    <span class="mobile"><a href="boeketten/bestellen" data-boeket="boeket3">bestel</a></span>
                 </p>
             </div>
             

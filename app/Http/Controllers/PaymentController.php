@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use Stripe\Stripe;
 use Stripe\PaymentIntent;
+use App\Mail\OrderConfirmed;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Mail;
 
 class PaymentController extends Controller
 {
@@ -111,7 +113,7 @@ class PaymentController extends Controller
             $weekday = $orderDate->translatedFormat('l'); // "vrijdag", "maandag", etc.
             $formattedDate = $orderDate->translatedFormat('d F'); // "26 september"
 
-
+            Mail::to($client->email)->send(new OrderConfirmed($order, $weekday, $formattedDate));
 
             return view('succes', [
                 'client' => $client,

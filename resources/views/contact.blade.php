@@ -2,21 +2,20 @@
 
 @section('title', 'informatie')
 
-{{-- @section('links')
-<script src="{{asset('/js/zoom-kaart.js')}}" defer></script>
-@endsection --}}
+@section('links')
+<script src="{{asset('/js/kopieren.js')}}" defer></script>
+@endsection
 
 @section('main')
 
     <main>
         <section id="contact">
-            <p><a href="mailto:info@bloemenier.be">info@bloemenier.be</a></p>
-            <br>
-            <p><a href="">instagram pagina</a></p>
-            {{-- <p><a href="">facebook pagina</a></p> --}}
-            <br>
-            <p><a href="https://maps.app.goo.gl/qAkeHriBos8S4XMcA" target="_blank">Koning Albertlaan 77</a><br>3010 Kessel-Lo</p>
-            
+            <p>
+              In het hartje van Kessel-Lo, <br>
+              in het kleinste pand van de <a href="https://maps.app.goo.gl/qAkeHriBos8S4XMcA" target="_blank">Koning Albertlaan</a>, <br>
+              op nummer 77, <br><br>
+              Daar vind je de Bloemenier.
+            </p>
         </section>
         <section id="kaart">
           <div>
@@ -25,7 +24,11 @@
             </a>
           </div>
           <img src="{{asset('/media/huis.png')}}" alt="">
-            
+        </section>
+        <section id="contact">
+          <h2 style="text-align: center">Contact</h2>
+            <p><u onclick="copy('info@bloemenier.be', 'info@bloemenier.be')">info@bloemenier.be</u></p>
+            <p><a href="">instagram-pagina</a></p>
         </section>
     </main>
 

@@ -9,6 +9,7 @@ use App\Models\Holiday;
 use Stripe\PaymentIntent;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Mail;
 
 class PageController extends Controller
 {

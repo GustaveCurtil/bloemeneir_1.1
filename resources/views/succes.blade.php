@@ -5,7 +5,7 @@
 @section('main')
 <main>
     <section>
-        <h2>Betaling geslaagd!</h2>
+        <h2>Betaling goed doorgekomen!</h2>
         <p>Je krijgt zodadelijk een e-mail op het volgende e-mailadres: <b>{{$client->email}}</b></p>
         <p>Het kan zijn dat de e-mail in jouw spam-box beland. Zeker eens te bekijken!</p>
         <br>

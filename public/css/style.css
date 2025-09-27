@@ -41,14 +41,14 @@ html {cursor: url('../boeket.cur'), auto;}
 h2 {margin-bottom: var(--gap-small);}
 h3 {text-align: center;}
 a {color: var(--color-text); cursor: url('../boeket2.cur'), auto;}
-label, .plusmin div, select, input {  cursor: url('../boeket2.cur'), auto;}
+label, .plusmin div, select, input, u {  cursor: url('../boeket2.cur'), auto;}
 img {width: 100%;}
 i.small {font-size: 0.8rem; opacity: .69; font-style: normal;}
 p.error {color: var(--color-red);}
 select.error {background-color: var(--color-yellow);}
 
 section {width: 100%; margin-top: var(--gap-small); margin-bottom: var(--gap-medium);}
-
+section:last-of-type {margin-bottom: var(--gap-small);}
 .desktop {display: none;}
 span.mobile {display: inline;}
 
@@ -372,7 +372,6 @@ section#kaart {
     align-items: center;
     gap: var(--gap-medium);
     width: 100%;
-    margin-bottom: 0;
 }
 
 section#kaart>div {
@@ -657,9 +656,9 @@ button {
     }
 
     section#fichkes>div>p {
-    padding-top: var(--gap-big);
-    height: 69%;
-    width: calc(100% / 3);
+        padding-bottom: var(--gap-small);
+        height: 100%;
+        width: calc(100% / 3);
     }
     #fichkes a[data-boeket="boeket1"]:hover img {
         content: url("/media/aanbod/fiche_schattig3.png");
