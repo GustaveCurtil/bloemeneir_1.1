@@ -304,15 +304,15 @@ section#aanbod img {
 }
 
 #fichkes a[data-boeket="boeket1"]:hover img {
-    content: url("/media/aanbod/schattig2.png");
+    content: url("/media/aanbod/fiche_schattig3.png");
 }
 
 #fichkes a[data-boeket="boeket2"]:hover img {
-    content: url("/media/aanbod/schattig2.png");
+    content: url("/media/aanbod/fiche_charmant3.png");
 }
 
 #fichkes a[data-boeket="boeket3"]:hover img {
-    content: url("/media/aanbod/schattig2.png");
+    content: url("/media/aanbod/fiche_magnifiek3.png");
 }
 
 section#aanbod p {

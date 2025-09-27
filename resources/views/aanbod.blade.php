@@ -34,13 +34,13 @@
         </section> --}}
         <section id="fichkes">
             <a href="boeketten/bestellen" data-boeket="boeket1">
-                <img src="{{asset('/media/aanbod/schattig1.png')}}" alt="" srcset="">
+                <img src="{{asset('/media/aanbod/fiche_schattig1.png')}}" alt="" srcset="">
             </a>
             <a href="boeketten/bestellen" data-boeket="boeket2">
-                <img src="{{asset('/media/aanbod/schattig1.png')}}" alt="" srcset="">
+                <img src="{{asset('/media/aanbod/fiche_charmant1.png')}}" alt="" srcset="">
             </a>
             <a href="boeketten/bestellen" data-boeket="boeket3">
-                <img src="{{asset('/media/aanbod/schattig1.png')}}" alt="" srcset="">
+                <img src="{{asset('/media/aanbod/fiche_magnifiek1.png')}}" alt="" srcset="">
             </a>
         </section>
     </main>

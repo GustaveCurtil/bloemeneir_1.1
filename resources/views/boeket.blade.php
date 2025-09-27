@@ -19,10 +19,10 @@
                 @enderror
                 <fieldset id="aantal">
                     <div>
-                        <div class="afbeelding"></div>
+                        <img src="{{asset('/media/aanbod/boeket_schattig.png')}}">
                         <label for="boeket1">
-                            <p>Schattige boeketten</p>
-                            <p>30 euro</p>
+                            <p>Schattig boeket</p>
+                            <p>29 euro</p>
                         </label>
                         <div class="plusmin">
                             <input type="number" name="option1" id="boeket1" placeholder="0" min="0" value="{{ old('option1', $order->option1 ?? '') }}">
@@ -31,10 +31,10 @@
                         </div>
                     </div>
                     <div>
-                        <div class="afbeelding"></div>
+                        <img src="{{asset('/media/aanbod/boeket_charmant.png')}}">
                         <label for="boeket2">
-                            <p>Charmante boeketten</p>
-                            <p>50 euro</p>
+                            <p>Charmant boeket</p>
+                            <p>39 euro</p>
                         </label>
                         <div class="plusmin">
                             <input type="number" name="option2" id="boeket2" placeholder="0" min="0" value="{{ old('option2', $order->option2 ?? '') }}">
@@ -43,10 +43,10 @@
                         </div>                      
                     </div>
                     <div>
-                        <div class="afbeelding"></div>
+                        <img src="{{asset('/media/aanbod/boeket_magnifiek.png')}}">
                         <label for="boeket3">
-                            <p>Magnifieke boeketten</p>
-                            <p>60 euro</p>
+                            <p>Magnifiek boeket</p>
+                            <p>49 euro</p>
                         </label>
                         <div class="plusmin">
                             <input type="number" name="option3" id="boeket3" placeholder="0" min="0" value="{{ old('option3', $order->option3 ?? '') }}">
