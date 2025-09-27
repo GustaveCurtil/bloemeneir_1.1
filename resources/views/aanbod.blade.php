@@ -55,21 +55,21 @@
                     een tussendoortje voor jezelf<br>
                     of wie weet een eerste date.<br>
                     <br>
-                    <span class="mobile"><a href="boeketten/bestellen" data-boeket="boeket1">bestel</a></span>
+                    <span class="mobile"><a href="boeketten/bestellen" data-boeket="boeket1">bestel hier</a></span>
                 </p>
                 <p>
                     Ons boeket gevuld <br>
                     met speelse elegantie<br>
                     een fleurige verwennerij.<br>
                     <br>
-                    <span class="mobile"><a href="boeketten/bestellen" data-boeket="boeket2">bestel</a></span>
+                    <span class="mobile"><a href="boeketten/bestellen" data-boeket="boeket2">bestel hier</a></span>
                 </p>
                 <p>
                     Ons florissant boeket <br>
                     om mee uit te pakken, <br>
                     waarvan harten sneller slaan.<br>
                     <br>
-                    <span class="mobile"><a href="boeketten/bestellen" data-boeket="boeket3">bestel</a></span>
+                    <span class="mobile"><a href="boeketten/bestellen" data-boeket="boeket3">bestel hier</a></span>
                 </p>
             </div>
             

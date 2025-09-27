@@ -6,10 +6,6 @@ use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PaymentController;
 
 Route::get('/', function () {
-    return view('constructie');
-});
-
-Route::get('/landing', function () {
     return view('landing');
 })->name('landing');
 

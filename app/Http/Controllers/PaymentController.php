@@ -12,9 +12,9 @@ use Illuminate\Support\Facades\Mail;
 class PaymentController extends Controller
 {
     protected $products = [
-        'option1' => ['name' => 'Schattige boeketten', 'price' => 3000], // €30
-        'option2' => ['name' => 'Charmante boeketten', 'price' => 5000], // €50
-        'option3' => ['name' => 'Magnifieke boeketten', 'price' => 6000], // €60
+        'option1' => ['name' => 'Schattige boeketten', 'price' => 2900], // €30
+        'option2' => ['name' => 'Charmante boeketten', 'price' => 3900], // €50
+        'option3' => ['name' => 'Magnifieke boeketten', 'price' => 4900], // €60
     ];
 
     public function orderForm()

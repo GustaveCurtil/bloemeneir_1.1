@@ -28,7 +28,7 @@
         <section id="contact">
           <h2 style="text-align: center">Contact</h2>
             <p><u onclick="copy('info@bloemenier.be', 'info@bloemenier.be')">info@bloemenier.be</u></p>
-            <p><a href="">instagram-pagina</a></p>
+            <p><a href="https://www.instagram.com/bloemenier/#" target="_blank">instagram-pagina</a></p>
         </section>
     </main>
 

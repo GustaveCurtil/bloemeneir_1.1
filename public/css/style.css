@@ -253,6 +253,26 @@ img#logo {
 
 /* SFEER PAGINA */
 
+section.fototekst {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+section.fototekst div {
+    padding: var(--gap-big);
+}
+
+section.gallerij {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-small);
+}
+
+section.gallerij img {
+}
+
+
 main#gallerij>section:first-of-type {
     columns: 3 150px;
     column-gap: var(--gap-small);
@@ -427,13 +447,11 @@ input, select {
     border-radius: 0;
     color: var(--color-text);
     margin-bottom: var(--gap-medium);
-    background-color: var(--color-bg);
+    background-color: #efe5d9;
 
     font-family: var(--font);
     padding: 0 var(--gap-mini);
     font-size: 1.1rem;
-
-    background-color: #36460416;
 
     accent-color: var(--color-text);
     caret-color: var(--color-text);
@@ -484,7 +502,7 @@ input::-webkit-inner-spin-button {
 input[type="number"] {
   display: inline-flex;
   align-items: center;
-  background-color: rgba(245, 222, 179, 0);
+  background-color: #efe5d9;
   -moz-appearance: textfield;
 }
 
@@ -584,19 +602,14 @@ fieldset#aantal input {
 }
 fieldset#aantal input::placeholder {color: var(--color-text);}
 
-fieldset#aantal>div:nth-child(1) .plusmin {background-color: var(--color-yellow);}
-fieldset#aantal>div:nth-child(2) .plusmin {background-color: var(--color-green);}
-fieldset#aantal>div:nth-child(3) .plusmin {background-color: var(--color-purple);}
+fieldset#aantal>div .plusmin {background-color: #efe5d9;}
+fieldset#aantal>div:nth-child(1) .plusmin>* {border-color: #887f1e;}
+fieldset#aantal>div:nth-child(2) .plusmin>* {border-color: #f1c47c}
+fieldset#aantal>div:nth-child(3) .plusmin>* {border-color: #9e3238;}
 
 #aantal div.afbeelding {
     height: calc( (2* var(--height-line)));
     aspect-ratio: 1/1;
-    -webkit-mask-image: url("/public/media/boeket.png");
-    -webkit-mask-repeat: no-repeat;
-    -webkit-mask-size: contain;
-    mask-image: url("/media/boeket.png");
-    mask-repeat: no-repeat;
-    mask-size: contain;
     z-index: 20;
 }
 
@@ -671,4 +684,42 @@ button {
     #fichkes a[data-boeket="boeket3"]:hover img {
         content: url("/media/aanbod/fiche_magnifiek3.png");
     }
+
+    section.fototekst {
+        flex-direction: row;
+    }
+
+    section.fototekst img {
+        width: 50%;
+    }
+
+    section.fototekst>div{
+        width: 50%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+
+        padding: var(--gap-big);
+    }
+
+    section.fototekst p {
+        font-size: 1.1rem;
+    }
+
+    section.gallerij {
+        flex-direction: row;
+        gap: var(--gap-medium);
+    }
+
+    img.horizontaal {
+        width: calc((100% - 2 * var(--gap-medium)) / 2) !important;
+    }
+
+    img.verticaal {
+        width: calc((100% - 2 * var(--gap-medium)) / 4);
+    }
+
+    
 }

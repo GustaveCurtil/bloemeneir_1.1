@@ -102,7 +102,7 @@ class PageController extends Controller
         Stripe::setApiKey(env('STRIPE_SECRET'));
 
         // Calculate total amount
-        $totalAmount = (30 * $order->option1) + (50 * $order->option2) + (60 * $order->option3);
+        $totalAmount = (29 * $order->option1) + (39 * $order->option2) + (49 * $order->option3);
 
         if ($totalAmount === 0) {
             return back()->withErrors('Je moet minstens één boeket kiezen.');
