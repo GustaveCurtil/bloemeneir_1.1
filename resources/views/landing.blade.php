@@ -6,7 +6,7 @@
 
     <main id="landing">
         <br>
-        <p class="slogan">Bloemenier is een bloemist in Kessel-Lo<br>en maakt prachtige boeketten op bestelling.</p>
+        <p class="slogan">Doe jezelf of iemand anders een groot plezier<br>en bestel een boeket bij de Bloemenier.</p>
         <img src="{{asset('/media/mamas.png')}}" alt="" id="landing">
     </main>
 

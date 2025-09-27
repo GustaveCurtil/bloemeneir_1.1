@@ -10,9 +10,6 @@
 
     <main id="gallerij">
         <section>
-            @for ($i = 1; $i < 33; $i++)
-                <img src="{{asset('/media/bloemen/boeket' . $i . '.jpg')}}" alt="">
-            @endfor
                     
         </section>
             <p>

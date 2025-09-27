@@ -34,7 +34,7 @@
             {{-- <img id="logo" src="{{ asset('media/boeketje.png') }}" alt=""> --}}
         </div>
         <nav>
-            <a href="{{ route('over') }}" class="{{ request()->routeIs('over') ? 'actief' : '' }}">wij</a>
+            <a href="{{ route('over') }}" class="{{ request()->routeIs('over') ? 'actief' : '' }}">over ons</a>
             <a href="{{ route('aanbod') }}" class="{{ request()->routeIs('aanbod') ? 'actief' : '' }}">boeket bestellen</a>
             <a href="{{ route('contact') }}" class="{{ request()->routeIs('contact') ? 'actief' : '' }}">contact</a>
         </nav>
@@ -44,8 +44,7 @@
 
         <footer>
             @if (!Route::is('landing'))
-            {{-- <p>🏵 <a href="">afspraken</a> 🏵</p> --}}
-            <p>website gemaakt met ♥ door <a href="https://kurtgustil.be/">kurtgustil</a></p>
+            <p>website gemaakt met ♥ door <a href="https://kurtgustil.be/" target="_blank">kurtgustil</a></p>
             @endif
         </footer>
     </div>

@@ -85,8 +85,8 @@ body {
 }
 
 body>div {
-    height: 100%;
-    width: 100%;
+    height: 100svh;
+    width: 100vw;
 
     display: flex;
     flex-direction: column;
@@ -152,9 +152,9 @@ nav a.actief {
     color: #f3e8ca;
 }
 
-nav a:first-child {animation: wobble 16s ease-in-out infinite; }
-nav a:nth-child(2) {animation: wobble 20s ease-in-out infinite; transform: translateY(0.6rem);}
-nav a:nth-child(3) {animation: wobble 18s ease-in-out alternate-reverse infinite;  transform: translateY(0.2rem);}
+nav a:first-child {animation: wobble 16s ease-in-out infinite; transform: scale(0.9); }
+nav a:nth-child(2) {animation: wobble 20s ease-in-out infinite; transform: translateY(0.8rem);}
+nav a:nth-child(3) {animation: wobble 18s ease-in-out alternate-reverse infinite;  transform: translateY(0.2rem) scale(0.9);}
 
 @keyframes wobble {
   0% {border-radius: 45% 19% 50% 70% / 69% 50% 70% 60%;}
@@ -186,12 +186,13 @@ footer {
     min-height: var(--height-footer);
     display: flex; flex-direction: column; justify-content: center; align-items: center;
 }
-footer p { line-height: calc((var(--height-footer) / 3)); font-size: 0.9rem;}
-footer p span{font-size: 0.8rem;}
-footer a {text-underline-offset: var(--gap-mini);}
-
+footer p { line-height: calc((var(--height-footer) / 3)); font-size: 0.9rem; display: inline;}
+footer>p>a { user-select: none; text-underline-offset: var(--gap-mini); cursor: url('../boeket2.cur'), auto; cursor: default;  line-height: calc((var(--height-footer) / 3)); font-size: 0.9rem; display: inline-block;}
+a:-webkit-any-link {
+    cursor: url('../boeket2.cur'), pointer;
+}
 div#omhoog {
-    cursor: pointer;
+    cursor: url('../boeket2.cur'), pointer;
     position:fixed; bottom: var(--gap-medium); right: var(--gap-medium);
     display: flex;  justify-content: center; align-items:center; 
     border: 1px solid var(--color-text); background-color: var(--color-bg);
@@ -267,18 +268,30 @@ main#gallerij>section:first-of-type img {
 
 /* AANBODPAGINA */
 
+section#intro p {
+    text-align:center; font-size: 0.9rem; font-weight: 600;
+    font-family: var(--font2);
+}
+
 section#aanbod, section#fichkes {
     flex-grow: 1;
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
 
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
     margin-bottom: 0;
-
 }
 
-section#aanbod>a {
+section#fichkes>div {
+    display: flex;
+    width: 50%;
+    height: 100%;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+/* section#aanbod>a {
     height: fit-content;
     border: 1px solid var(--color-text);
     background-color: var(--color-green);
@@ -291,11 +304,20 @@ section#aanbod>a {
     padding: var(--gap-small);
 }
 
-section#fichkes>a {
+section#fichkes>div>a {
     display: block;
     height: fit-content;
     max-width: calc(100% - 2 * var(--gap-big) + 2 * var(--gap-mini));
     text-decoration: none;
+} */
+
+section#fichkes>div>p {
+    font-size: 0.9rem;
+    width: 100%;
+    height: calc(100% / 3);
+    display: inline-block;
+    align-content: center;
+    text-align: center;
 }
 
 section#aanbod img {
@@ -303,22 +325,11 @@ section#aanbod img {
     max-width: 180px;
 }
 
-#fichkes a[data-boeket="boeket1"]:hover img {
-    content: url("/media/aanbod/fiche_schattig3.png");
-}
-
-#fichkes a[data-boeket="boeket2"]:hover img {
-    content: url("/media/aanbod/fiche_charmant3.png");
-}
-
-#fichkes a[data-boeket="boeket3"]:hover img {
-    content: url("/media/aanbod/fiche_magnifiek3.png");
-}
 
 section#aanbod p {
     text-align: center;
     margin: var(--gap-mini) 0;
-    font-size: 0.9rem;
+
 }
 
 section#aanbod>a:nth-child(1) { border-radius: 8% 20% 10% 20% / 40% 30% 25% 69%; background-color: var(--color-yellow); }
@@ -365,12 +376,13 @@ section#kaart {
 }
 
 section#kaart>div {
-    flex-grow: 1;
     height: 100%;
+    width: 100%;
 }
 
 section#kaart>img {
-    height: 100%;
+    max-height: 100%;
+    aspect-ratio: 2/3;
     width: auto;
     max-width: 100%;
 }
@@ -624,7 +636,12 @@ button {
     .desktop {display: flex;}
     span.desktop {display: inline;}
     section#aanbod, section#fichkes {
+        flex-direction: column;
+    }
+
+    section#fichkes>div {
         flex-direction: row;
+        width: 100%;
     }
 
     section#fichkes a {
@@ -637,5 +654,22 @@ button {
     section#kaart {
         height: 400px;
         flex-direction: row;
+    }
+
+    section#fichkes>div>p {
+    padding-top: var(--gap-big);
+    height: 69%;
+    width: calc(100% / 3);
+    }
+    #fichkes a[data-boeket="boeket1"]:hover img {
+        content: url("/media/aanbod/fiche_schattig3.png");
+    }
+
+    #fichkes a[data-boeket="boeket2"]:hover img {
+        content: url("/media/aanbod/fiche_charmant3.png");
+    }
+
+    #fichkes a[data-boeket="boeket3"]:hover img {
+        content: url("/media/aanbod/fiche_magnifiek3.png");
     }
 }

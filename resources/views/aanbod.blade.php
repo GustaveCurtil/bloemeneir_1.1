@@ -32,16 +32,41 @@
                     <p>60 euro</p>
                 </a>
         </section> --}}
+        <section id="intro">
+           <p>we werken alleen op bestelling om overschotten en afval zoveel mogelijk te beperken.<br>Ook kromme stengels en speelse bloemen krijgen een kans in onze boeketjes</p> 
+        </section>
+        
         <section id="fichkes">
-            <a href="boeketten/bestellen" data-boeket="boeket1">
+            <div>
+                <a href="boeketten/bestellen" data-boeket="boeket1">
                 <img src="{{asset('/media/aanbod/fiche_schattig1.png')}}" alt="" srcset="">
-            </a>
-            <a href="boeketten/bestellen" data-boeket="boeket2">
-                <img src="{{asset('/media/aanbod/fiche_charmant1.png')}}" alt="" srcset="">
-            </a>
-            <a href="boeketten/bestellen" data-boeket="boeket3">
-                <img src="{{asset('/media/aanbod/fiche_magnifiek1.png')}}" alt="" srcset="">
-            </a>
+                </a>
+                <a href="boeketten/bestellen" data-boeket="boeket2">
+                    <img src="{{asset('/media/aanbod/fiche_charmant1.png')}}" alt="" srcset="">
+                </a>
+                <a href="boeketten/bestellen" data-boeket="boeket3">
+                    <img src="{{asset('/media/aanbod/fiche_magnifiek1.png')}}" alt="" srcset="">
+                </a>
+            </div>
+            <div>
+                <p>
+                    Ons lief boeketje, <br>
+                    voor een kleine gelegenheid,<br>
+                    een tussendoortje voor jezelf<br>
+                    of wie weet een eerste date.
+                </p>
+                <p>
+                    Ons boeket gevuld <br>
+                    met speelse elegantie<br>
+                    een fleurige verwennerij.
+                </p>
+                <p>
+                    Ons florissant boeket <br>
+                    om mee uit te pakken, <br>
+                    waarvan harten sneller slaan.
+                </p>
+            </div>
+            
         </section>
     </main>
 
