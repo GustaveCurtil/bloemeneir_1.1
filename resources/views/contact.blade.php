@@ -12,7 +12,7 @@
         <section id="contact">
             <p>
               In het hartje van Kessel-Lo, <br>
-              in het kleinste pand van de <a href="https://maps.app.goo.gl/qAkeHriBos8S4XMcA" target="_blank">Koning Albertlaan</a>, <br>
+              in het kleinste pand van de <a href="https://maps.app.goo.gl/qAkeHriBos8S4XMcA" target="_blank" style="text-wrap-mode: nowrap">Koning Albertlaan</a>, <br>
               op nummer 77, <br><br>
               Daar vind je de Bloemenier.
             </p>

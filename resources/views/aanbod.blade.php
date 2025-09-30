@@ -33,7 +33,7 @@
                 </a>
         </section> --}}
         <section id="intro">
-           <p>We werken alleen op bestelling om overschotten en afval zoveel mogelijk te beperken.<br>Ook kromme stengels en speelse bloemen krijgen een kans in onze boeketjes.</p> 
+           <p>We werken alleen op bestelling om overschotten en afval zoveel mogelijk te beperken.<br>Bestel je boeket voor woensdag 18u en kies zelf of je het vrijdagnamiddag of zaterdag voormiddag komt afhalen bij ons.</p>
         </section>
         
         <section id="fichkes">

@@ -13,24 +13,19 @@
                 <img src="{{asset('media/over/bloemenier-51.jpg')}}" alt="">  
                 <div>
                     <p>
-                        Dat zijn wij, Bloemenier. <br>
-                        Petra en Anne-Sophie.<br>
+                        Dit zijn wij, Bloemenier. <br>
+                        Anne-Sophie en Petra.<br>
                         Welkom.
                     </p>
                     <br>
                     <p>
-                        We werken op bestelling<br>
-                        beperkt overschot en afval.<br>
+                        We werken enkel op bestelling<br>
+                        zo beperken we overschot en afval.<br>
                         Geïnspireerd op het aanbod<br>
-                        van het seizoen en<br>
-                        steeds kakelverse bloemen<br>
-                        want we bestellen ze
-                    </p>
-                    <br>
-                    <p>
-                        enkel voor jullie<br>
-                        Ecologisch doordacht.<br>
-                        Prijs in evenwicht.
+                        van het seizoen en steeds<br>
+                        kakelverse bloemen<br>
+                        want we bestellen ze <br>
+                        speciaal voor jullie<br>
                     </p>
                 </div> 
         </section>
@@ -42,17 +37,14 @@
         <section class="fototekst">
             <div>
                 <p>
-                    Het seizoen bepaalt de bloemen,<br>
-                    fris en vers bepalen wij. <br>
                     Kromme stengels, speelse kleuren<br>
-                    grijpen hun kans, horen erbij.
+                    horen erbij.
                 </p>
                 <br>
                 <p>
                     Zot van bloemen, net als wij?<br>
-                    Goesting gekregen, kriebelt iets blij?<br>
                     Jij kiest ‘schattig’, ‘charmant’ of ‘magnifiek’.<br>
-                    Wij zorgen voor iets magique.
+                    Wij zorgen voor iets artistiek.
                 </p>
             </div> 
             <img src="{{asset('media/over/bloemenier-72.jpg')}}" alt="" class="horizontaal">  
