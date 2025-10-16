@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\MailPetrannesophie;
 use Stripe\Stripe;
 use Stripe\PaymentIntent;
 use App\Mail\OrderConfirmed;
@@ -103,17 +104,28 @@ class PaymentController extends Controller
         $order  = \App\Models\Order::find($orderId);
     
         if ($paymentIntent->status === 'succeeded') {
-            $order->payed = true;
+            
+                $orderDate = Carbon::parse($order->day);
+                Carbon::setLocale('nl');
+                $weekday = $orderDate->translatedFormat('l'); // "vrijdag", "maandag", etc.
+                $formattedDate = $orderDate->translatedFormat('d F'); // "26 september"
+
+            if (!$order->payed) {
+                $order->payed = true;
             // $order->stripe_payment_intent_id = $paymentIntent->id;
-            $order->save();
+                $order->save(); 
+                Mail::to($client->email)->send(new OrderConfirmed($order, $weekday, $formattedDate));
+                Mail::to('petra.magnus@telenet.be')
+                    ->cc([
+                        'annesophie@fullscalearchitecten.be',
+                        'gustave.curtil@tutanota.com',
+                    ])
+                    ->send(new MailPetrannesophie($order, $weekday, $formattedDate));
+            }
+
             $request->session()->forget('order');
 
-            $orderDate = Carbon::parse($order->day);
-            Carbon::setLocale('nl');
-            $weekday = $orderDate->translatedFormat('l'); // "vrijdag", "maandag", etc.
-            $formattedDate = $orderDate->translatedFormat('d F'); // "26 september"
-
-            Mail::to($client->email)->send(new OrderConfirmed($order, $weekday, $formattedDate));
+            
 
             return view('succes', [
                 'client' => $client,
@@ -132,9 +144,9 @@ class PaymentController extends Controller
         }
     }
 
-    public function failed()
-    {
+    // public function failed()
+    // {
 
-        return "Betaling onsuccesvol! Bedankt voor te proberen.";
-    }
+    //     return "Betaling onsuccesvol! Bedankt voor te proberen.";
+    // }
 }

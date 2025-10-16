@@ -9,7 +9,13 @@
 @section('main')
 
     <main>
+      <section id="contact">
+        <h2 style="text-align: center">Afhaalmomenten</h2>
+        <p>Vrijdag tussen 16u en 19u</p>
+        <p>Zaterdag tussen 10u en 13u</p>
+      </section>
         <section id="contact">
+          <h2 style="text-align: center">Kessel-Lo</h2>
             <p>
               In het hartje van Kessel-Lo, <br>
               in het kleinste pand van de <a href="https://maps.app.goo.gl/qAkeHriBos8S4XMcA" target="_blank" style="text-wrap-mode: nowrap">Koning Albertlaan</a>, <br>
@@ -29,6 +35,8 @@
           <h2 style="text-align: center">Contact</h2>
             <p><u onclick="copy('info@bloemenier.be', 'info@bloemenier.be')">info@bloemenier.be</u></p>
             <p><a href="https://www.instagram.com/bloemenier/#" target="_blank">instagram-pagina</a></p>
+            <br>
+            <p>BTW-nummer: 1028201978</p>
         </section>
     </main>
 

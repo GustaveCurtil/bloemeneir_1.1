@@ -16,6 +16,7 @@ class OrderController extends Controller
         // Validate input
         $validated = $request->validate([
             'first_name' => 'required|string|max:255',
+            'last_name' => 'nullable|string|max:255',
             'phone'      => 'nullable|max:20',
             'email'      => 'required|email|max:255',
             'nieuwsbrief'=> 'nullable|boolean',
@@ -55,6 +56,7 @@ class OrderController extends Controller
                 // ✅ Same email → update existing client
                 $sessionClient->update([
                     'first_name' => $validated['first_name'],
+                    'last_name' => $validated['last_name'],
                     'phone'      => $validated['phone'],
                     'nieuwsbrief'=> $validated['nieuwsbrief'],
                 ]);
@@ -75,6 +77,7 @@ class OrderController extends Controller
                         $existingClient->update([
                             'device_id'  => uniqid(),
                             'first_name' => $validated['first_name'],
+                            'last_name' => $validated['last_name'],
                             'nieuwsbrief'=> $validated['nieuwsbrief']
                         ]);
                         $client = $existingClient;
@@ -82,7 +85,7 @@ class OrderController extends Controller
                         // 🚨 Phone mismatch or missing → create new client
                         $client = Client::create([
                             'first_name' => $validated['first_name'],
-                            'last_name'  => '',
+                            'last_name'  => $validated['last_name'],
                             'phone'      => $validated['phone'],
                             'email'      => $validated['email'],
                             'nieuwsbrief'=> $validated['nieuwsbrief'],
@@ -93,7 +96,7 @@ class OrderController extends Controller
                     // ✅ No client with that email → create new one
                     $client = Client::create([
                         'first_name' => $validated['first_name'],
-                        'last_name'  => '',
+                        'last_name'  => $validated['last_name'],
                         'phone'      => $validated['phone'],
                         'email'      => $validated['email'],
                         'nieuwsbrief'=> $validated['nieuwsbrief'],
@@ -110,7 +113,7 @@ class OrderController extends Controller
                 // 2.1 Email does not exist → create new client
                 $client = Client::create([
                     'first_name' => $validated['first_name'],
-                    'last_name'  => '',
+                    'last_name'  => $validated['last_name'],
                     'phone'      => $validated['phone'],
                     'email'      => $validated['email'],
                     'nieuwsbrief' => $validated['nieuwsbrief'],
@@ -127,6 +130,7 @@ class OrderController extends Controller
                     // ✅ Safe reuse → update client
                     $existingClient->update([
                         'first_name' => $validated['first_name'],
+                        'last_name' => $validated['last_name'],
                         'device_id'  => uniqid(),
                     ]);
                     $client = $existingClient;
@@ -134,7 +138,7 @@ class OrderController extends Controller
                     // 🚨 Phone mismatch/missing → create new client (duplicate email allowed)
                     $client = Client::create([
                         'first_name' => $validated['first_name'],
-                        'last_name'  => '',
+                        'last_name'  => $validated['last_name'],
                         'phone'      => $validated['phone'],
                         'email'      => $validated['email'],
                         'nieuwsbrief'=> $validated['nieuwsbrief'],

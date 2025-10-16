@@ -79,8 +79,10 @@
                     <p><i class="small">Je ontvangt nog een mail met alle informatie.</i></p>
                 </fieldset>
                 <fieldset>
-                    <label for="naam">jouw naam*:</label>
+                    <label for="naam">jouw voornaam*:</label>
                     <input type="text" name="first_name" id="naam" value="{{ old('first_name', $client->first_name ?? '') }}" placeholder="vul hier in" required>
+                    <label for="achternaam">jouw achternaam:</label>
+                    <input type="text" name="last_name" id="achternaam" value="{{ old('last_name', $client->last_name ?? '') }}" placeholder="vul hier in" required>
                     <label for="email">email*:</label>
                     <input type="email" name="email" id="email" value="{{ old('email', $client->email ?? '') }}" placeholder="vul hier in" required>
                     <label for="nummer">telefoonnummer <i class="small">(in case of)</i>:</label>

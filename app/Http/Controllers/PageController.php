@@ -27,51 +27,65 @@ class PageController extends Controller
         $now = Carbon::now();
         $startDate = Carbon::today();
 
-        // Wednesday 18:00 of the current week
+        $now = Carbon::now('Europe/Brussels');
+
+        // Wednesday 18:00 of this week
         $wednesdayCutoff = $now->copy()->startOfWeek()->addDays(2)->setTime(18, 0, 0);
 
-        // --- Find this week's Friday ---
-        $firstFriday = $now->copy()->startOfWeek()->addDays(4); // Monday + 4 = Friday
-        if ($now->gt($firstFriday)) {
-            // if today is already after Friday, jump to next week's Friday
-            $firstFriday->addWeek();
-        }
-        $firstSaturday = $firstFriday->copy()->addDay();
+        // Determine start of the active week
+        $weekStart = $now->copy()->startOfWeek();
 
-        // --- Apply cutoff logic ---
+        // If it’s after Wednesday 18:00, move to next week
         if ($now->gt($wednesdayCutoff)) {
-            // after Wednesday 18:00 → skip this week’s Fri/Sat
-            $firstFriday->addWeek();
-            $firstSaturday->addWeek();
+            $weekStart->addWeek();
         }
 
+        // Friday and Saturday of that (possibly next) week
+        $firstFriday = $weekStart->copy()->addDays(4);   // Friday
+        $firstSaturday = $firstFriday->copy()->addDay();  // Saturday
+\Log::info('Now: ' . $now);
+\Log::info('Cutoff: ' . $wednesdayCutoff);
+\Log::info('Friday: ' . $firstFriday);
+\Log::info('Saturday: ' . $firstSaturday);
         $dates = collect();
         $weeksChecked = 0;
         $neededDates = 6;
+        $maxWeeksToCheck = 10; // veiligheidsstop om niet oneindig te loopen
 
-        while ($dates->count() < $neededDates && $weeksChecked < 10) {
-            $friday = $startDate->copy()->next(Carbon::FRIDAY);
-            $saturday = $friday->copy()->addDay(); // guaranteed to be the Saturday after
+        while ($dates->count() < $neededDates && $weeksChecked < $maxWeeksToCheck) {
+            // bepaal de start van de week die we nu checken
+            $currentWeekStart = $weekStart->copy()->addWeeks($weeksChecked);
 
+            // Friday = maandag + 4 dagen
+            $friday = $currentWeekStart->copy()->addDays(4);
+            $saturday = $friday->copy()->addDay();
+
+            // Holiday-check: zorg dat we de juiste kolom gebruiken (hier 'date')
             $weekIsBlocked = Holiday::whereBetween(
                 'week',
-                [$friday->copy()->startOfWeek(), $friday->copy()->endOfWeek()]
+                [
+                    $currentWeekStart->copy()->startOfWeek(Carbon::MONDAY)->toDateString(),
+                    $currentWeekStart->copy()->endOfWeek(Carbon::MONDAY)->toDateString()
+                ]
             )->exists();
 
-            if (!$weekIsBlocked) {
+            if (! $weekIsBlocked) {
                 $dates->push([
                     'date'      => $friday->toDateString(),
                     'formatted' => $friday->translatedFormat('j F'),
                     'day'       => $friday->translatedFormat('l'),
                 ]);
-                $dates->push([
-                    'date'      => $saturday->toDateString(),
-                    'formatted' => $saturday->translatedFormat('j F'),
-                    'day'       => $saturday->translatedFormat('l'),
-                ]);
+
+                // check nogmaals of we na het pushen al genoeg hebben
+                if ($dates->count() < $neededDates) {
+                    $dates->push([
+                        'date'      => $saturday->toDateString(),
+                        'formatted' => $saturday->translatedFormat('j F'),
+                        'day'       => $saturday->translatedFormat('l'),
+                    ]);
+                }
             }
 
-            $startDate->addWeek();
             $weeksChecked++;
         }
 

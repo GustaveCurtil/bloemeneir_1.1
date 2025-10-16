@@ -6,7 +6,7 @@
 <main>
     <section>
         <h2>Jouw gegevens</h2>
-        <p>Naam: <b>{{$client->first_name}}</b></p>
+        <p>Naam: <b>{{$client->first_name}} {{$client->last_name}}</b></p>
         <p>Telefoonnummer: <b>{{$client->phone}}</b> <i class="small">(wordt enkel gebruikt indien noodzakelijk)</i></p>
         <p>E-mailadres: <b>{{$client->email}}</b></p>
         <p>Nieuwsbrief: 
@@ -18,7 +18,7 @@
         </p>
     </section>
     <section>
-        <h2>Jouw bestelling</h2>
+        <h2>Jouw bestelling (nog niet betaald)</h2>
         <ul>
             <li>Schattig boeket x {{ $order->option1 }} = €{{ number_format(29 * $order->option1, 2 , ',')}}</li>
             <li>Charmant boeket x {{ $order->option2 }} = €{{ number_format(39 * $order->option2, 2 , ',')}}</li>

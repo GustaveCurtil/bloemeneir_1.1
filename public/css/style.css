@@ -188,7 +188,7 @@ footer {
     display: flex; flex-direction: column; justify-content: center; align-items: center;
 }
 footer p { line-height: calc((var(--height-footer) / 3)); font-size: 0.9rem; display: inline;}
-footer>p>a { user-select: none; text-underline-offset: var(--gap-mini); cursor: url('../boeket2.cur'), auto; cursor: default;  line-height: calc((var(--height-footer) / 3)); font-size: 0.9rem; display: inline-block;}
+footer>p>a { user-select: none; text-underline-offset: var(--gap-mini); cursor: url('../boeket2.cur'), auto; cursor: default;  line-height: calc((var(--height-footer) / 3)); font-size: 0.9rem; padding-left: 0.2rem;}
 a:-webkit-any-link {
     cursor: url('../boeket2.cur'), pointer;
 }

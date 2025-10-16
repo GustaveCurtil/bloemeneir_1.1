@@ -44,8 +44,12 @@
 
         <footer>
             @if (!Route::is('landing'))
-            <p>website gemaakt met ♥ door <a href="https://kurtgustil.be/" target="_blank">kurtgustil</a></p>
+            <p>website gemaakt met ♥ door<a href="https://kurtgustil.be/" target="_blank">kurtgustil</a></p>
+            @if (!Route::is('gdpr'))
+            <p><a href="{{ route('gdpr') }}">GDPR</a></p>
             @endif
+            @endif
+
         </footer>
     </div>
     <div id="omhoog">
