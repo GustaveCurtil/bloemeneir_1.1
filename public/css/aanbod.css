@@ -1,0 +1,14 @@
+button.add-to-basket{
+    height: var(--height-line);
+    width: auto;
+    background-color: #f0e6da;
+    border-radius: 5px;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+}
+
+button.add-to-basket img {
+    height: var(--height-line);
+    width: var(--height-line);
+}

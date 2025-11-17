@@ -4,6 +4,23 @@
 
 @section('main')
 <main>
+    <form action="">
+        <fieldset>
+                    <label for="naam">jouw voornaam*:</label>
+                    <input type="text" name="first_name" id="naam" value="{{ old('first_name', $client->first_name ?? '') }}" placeholder="vul hier in" required>
+                    <label for="achternaam">jouw achternaam:</label>
+                    <input type="text" name="last_name" id="achternaam" value="{{ old('last_name', $client->last_name ?? '') }}" placeholder="vul hier in" required>
+                    <label for="email">email*:</label>
+                    <input type="email" name="email" id="email" value="{{ old('email', $client->email ?? '') }}" placeholder="vul hier in" required>
+                    <label for="nummer">telefoonnummer <i class="small">(in case of)</i>:</label>
+                    <input type="tel" name="phone" id="nummer" value="{{ old('phone', $client->phone ?? '') }}" placeholder="vul hier in">
+                    <label class="rij">
+                        <input type="checkbox" name="nieuwsbrief" value="1"
+                            {{ old('nieuwsbrief', $client->nieuwsbrief ?? 0) == 1 ? 'checked' : '' }}>
+                        nieuwsbrief&nbsp;<i class="small">(max 4x per jaar)</i>
+                    </label>
+        </fieldset>
+    </form>
     <section>
         <h2>Jouw gegevens</h2>
         <p>Naam: <b>{{$client->first_name}} {{$client->last_name}}</b></p>
@@ -28,7 +45,7 @@
         <br>
         <p>Je komt jouw boeket halen op <b>{{$dag}} {{$datum}}
             @if ($dag === 'vrijdag')
-            (tussen 16u en 19u)
+            (tussen 15u en 19u)
             @else
             (tussen 10u en 13u)
             @endif

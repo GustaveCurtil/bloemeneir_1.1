@@ -1,0 +1,4 @@
+/* WebKit browsers (Chrome, Edge, Safari) */
+::-webkit-scrollbar {
+  width: 0rem; 
+}

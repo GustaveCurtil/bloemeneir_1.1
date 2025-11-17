@@ -10,7 +10,7 @@
     @if ($weekday === 'vrijdag')
     (tussen 15u en 19u)
     @else
-    (tussen 11u en 13u)
+    (tussen 10u en 13u)
     @endif
     </b>
 </p>

@@ -10,7 +10,8 @@
             <h2>1. Wie zijn we?</h2>
             <p>Bloemenier</p>
             <p>E-mail: info@bloemenier.be</p>
-            <p>BTW-nummer: 1028201978</p>
+            <p>Bloemenier VDK BE60 8940 0146 7370</p>
+            <p>Ondernemersnummer: 1028 201 978</p>
             <p>Adres: Koning Albertlaan 77, Kessel-Lo</p>
         </section>
         <section>
@@ -39,7 +40,7 @@
         <section>
             <h2>5. Worden je gegevens gedeeld?</h2>
 
-            <p>Nee. We delen je persoonsgegevens niet met derden, behalve als dit wettelijk verplicht is of strikt noodzakelijk voor de uitvoering van je bestelling (zoals onze hostingprovider).</p>
+            <p>Nee. We delen je persoonsgegevens niet met derden, behalve als dit wettelijk verplicht is of strikt noodzakelijk voor de uitvoering van je bestelling.</p>
         </section>
         <section>
             <h2>6. Cookies</h2>

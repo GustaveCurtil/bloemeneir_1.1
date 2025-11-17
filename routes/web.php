@@ -15,7 +15,7 @@ Route::get('/sfeer', function () {
     return view('over');
 })->name('over');
 
-Route::get('/boeketten', function () {
+Route::get('/aanbod', function () {
     return view('aanbod');
 })->name('aanbod');
 
@@ -27,7 +27,7 @@ Route::get('/gdpr', function () {
     return view('gdpr');
 })->name('gdpr');
 
-Route::get('/boeketten/bestellen', [PageController::class, 'bestellen'])->name('checkout.backToForm');
+Route::get('/aanbod/winkelmandje', [PageController::class, 'bestellen'])->name('shopping-basket');
 
 Route::get('/checkout', [PageController::class, 'checkout'])->name('checkout');
 

@@ -35,27 +35,38 @@
         </div>
         <nav>
             <a href="{{ route('over') }}" class="{{ request()->routeIs('over') ? 'actief' : '' }}">over ons</a>
-            <a href="{{ route('aanbod') }}" class="{{ request()->routeIs('aanbod') ? 'actief' : '' }}">boeket bestellen</a>
+            <a href="{{ route('aanbod') }}" class="{{ request()->routeIs('aanbod') || request()->routeIs('shopping-basket') ? 'actief' : '' }}">boeket bestellen</a>
             <a href="{{ route('contact') }}" class="{{ request()->routeIs('contact') ? 'actief' : '' }}">contact</a>
         </nav>
     </header>
     <div>
         @yield('main')
-
+        @if (!Route::is('landing') && !Route::is('shopping-basket'))
         <footer>
-            @if (!Route::is('landing'))
             <p>website gemaakt met ♥ door<a href="https://kurtgustil.be/" target="_blank">kurtgustil</a></p>
+            <p><a href="https://www.instagram.com/bloemenier/#" target="_blank">instagram</a></p>
             @if (!Route::is('gdpr'))
             <p><a href="{{ route('gdpr') }}">GDPR</a></p>
             @endif
+            @if (Route::is('gdpr'))
+            <p><a href="{{ route('overzicht') }}">inloggen</a></p>
             @endif
-
         </footer>
+        @endif
     </div>
     <div id="omhoog">
         <p>↑</p>
     </div>
   </div>
+  @if (!Route::is('landing') && !Route::is('shopping-basket') && !Route::is('gdpr'))
+    <div id="shopping-card" class="active">
+        <img src="{{asset('/media/aanbod/winkelmandje.png')}}" alt="">
+        <div>
+            <p><b><span id="amount">0 dingen</span></b> in het winkelmandje</p>
+            <p><u>beheer winkelmandje / kassa</u></p>
+        </div> 
+    </div>
+    @endif
     
 </body>
 </html>

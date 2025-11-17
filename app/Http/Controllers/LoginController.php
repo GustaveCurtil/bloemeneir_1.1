@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 
 class LoginController extends Controller
@@ -24,9 +25,7 @@ class LoginController extends Controller
         $naam = $request->input('naam');
         $wachtwoord = $request->input('wachtwoord');
 
-        if (isset($users[$naam]) && $users[$naam] === $wachtwoord) {
-            // Save login in session
-            Session::put('user', $naam);
+        if (Auth::attempt(['name' => $naam, 'password' => $wachtwoord])) {
             return redirect()->route('overzicht');
         }
 

@@ -4,6 +4,8 @@
 
 @section('links')
 <script src="{{asset('/js/kopieren.js')}}" defer></script>
+<script src="{{asset('/js/winkelmandje.js')}}" defer></script>
+<script src="{{asset('/js/inkopen.js')}}" defer></script>
 @endsection
 
 @section('main')
@@ -11,7 +13,7 @@
     <main>
       <section id="contact">
         <h2 style="text-align: center">Afhaalmomenten</h2>
-        <p>Vrijdag tussen 16u en 19u</p>
+        <p>Vrijdag tussen 15u en 19u</p>
         <p>Zaterdag tussen 10u en 13u</p>
       </section>
         <section id="contact">
@@ -19,8 +21,8 @@
             <p>
               In het hartje van Kessel-Lo, <br>
               in het kleinste pand van de <a href="https://maps.app.goo.gl/qAkeHriBos8S4XMcA" target="_blank" style="text-wrap-mode: nowrap">Koning Albertlaan</a>, <br>
-              op nummer 77, <br><br>
-              Daar vind je Bloemenier.
+              op nummer 77, <br>
+              daar vind je Bloemenier.
             </p>
         </section>
         <section id="kaart">
@@ -36,7 +38,9 @@
             <p><u onclick="copy('info@bloemenier.be', 'info@bloemenier.be')">info@bloemenier.be</u></p>
             <p><a href="https://www.instagram.com/bloemenier/#" target="_blank">instagram-pagina</a></p>
             <br>
-            <p>BTW-nummer: 1028201978</p>
+            <p>Bloemenier VDK BE60 8940 0146 7370</p>
+            <p>Ondernemersnummer: 1028 201 978</p>
+            <p>RPR Leuven</p>
         </section>
     </main>
 

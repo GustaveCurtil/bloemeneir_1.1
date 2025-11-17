@@ -14,7 +14,6 @@ use Illuminate\Support\Facades\Mail;
 class PageController extends Controller
 {
 
- 
     public function bestellen()
     {
         $order = session('order');
@@ -43,10 +42,10 @@ class PageController extends Controller
         // Friday and Saturday of that (possibly next) week
         $firstFriday = $weekStart->copy()->addDays(4);   // Friday
         $firstSaturday = $firstFriday->copy()->addDay();  // Saturday
-\Log::info('Now: ' . $now);
-\Log::info('Cutoff: ' . $wednesdayCutoff);
-\Log::info('Friday: ' . $firstFriday);
-\Log::info('Saturday: ' . $firstSaturday);
+        \Log::info('Now: ' . $now);
+        \Log::info('Cutoff: ' . $wednesdayCutoff);
+        \Log::info('Friday: ' . $firstFriday);
+        \Log::info('Saturday: ' . $firstSaturday);
         $dates = collect();
         $weeksChecked = 0;
         $neededDates = 6;
@@ -91,10 +90,12 @@ class PageController extends Controller
 
         $data = $dates->sortBy('date')->values()->take($neededDates);
 
-        return view('boeket', compact('order', 'client', 'data'));
+        return view('bestelling.winkelmand', compact('order', 'client', 'data'));
     }
 
-    public function checkout(Request $request) {
+
+    public function checkout(Request $request) 
+    {
         $client = Client::findOrFail($request->client_id);
         $order  = Order::findOrFail($request->order_id);
         if ($order->payed) {
@@ -142,7 +143,7 @@ class PageController extends Controller
         $clientSecret = $paymentIntent->client_secret;
 
 
-        return view('checkout', [
+        return view('bestelling.checkout', [
             'client' => $client,
             'order'  => $order,
             'dag'    => $weekday,
@@ -151,8 +152,10 @@ class PageController extends Controller
         ]);
     }
 
+
     public function backToForm(Request $request)
     {
+
         session([
             'order' => $request->order,   // or $order model/array
             'client' => $request->client, // or $client model/array

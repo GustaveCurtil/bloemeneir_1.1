@@ -13,19 +13,14 @@ use Illuminate\Support\Facades\Mail;
 class PaymentController extends Controller
 {
     protected $products = [
-        'option1' => ['name' => 'Schattige boeketten', 'price' => 2900], // €30
-        'option2' => ['name' => 'Charmante boeketten', 'price' => 3900], // €50
-        'option3' => ['name' => 'Magnifieke boeketten', 'price' => 4900], // €60
+        'option1' => ['name' => 'Schattige boeketten', 'price' => 2900], 
+        'option2' => ['name' => 'Charmante boeketten', 'price' => 3900],
+        'option3' => ['name' => 'Magnifieke boeketten', 'price' => 4900],
     ];
 
-    public function orderForm()
-    {
-        return view('order');
-    }
 
     public function processOrder(Request $request)
     {
-        // Haal het aantal op
         $quantities = [
             'option1' => (int) $request->input('option1', 0),
             'option2' => (int) $request->input('option2', 0),
@@ -72,20 +67,24 @@ class PaymentController extends Controller
             ],
         ]);
 
-        return view('checkout', [
+        return view('bestelling.checkout', [
             'clientSecret' => $paymentIntent->client_secret,
             'items' => $items,
             'totalAmount' => $totalAmount,
             'userData' => $userData,
         ]);
+
     }
 
+    
     public function success(Request $request)
     {
         $paymentIntentId = $request->query('payment_intent');
 
         if (!$paymentIntentId) {
+
             return "Geen betaling gevonden.";
+
         }
 
         \Stripe\Stripe::setApiKey(env('STRIPE_SECRET'));
@@ -111,42 +110,42 @@ class PaymentController extends Controller
                 $formattedDate = $orderDate->translatedFormat('d F'); // "26 september"
 
             if (!$order->payed) {
+
                 $order->payed = true;
-            // $order->stripe_payment_intent_id = $paymentIntent->id;
+
+                // $order->stripe_payment_intent_id = $paymentIntent->id;
                 $order->save(); 
                 Mail::to($client->email)->send(new OrderConfirmed($order, $weekday, $formattedDate));
-                Mail::to('petra.magnus@telenet.be')
-                    ->cc([
-                        'annesophie@fullscalearchitecten.be',
-                        'gustave.curtil@tutanota.com',
-                    ])
+                Mail::to('info@bloemenier.be')
+                    // ->cc([
+                    //     'annesophie@fullscalearchitecten.be',
+                    //     'gustave.curtil@tutanota.com',
+                    // ])
                     ->send(new MailPetrannesophie($order, $weekday, $formattedDate));
             }
 
             $request->session()->forget('order');
 
-            
-
-            return view('succes', [
+            return view('bestelling.succes', [
                 'client' => $client,
                 'dag' => $weekday,
                 'datum' => $formattedDate
             ]);
+
         } elseif ($paymentIntent->status === 'processing') {
+
             return "⏳ Je betaling wordt nog verwerkt. Even geduld!";
+
         } elseif ($paymentIntent->status === 'requires_payment_method') {
+
             return redirect()->route('checkout', [
                 'client_id' => $order->client_id,
                 'order_id' => $order->id
             ])->with('message', 'Betaling mislukt of geannuleerd.');
+
         } else {
+
             return "⚠️ Onbekende status: {$paymentIntent->status}";
         }
     }
-
-    // public function failed()
-    // {
-
-    //     return "Betaling onsuccesvol! Bedankt voor te proberen.";
-    // }
 }
