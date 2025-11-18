@@ -16,7 +16,7 @@
         </div>
             <p>Boeket voor deze week graag vòòr woensdag 18u bestellen.</p>
             <br>
-            <p>De volledige opbrengst van de verkoop op <b>12 en 13 december</b> schenken we aan 🔥<b>de Warmste Week</b>🔥</p>
+            <p>De volledige opbrengst van de verkoop op <b>12 en 13 december</b> schenken we aan de ☀ <b>Warmste Week</b> ☀</p>
             <br>
             
             <form onsubmit="return gaNaarBetaling()">

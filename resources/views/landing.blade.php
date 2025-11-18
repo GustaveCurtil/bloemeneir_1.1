@@ -12,9 +12,9 @@
         <div class="slogan">
             <p>Doe jezelf of iemand anders<br>een groot plezier<br>en bestel een boeket<br>bij Bloemenier</p>
             <br>
-            <p>De volledige opbrengst<br>van de verkoop op 12 en 13 december<br>schenken we aan<br>🔥 de Warmste Week 🔥</p>
+            <p>De volledige opbrengst<br>van de verkoop op 12 en 13 december schenken we aan<br>☀ de Warmste Week ☀</p>
             <br>
-            <p>☃️ Extra openingsdagen tijdens de kerstperiode ☃️</p>
+            <p>❄ Extra openingsdagen tijdens de kerstperiode ❄</p>
         </div>
         <img src="{{asset('/media/mamas.png')}}" alt="" id="landing">
     </main>
