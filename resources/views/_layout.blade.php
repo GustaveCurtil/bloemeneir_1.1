@@ -60,11 +60,18 @@
   </div>
   @if (!Route::is('landing') && !Route::is('shopping-basket') && !Route::is('gdpr'))
     <div id="shopping-card" class="active">
-        <img src="{{asset('/media/aanbod/winkelmandje.png')}}" alt="">
         <div>
-            <p><b><span id="amount">0 dingen</span></b> in het winkelmandje</p>
-            <p><u>beheer winkelmandje / kassa</u></p>
-        </div> 
+            <div onclick="window.location.href='/aanbod/winkelmandje'">
+                <img src="{{asset('/media/aanbod/winkelmandje.png')}}" alt="">
+                <div>
+                    <p><b><span id="amount">0 dingen</span></b> in <span class="desktop">het</span> winkelmandje</p>
+                    <p>
+                    <u>bekijk winkelmandje / kassa</u>
+                    </p>
+                </div> 
+            </div>
+            <div onclick="resetWinkelwagen()">x</div>
+        </div>
     </div>
     @endif
     

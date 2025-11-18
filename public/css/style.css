@@ -45,6 +45,7 @@ label, .plusmin div, select, input, u {  cursor: url('../boeket2.cur'), auto;}
 img {width: 100%;}
 i.small {font-size: 0.8rem; opacity: .69; font-style: normal;}
 p.error {color: var(--color-red);}
+p.error:not(.active) {display: none;}
 select.error {background-color: var(--color-yellow);}
 
 section {width: 100%; margin-top: var(--gap-small); margin-bottom: var(--gap-medium);}
@@ -374,6 +375,8 @@ div#shopping-card {
     flex-direction: row;
     justify-content: center;
     align-items: center;
+
+    overflow-y: hidden;
 }
 
 div#shopping-card:not(.active) {
@@ -381,18 +384,51 @@ div#shopping-card:not(.active) {
 }
 
 div#shopping-card>div {
+    width: 100%;
+    max-width: var(--width-max);
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    min-height: auto;
+    height: 100%;
+}
+
+div#shopping-card>div>div:first-of-type {
+    display: flex;
+
+    flex-grow: 1;
+    padding-left: var(--gap-small);
+}
+
+div#shopping-card>div>div:first-of-type>* {
+    cursor: url('../boeket2.cur'), auto;
+}
+
+div#shopping-card>div>div:first-of-type>div {
     width: auto;
     display: block;
     min-height: auto;
     font-family: var(--font2);
+    line-height: var(--height-line);
 }
 
-div#shopping-card img {
+div#shopping-card>div>div:first-of-type>img {
     height: calc(var(--height-footer) / 2);
     width: calc(var(--height-footer) / 2);
     margin-right: var(--gap-small);
 }
 
+div#shopping-card>div>div:last-of-type {
+    font-size: 2rem;
+    cursor: url('../boeket2.cur'), auto;
+    padding: 0 var(--gap-small);
+}
+
+@media screen and (width > 600px) {
+    div#shopping-card>div>div:first-of-type {
+        justify-content: center;
+    }
+}
 
 /* CONTACT */
 
@@ -592,35 +628,35 @@ label.rij {
     display: inline-flex;
 }
 
-fieldset#aantal>div {
+fieldset.aantal>div {
     display: flex;
     justify-content: space-between;
 }
 
-fieldset#aantal>div:not(:first-child) {
+fieldset.aantal>div:not(:first-child) {
     margin-top: var(--gap-medium);
 }
 
-fieldset#aantal>div>img {
+fieldset.aantal>div>img {
     height: calc( 2 * var(--height-line));
     width: calc( 2 * var(--height-line));
     margin-right: var(--gap-small);
     animation: wiggle 1s infinite ;
 }
 
-fieldset#aantal>div>label {
+fieldset.aantal>div>label {
         flex-grow: 1;
         margin-left: var(--gap-mini);
         font-size: 0.8rem;
 }
 
 @media screen and (width > 600px) {
-    fieldset#aantal>div>label {
+    fieldset.aantal>div>label {
         font-size: 1rem;
 }
 }
 
-fieldset#aantal input[type="number"] {
+fieldset.aantal input[type="number"] {
     height: calc( 2 * var(--height-line));
     width: calc( 2 * var(--height-line));
     aspect-ratio: 1/1;
@@ -630,22 +666,22 @@ fieldset#aantal input[type="number"] {
     margin-bottom: 0;
     color: var(--color-text);
 }
-fieldset#aantal input::placeholder {color: var(--color-text);}
+fieldset.aantal input::placeholder {color: var(--color-text);}
 
-fieldset#aantal>div .plusmin {background-color: #efe5d9;}
-fieldset#aantal>div:nth-child(1) .plusmin>* {border-color: #887f1e;}
-fieldset#aantal>div:nth-child(2) .plusmin>* {border-color: #f1c47c}
-fieldset#aantal>div:nth-child(3) .plusmin>* {border-color: #9e3238;}
+fieldset.aantal>div .plusmin {background-color: #efe5d9;}
+fieldset.aantal>div:nth-child(1) .plusmin>* {border-color: #887f1e;}
+fieldset.aantal>div:nth-child(2) .plusmin>* {border-color: #f1c47c}
+fieldset.aantal>div:nth-child(3) .plusmin>* {border-color: #9e3238;}
 
-#aantal div.afbeelding {
+.aantal div.afbeelding {
     height: calc( (2* var(--height-line)));
     aspect-ratio: 1/1;
     z-index: 20;
 }
 
-#aantal div:nth-child(1) > div.afbeelding {background-color: var(--color-yellow); transform: rotate(-1deg);}
-#aantal div:nth-child(2) > div.afbeelding {background-color: var(--color-green); transform: rotate(0deg) scaleX(-1);}
-#aantal div:nth-child(3) > div.afbeelding {background-color: var(--color-purple); transform: rotate(1deg);}
+.aantal div:nth-child(1) > div.afbeelding {background-color: var(--color-yellow); transform: rotate(-1deg);}
+.aantal div:nth-child(2) > div.afbeelding {background-color: var(--color-green); transform: rotate(0deg) scaleX(-1);}
+.aantal div:nth-child(3) > div.afbeelding {background-color: var(--color-purple); transform: rotate(1deg);}
 
 fieldset.vraag>*:not(:last-child) {
     margin-bottom: var(--gap-normal);
@@ -658,7 +694,9 @@ label.inzetten {
     padding-left: calc(2 * var(--height-line) + var(--gap-small));
 }
 
-fieldset#aantal #cadeau-prijs>input[type="number"] {
+label.inzetten:not(.active) {display: none;}
+
+fieldset.aantal #cadeau-prijs>input[type="number"] {
     width: calc(3 * var(--height-line));
 }
 

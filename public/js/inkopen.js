@@ -1,6 +1,5 @@
 
 
-
 // Wait for DOM to load
 document.addEventListener('DOMContentLoaded', () => {
 const klikbaren = document.querySelectorAll('[data-aanbod]');
@@ -18,13 +17,17 @@ function updateInkopen(target, richting) {
     console.log(inkoopMap.hasOwnProperty(aanbod));
     if(inkoopMap.hasOwnProperty(aanbod)) {
         // Increment in the map
-        if (richting === "boven") {
-            inkoopMap[aanbod]++;
+        if (aanbod === "cadeau") {
+            inkoopMap[aanbod]+= 20;
         } else {
-            inkoopMap[aanbod]--;
+            if (richting === "boven") {
+                inkoopMap[aanbod]++;
+            } else {
+                inkoopMap[aanbod]--;
+            }
         }
         
-
+        
         // Update the standalone variable
         switch(aanbod) {
             case "boeket_A": boeket_A = inkoopMap[aanbod]; break;

@@ -17,9 +17,11 @@
 
     <main>
         <section id="intro">
-           <p>We werken alleen op bestelling om overschotten en afval zoveel mogelijk te beperken.</p>
-           <br>
+            <p>We werken alleen op bestelling om overschotten en afval zoveel mogelijk te beperken.</p>
+            <br>
             <p>Bestel je boeket voor woensdag 18u en kies zelf of je het vrijdagnamiddag (15-19u) of zaterdagvoormiddag (10-13u) komt afhalen bij ons.</p>
+            <br>
+            <p>☃️ Extra openingsdagen tijdens de kerstperiode ☃️</p>
         </section>
         
         <section class="fichkes">

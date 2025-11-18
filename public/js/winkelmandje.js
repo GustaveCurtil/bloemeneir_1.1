@@ -6,7 +6,7 @@ let kaart_B = Number(localStorage.getItem("kaart_B")) || 0;
 let kaart_C = Number(localStorage.getItem("kaart_C")) || 0;
 let cadeau = Number(localStorage.getItem("cadeau")) || 0;
 
-const inkoopMap = { boeket_A, boeket_B, boeket_C, kaart_A, kaart_B, kaart_C, cadeau };
+let inkoopMap = { boeket_A, boeket_B, boeket_C, kaart_A, kaart_B, kaart_C, cadeau };
 
 let inzetten_A = JSON.parse(localStorage.getItem("inzetten_A")) ?? false;
 let inzetten_B = JSON.parse(localStorage.getItem("inzetten_B")) ?? false;
@@ -24,9 +24,6 @@ document.addEventListener('DOMContentLoaded', () => {
     berekenTotaal();
     if (winkelmandje) {
         updateWinkelmandje();
-        winkelmandje.addEventListener('click', (e) => {
-            window.location.href = "/aanbod/winkelmandje"
-        })
     }
 
 
@@ -34,24 +31,62 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 function berekenTotaal() {
-    let cadeaubon = cadeau > 0 ? 1 : 0;
-    return boeket_A + boeket_B + boeket_C + kaart_A + kaart_B + kaart_C + cadeaubon;
+    boeket_A = Number(localStorage.getItem("boeket_A")) || 0;
+    boeket_B = Number(localStorage.getItem("boeket_B")) || 0;
+    boeket_C = Number(localStorage.getItem("boeket_C")) || 0;
+    kaart_A = Number(localStorage.getItem("kaart_A")) || 0;
+    kaart_B = Number(localStorage.getItem("kaart_B")) || 0;
+    kaart_C = Number(localStorage.getItem("kaart_C")) || 0;
+    let cado = Number(localStorage.getItem("cadeau")) || 0;
+
+    inkoopMap = { boeket_A, boeket_B, boeket_C, kaart_A, kaart_B, kaart_C, cadeau: cado };
+
+    // zorg dat we geen 'cadeau' dubbel tellen: cadeau telt als 1 wanneer >0
+    const { cadeau, ...rest } = inkoopMap;
+
+    // sommeer alle overige items (forceer naar Number)
+    const totaalAndere = Object.values(rest)
+        .reduce((sum, v) => sum + (Number(v) || 0), 0);
+
+    const cadeaubon = Number(cadeau) > 0 ? 1 : 0;
+    return totaalAndere + cadeaubon;
 }
 
 function updateMandjes() {
     knoppen.forEach(knop => {
         let span = knop.querySelector('span');
-        span.textContent = `(${inkoopMap[knop.dataset.aanbod] ?? 0})`;
+        if (knop.dataset.aanbod === "cadeau") {
+            span.textContent = `(${inkoopMap[knop.dataset.aanbod] ?? 0} euro)`;
+        } else {
+            span.textContent = `(${inkoopMap[knop.dataset.aanbod] ?? 0})`;
+        }
+        
     });
 }
 
 function updateWinkelmandje() {
-    const totaal = berekenTotaal();
+    let totaal = berekenTotaal();
     let aantalDingen = document.querySelector('span#amount')
     if (totaal > 0) {
         winkelmandje.classList.add('active');
-        aantalDingen.textContent = totaal + " dingen"
+        if (totaal === 1) {
+            aantalDingen.textContent = totaal + " iets"
+        } else {
+            aantalDingen.textContent = totaal + " dingen"
+        }
+        
     } else {
         winkelmandje.classList.remove('active');
     }
+}
+
+function resetWinkelwagen() {
+    Object.keys(inkoopMap).forEach(item => {
+        inkoopMap[item] = 0;
+        console.log(item + ": " + inkoopMap[item] )
+        localStorage.setItem(item, 0);
+    });
+    console.log(boeket_A )
+    updateMandjes()
+    updateWinkelmandje()
 }

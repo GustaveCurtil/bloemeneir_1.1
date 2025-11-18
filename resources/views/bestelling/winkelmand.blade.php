@@ -14,17 +14,18 @@
             <h2>Winkelmandje</h2>
             <a href="/aanbod">terug</a>
         </div>
-        
             <p>Boeket voor deze week graag vòòr woensdag 18u bestellen.</p>
             <br>
-            <form action="{{ route('order') }}" method="POST" >
-                @csrf
+            <p>De volledige opbrengst van de verkoop op <b>12 en 13 december</b> schenken we aan 🔥<b>de Warmste Week</b>🔥</p>
+            <br>
+            
+            <form onsubmit="return gaNaarBetaling()">
                 @error('options')
                     <br>
                     <p class="error">⚠️ <b>{{ $message }}</b></p>
                     <br>
                 @enderror
-                <fieldset id="aantal">
+                <fieldset class="aantal" id="boeketten">
                     <div>
                         <img src="{{asset('/media/aanbod/boeket_schattig.png')}}">
                         <label for="boeket_A">
@@ -63,7 +64,7 @@
                     </div>
                 </fieldset>
                 <br>
-                <fieldset id="aantal">
+                <fieldset class="aantal" id="kaarten">
                     <div>
                         <img src="{{asset('/media/aanbod/boeket_schattig.png')}}">
                         <label for="kaart_A">
@@ -76,8 +77,8 @@
                             <div onclick="const el = this.parentNode.querySelector('input[type=number]');  el.stepDown();  el.dispatchEvent(new Event('input'));">-</div>
                         </div>
                     </div>
-                    <label for="" class="inzetten">
-                        <input type="checkbox" name="" id="">Meteen gebruiken (3 over)
+                    <label for="inzetten_A" class="inzetten">
+                        <input type="checkbox" name="inzetten_A" id="inzetten_A">Meteen gebruiken<span>&nbsp;(5 over)</span>
                     </label>
                     <div>
                         <img src="{{asset('/media/aanbod/boeket_charmant.png')}}">
@@ -91,8 +92,8 @@
                             <div onclick="const el = this.parentNode.querySelector('input[type=number]');  el.stepDown();  el.dispatchEvent(new Event('input'));">-</div>
                         </div>                      
                     </div>
-                    <label for="" class="inzetten">
-                        <input type="checkbox" name="" id="">Meteen gebruiken
+                    <label for="inzetten_B" class="inzetten">
+                        <input type="checkbox" name="inzetten_B" id="inzetten_B">Meteen gebruiken<span>&nbsp;(5 over)</span>
                     </label>
                     <div>
                         <img src="{{asset('/media/aanbod/boeket_magnifiek.png')}}">
@@ -106,12 +107,12 @@
                             <div onclick="const el = this.parentNode.querySelector('input[type=number]');  el.stepDown();  el.dispatchEvent(new Event('input'));">-</div>
                         </div>                        
                     </div>
-                    <label for="" class="inzetten">
-                        <input type="checkbox" name="" id="">Meteen gebruiken
+                    <label for="inzetten_C" class="inzetten">
+                        <input type="checkbox" name="" id="inzetten_C">Meteen gebruiken<span>&nbsp;(5 over)</span>
                     </label>
                 </fieldset>
                 <br>
-                <fieldset id="aantal">
+                <fieldset class="aantal">
                     <div>
                         <img src="{{asset('/media/aanbod/boeket_magnifiek.png')}}">
                         <label for="cadeau">
@@ -119,7 +120,7 @@
                             <p>Bedrag naar keuze</p>
                         </label>
                         <div id="cadeau-prijs">
-                            <input type="number" name="option3" id="cadeau" data-aanbod="cadeau" placeholder="00" min="0">
+                            € <input type="number" name="option3" id="cadeau" data-aanbod="cadeau" placeholder="00" min="0">
                         </div>                        
                     </div>
                 </fieldset>
@@ -128,8 +129,8 @@
                     @error('day')
                         <p class="error">⚠️ <b>{{ $message }}</b></p>
                     @enderror
-                    <select name="day" id="" required @error('day') class="error" @enderror>
-                            <option>kies een moment*</option>
+                    <select name="day" id="afhaalmoment" required @error('day') class="error" @enderror>
+                            <option value="" disabled selected hidden>kies een moment*</option>
                             @foreach ($data as $datum)
                             <option value="{{$datum['date']}}" {{ old('day', $order->day ?? '') == $datum['date'] ? 'selected' : '' }}>
                                 {{$datum['day']}} {{$datum['formatted']}}
@@ -144,6 +145,7 @@
                     <p><i class="small">Adres: <a href="https://maps.app.goo.gl/qAkeHriBos8S4XMcA" target="_blank">Koning Albertlaan 77</a> in Kessel-Lo</i></p>
                     <p><i class="small">Je ontvangt nog een mail met alle informatie.</i></p>
                 </fieldset>
+                <p class="error lege-bestelling">⚠️ <b>Je hebt nog geen bestelling gemaakt.</b><br><br></p>
                 <input type="submit" value="bestelling voltooien">
             </form>
     </main>
