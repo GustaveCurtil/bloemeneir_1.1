@@ -4,7 +4,7 @@
 
 @section('links')
 <script src="{{asset('/js/omhoog.js')}}" defer></script>
-<script src="{{asset('/js/winkelmandje.js')}}" defer></script>
+<script src="{{asset('/js/winkelbanner.js')}}" defer></script>
 @endsection
 
 @section('main')

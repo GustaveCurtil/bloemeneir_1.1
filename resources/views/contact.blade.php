@@ -4,8 +4,8 @@
 
 @section('links')
 <script src="{{asset('/js/kopieren.js')}}" defer></script>
-<script src="{{asset('/js/winkelmandje.js')}}" defer></script>
-<script src="{{asset('/js/inkopen.js')}}" defer></script>
+<script src="{{asset('/js/winkelbanner.js')}}" defer></script>
+
 @endsection
 
 @section('main')

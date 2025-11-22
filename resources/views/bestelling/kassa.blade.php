@@ -4,6 +4,10 @@
 
 @section('main')
 <main>
+    <div class="left-right">
+            <h2>Kassa</h2>
+            <a href="/winkel/winkelmandje">terug</a>
+        </div>
     <form action="">
         <fieldset>
                     <label for="naam">jouw voornaam*:</label>
@@ -21,7 +25,8 @@
                     </label>
         </fieldset>
     </form>
-    <section>
+</main>
+    {{-- <section>
         <h2>Jouw gegevens</h2>
         <p>Naam: <b>{{$client->first_name}} {{$client->last_name}}</b></p>
         <p>Telefoonnummer: <b>{{$client->phone}}</b> <i class="small">(wordt enkel gebruikt indien noodzakelijk)</i></p>
@@ -88,5 +93,5 @@
             alert(error.message);
         }
     });
-</script>
+</script> --}}
 @endsection

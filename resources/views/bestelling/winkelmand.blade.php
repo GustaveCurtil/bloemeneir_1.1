@@ -3,8 +3,8 @@
 @section('title', 'bestellen')
 
 @section('links')
+<script src="{{asset('/js/winkelbanner.js')}}" defer></script>
 <script src="{{asset('/js/winkelmandje.js')}}" defer></script>
-<script src="{{asset('/js/kassa.js')}}" defer></script>
 @endsection
 
 @section('main')
@@ -12,19 +12,14 @@
     <main>
         <div class="left-right">
             <h2>Winkelmandje</h2>
-            <a href="/aanbod">terug</a>
+            <a href="/winkel">terug</a>
         </div>
             <p>Boeket voor deze week graag vòòr woensdag 18u bestellen.</p>
             <br>
             <p>De volledige opbrengst van de verkoop op <b>12 en 13 december</b> schenken we aan de ☀ <b>Warmste Week</b> ☀</p>
             <br>
             
-            <form onsubmit="return gaNaarBetaling()">
-                @error('options')
-                    <br>
-                    <p class="error">⚠️ <b>{{ $message }}</b></p>
-                    <br>
-                @enderror
+            <form>
                 <fieldset class="aantal" id="boeketten">
                     <div>
                         <img src="{{asset('/media/aanbod/boeket_schattig.png')}}">
@@ -33,7 +28,7 @@
                             <p>29 euro</p>
                         </label>
                         <div class="plusmin">
-                            <input type="number" name="option1" id="boeket_A" data-aanbod="boeket_A" placeholder="0" min="0" value="{{ old('option1', $order->option1 ?? '') }}">
+                            <input type="number" id="boeket_A" data-aanbod="boeket_A" placeholder="0" min="0">
                             <div onclick="const el = this.parentNode.querySelector('input[type=number]');  el.stepUp();  el.dispatchEvent(new Event('input'));">+</div>
                             <div onclick="const el = this.parentNode.querySelector('input[type=number]');  el.stepDown();  el.dispatchEvent(new Event('input'));">-</div>
                         </div>
@@ -45,7 +40,7 @@
                             <p>39 euro</p>
                         </label>
                         <div class="plusmin">
-                            <input type="number" name="option2" id="boeket_B" data-aanbod="boeket_B" placeholder="0" min="0" value="{{ old('option2', $order->option2 ?? '') }}">
+                            <input type="number" id="boeket_B" data-aanbod="boeket_B" placeholder="0" min="0">
                             <div onclick="const el = this.parentNode.querySelector('input[type=number]');  el.stepUp();  el.dispatchEvent(new Event('input'));">+</div>
                             <div onclick="const el = this.parentNode.querySelector('input[type=number]');  el.stepDown();  el.dispatchEvent(new Event('input'));">-</div>
                         </div>                      
@@ -57,7 +52,7 @@
                             <p>49 euro</p>
                         </label>
                         <div class="plusmin">
-                            <input type="number" name="option3" id="boeket_C" data-aanbod="boeket_C" placeholder="0" min="0" value="{{ old('option3', $order->option3 ?? '') }}">
+                            <input type="number" id="boeket_C" data-aanbod="boeket_C" placeholder="0" min="0">
                             <div onclick="const el = this.parentNode.querySelector('input[type=number]');  el.stepUp();  el.dispatchEvent(new Event('input'));">+</div>
                             <div onclick="const el = this.parentNode.querySelector('input[type=number]');  el.stepDown();  el.dispatchEvent(new Event('input'));">-</div>
                         </div>                        
@@ -72,7 +67,7 @@
                             <p>120 euro (gratis vaas)</p>
                         </label>
                         <div class="plusmin">
-                            <input type="number" name="option1" id="kaart_A" data-aanbod="kaart_A" placeholder="0" min="0" value="{{ old('option1', $order->option1 ?? '') }}">
+                            <input type="number" id="kaart_A" data-aanbod="kaart_A" placeholder="0" min="0">
                             <div onclick="const el = this.parentNode.querySelector('input[type=number]');  el.stepUp();  el.dispatchEvent(new Event('input'));">+</div>
                             <div onclick="const el = this.parentNode.querySelector('input[type=number]');  el.stepDown();  el.dispatchEvent(new Event('input'));">-</div>
                         </div>
@@ -87,7 +82,7 @@
                             <p>160 euro (gratis vaas)</p>
                         </label>
                         <div class="plusmin">
-                            <input type="number" name="option2" id="kaart_B" data-aanbod="kaart_B" placeholder="0" min="0" value="{{ old('option2', $order->option2 ?? '') }}">
+                            <input type="number" id="kaart_B" data-aanbod="kaart_B" placeholder="0" min="0">
                             <div onclick="const el = this.parentNode.querySelector('input[type=number]');  el.stepUp();  el.dispatchEvent(new Event('input'));">+</div>
                             <div onclick="const el = this.parentNode.querySelector('input[type=number]');  el.stepDown();  el.dispatchEvent(new Event('input'));">-</div>
                         </div>                      
@@ -102,7 +97,7 @@
                             <p>200 euro (gratis vaas)</p>
                         </label>
                         <div class="plusmin">
-                            <input type="number" name="option3" id="kaart_C" data-aanbod="kaart_C" placeholder="0" min="0" value="{{ old('option3', $order->option3 ?? '') }}">
+                            <input type="number" id="kaart_C" data-aanbod="kaart_C" placeholder="0" min="0">
                             <div onclick="const el = this.parentNode.querySelector('input[type=number]');  el.stepUp();  el.dispatchEvent(new Event('input'));">+</div>
                             <div onclick="const el = this.parentNode.querySelector('input[type=number]');  el.stepDown();  el.dispatchEvent(new Event('input'));">-</div>
                         </div>                        
@@ -120,7 +115,7 @@
                             <p>Bedrag naar keuze</p>
                         </label>
                         <div id="cadeau-prijs">
-                            € <input type="number" name="option3" id="cadeau" data-aanbod="cadeau" placeholder="00" min="0">
+                            € <input type="number" id="cadeau" data-aanbod="cadeau" placeholder="00" min="0">
                         </div>                        
                     </div>
                 </fieldset>
@@ -145,8 +140,9 @@
                     <p><i class="small">Adres: <a href="https://maps.app.goo.gl/qAkeHriBos8S4XMcA" target="_blank">Koning Albertlaan 77</a> in Kessel-Lo</i></p>
                     <p><i class="small">Je ontvangt nog een mail met alle informatie.</i></p>
                 </fieldset>
-                <p class="error lege-bestelling">⚠️ <b>Je hebt nog geen bestelling gemaakt.</b><br><br></p>
-                <input type="submit" value="bestelling voltooien">
+                <p class="error lege-bestelling">⚠️ <b>Je hebt nog geen bestelling gemaakt.</b></p>
+                <p class="error geen-moment">⚠️ <b>Je hebt nog afhaalmoment opgegeven.</b></p>
+                <input type="button" value="naar de kassa" onclick="gaNaarBetaling()">
             </form>
     </main>
 

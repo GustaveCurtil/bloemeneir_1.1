@@ -35,7 +35,7 @@
         </div>
         <nav>
             <a href="{{ route('over') }}" class="{{ request()->routeIs('over') ? 'actief' : '' }}">over ons</a>
-            <a href="{{ route('aanbod') }}" class="{{ request()->routeIs('aanbod') || request()->routeIs('shopping-basket') ? 'actief' : '' }}">boeket bestellen</a>
+            <a href="{{ route('aanbod') }}" class="{{ request()->routeIs('aanbod') || request()->routeIs('shopping-basket') || request()->routeIs('kassa') ? 'actief' : '' }}">boeket bestellen</a>
             <a href="{{ route('contact') }}" class="{{ request()->routeIs('contact') ? 'actief' : '' }}">contact</a>
         </nav>
     </header>
@@ -59,9 +59,9 @@
     </div>
   </div>
   @if (!Route::is('landing') && !Route::is('shopping-basket') && !Route::is('gdpr'))
-    <div id="shopping-card" class="active">
+    <div id="shopping-card">
         <div>
-            <div onclick="window.location.href='/aanbod/winkelmandje'">
+            <div onclick="window.location.href='/winkel/winkelmandje'">
                 <img src="{{asset('/media/aanbod/winkelmandje.png')}}" alt="">
                 <div>
                     <p><b><span id="amount">0 dingen</span></b> in <span class="desktop">het</span> winkelmandje</p>

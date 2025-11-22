@@ -93,6 +93,10 @@ class PageController extends Controller
         return view('bestelling.winkelmand', compact('order', 'client', 'data'));
     }
 
+    public function kassa() {
+        return view('bestelling.kassa');
+    }
+
 
     public function checkout(Request $request) 
     {

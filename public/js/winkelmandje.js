@@ -1,92 +1,141 @@
-let boeket_A = Number(localStorage.getItem("boeket_A")) || 0;
-let boeket_B = Number(localStorage.getItem("boeket_B")) || 0;
-let boeket_C = Number(localStorage.getItem("boeket_C")) || 0;
-let kaart_A = Number(localStorage.getItem("kaart_A")) || 0;
-let kaart_B = Number(localStorage.getItem("kaart_B")) || 0;
-let kaart_C = Number(localStorage.getItem("kaart_C")) || 0;
-let cadeau = Number(localStorage.getItem("cadeau")) || 0;
+let inputBoeket_A = document.querySelector('input#boeket_A')
+let inputBoeket_B = document.querySelector('input#boeket_B')
+let inputBoeket_C = document.querySelector('input#boeket_C')
+let inputKaart_A = document.querySelector('input#kaart_A')
+let inputKaart_B = document.querySelector('input#kaart_B')
+let inputKaart_C = document.querySelector('input#kaart_C')
+let inputCadeau = document.querySelector('input#cadeau')
 
-let inkoopMap = { boeket_A, boeket_B, boeket_C, kaart_A, kaart_B, kaart_C, cadeau };
+let inputs = document.querySelectorAll('[data-aanbod]')
 
-let inzetten_A = JSON.parse(localStorage.getItem("inzetten_A")) ?? false;
-let inzetten_B = JSON.parse(localStorage.getItem("inzetten_B")) ?? false;
-let inzetten_C = JSON.parse(localStorage.getItem("inzetten_C")) ?? false;
+let afhaalselector = document.querySelector('select#afhaalmoment');
+let afhaalmomenten = document.querySelectorAll('option');
+let momentGekozen = false;
 
-let datum = localStorage.getItem("datum") ?? null;
 
-let totaal = 0;
+let legeBestelling = document.querySelector('.lege-bestelling');
 
-let winkelmandje = document.querySelector('#shopping-card');
-const knoppen = document.querySelectorAll('button[data-aanbod]');
+let boeketInputten = document.querySelectorAll('#boeketten .plusmin>input');
+let kaartInputten = document.querySelectorAll('#kaarten .plusmin>input');
+let gebruikCheckboxen = document.querySelectorAll('.inzetten');
 
 document.addEventListener('DOMContentLoaded', () => {
-    updateMandjes()
-    berekenTotaal();
-    if (winkelmandje) {
-        updateWinkelmandje();
+    updateInputFields();
+
+    updateGebruikCheckboxen()
+
+    inputs.forEach(input => {
+        input.addEventListener('input', () => {
+            localStorage.setItem(input.dataset.aanbod, input.value);
+            totaal = berekenTotaal();
+            if (totaal > 0) {
+                legeBestelling.classList.remove('active')
+            }
+            updateGebruikCheckboxen()
+        });
+    });
+
+    for (let i = 0; i < gebruikCheckboxen.length; i++) {
+        const checkbox = gebruikCheckboxen[i].querySelector('input');
+        const span = gebruikCheckboxen[i].querySelector('span');
+        const boeket = boeketInputten[i];
+        checkbox.addEventListener('change', (e) => {
+            if (checkbox.checked) {
+                localStorage.setItem(checkbox.id, true);
+                if (boeket.value == 0) {
+                    console.log(boeket.value);
+                    localStorage.setItem(boeket.dataset.aanbod, Number(boeket.value) + 1);
+                    berekenTotaal();
+                    updateInputFields();
+                }
+            } else {
+                localStorage.setItem(checkbox.id, false);
+            }
+        })
+    }
+
+    for (let i = 0; i < boeketInputten.length; i++) {
+        const boeket = boeketInputten[i];
+        const checkbox = gebruikCheckboxen[i].querySelector('input');
+        const span = gebruikCheckboxen[i].querySelector('span');
+        boeket.addEventListener('input', (e) => {
+            if (boeket.value == 0) {
+                checkbox.checked = false;
+                localStorage.setItem(checkbox.id, false);
+            }
+            
+        })
+        
     }
 
 
+    afhaalmomenten.forEach(afhaalmoment => {
+        if (afhaalmoment.value === localStorage.getItem("afhaalmoment")) {
+            afhaalmoment.selected = true;
+            momentGekozen = true;
+        }
+    });
+
+    afhaalselector.addEventListener('input', (e) => {
+        localStorage.setItem("afhaalmoment", e.target.value);
+        momentGekozen = true;
+    })
+    
 })
 
-
-function berekenTotaal() {
-    boeket_A = Number(localStorage.getItem("boeket_A")) || 0;
-    boeket_B = Number(localStorage.getItem("boeket_B")) || 0;
-    boeket_C = Number(localStorage.getItem("boeket_C")) || 0;
-    kaart_A = Number(localStorage.getItem("kaart_A")) || 0;
-    kaart_B = Number(localStorage.getItem("kaart_B")) || 0;
-    kaart_C = Number(localStorage.getItem("kaart_C")) || 0;
-    let cado = Number(localStorage.getItem("cadeau")) || 0;
-
-    inkoopMap = { boeket_A, boeket_B, boeket_C, kaart_A, kaart_B, kaart_C, cadeau: cado };
-
-    // zorg dat we geen 'cadeau' dubbel tellen: cadeau telt als 1 wanneer >0
-    const { cadeau, ...rest } = inkoopMap;
-
-    // sommeer alle overige items (forceer naar Number)
-    const totaalAndere = Object.values(rest)
-        .reduce((sum, v) => sum + (Number(v) || 0), 0);
-
-    const cadeaubon = Number(cadeau) > 0 ? 1 : 0;
-    return totaalAndere + cadeaubon;
-}
-
-function updateMandjes() {
-    knoppen.forEach(knop => {
-        let span = knop.querySelector('span');
-        if (knop.dataset.aanbod === "cadeau") {
-            span.textContent = `(${inkoopMap[knop.dataset.aanbod] ?? 0} euro)`;
-        } else {
-            span.textContent = `(${inkoopMap[knop.dataset.aanbod] ?? 0})`;
-        }
-        
-    });
-}
-
-function updateWinkelmandje() {
-    let totaal = berekenTotaal();
-    let aantalDingen = document.querySelector('span#amount')
-    if (totaal > 0) {
-        winkelmandje.classList.add('active');
-        if (totaal === 1) {
-            aantalDingen.textContent = totaal + " iets"
-        } else {
-            aantalDingen.textContent = totaal + " dingen"
-        }
-        
+function gaNaarBetaling() {
+    totaal = berekenTotaal();
+    if (totaal === 0) {
+        let legeBestelling = document.querySelector('.lege-bestelling');
+        legeBestelling.classList.add('active')
+        return false;
     } else {
-        winkelmandje.classList.remove('active');
+        if (!momentGekozen) {
+            let geenMoment = document.querySelector('.geen-moment');
+            geenMoment.classList.add('active')
+            return false; 
+        } else {
+            window.location.href = '/winkel/kassa';
+            return true;
+        } 
     }
 }
 
-function resetWinkelwagen() {
-    Object.keys(inkoopMap).forEach(item => {
-        inkoopMap[item] = 0;
-        console.log(item + ": " + inkoopMap[item] )
-        localStorage.setItem(item, 0);
-    });
-    console.log(boeket_A )
-    updateMandjes()
-    updateWinkelmandje()
+function updateGebruikCheckboxen() {
+    for (let i = 0; i < kaartInputten.length; i++) {
+        const input = kaartInputten[i];
+        if (input.value > 0) {
+            gebruikCheckboxen[i].classList.add('active');
+        } else {
+            gebruikCheckboxen[i].classList.remove('active');
+        }
+    }
+}
+
+function updateInputFields() {
+    inputBoeket_A.value = boeket_A
+    inputBoeket_B.value = boeket_B
+    inputBoeket_C.value = boeket_C
+    inputKaart_A.value = kaart_A
+    inputKaart_B.value = kaart_B
+    inputKaart_C.value = kaart_C
+    inputCadeau.value = cadeau
+
+    for (let i = 0; i < gebruikCheckboxen.length; i++) {
+        const checkbox = gebruikCheckboxen[i].querySelector('input');
+        const span = gebruikCheckboxen[i].querySelector('span');
+        const boeket = boeketInputten[i];
+        console.log(localStorage.getItem(checkbox.id));
+        if (localStorage.getItem(checkbox.id) === "true") {
+            checkbox.checked = true;
+            if (boeket.value == 0) {
+                localStorage.setItem(boeket.dataset.aanbod, Number(boeket.value) + 1);
+                berekenTotaal();
+                updateInputFields();
+            }
+        } else {
+            checkbox.checked = false;
+        }
+    }
+
 }
