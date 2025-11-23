@@ -1,14 +1,26 @@
 @extends('_layout')
 
-@section('title', 'Betaling')
+@section('links')
+<script src="{{asset('/js/kassa.js')}}" defer></script>
+@endsection
+
+@section('title', 'kassa')
 
 @section('main')
 <main>
     <div class="left-right">
-            <h2>Kassa</h2>
-            <a href="/winkel/winkelmandje">terug</a>
-        </div>
+        <h2>Kassa</h2>
+        <a href="/winkel/winkelmandje">bestelling aanpassen</a>
+    </div>
+    <section>
+            <h3>Overzicht bestelling</h3>
+            <ul id="overzicht">
+                
+            </ul>
+            <p><b>Totaal: <span id="prijs"></span></b></p>
+        </section>
     <form action="">
+        <h3>Jouw gegevens</h3>
         <fieldset>
                     <label for="naam">jouw voornaam*:</label>
                     <input type="text" name="first_name" id="naam" value="{{ old('first_name', $client->first_name ?? '') }}" placeholder="vul hier in" required>
@@ -24,6 +36,7 @@
                         nieuwsbrief&nbsp;<i class="small">(max 4x per jaar)</i>
                     </label>
         </fieldset>
+        <input type="submit" value="Betaal met Bancontact">
     </form>
 </main>
     {{-- <section>

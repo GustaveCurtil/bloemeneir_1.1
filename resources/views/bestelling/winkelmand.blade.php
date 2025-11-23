@@ -1,6 +1,6 @@
 @extends('_layout')
 
-@section('title', 'bestellen')
+@section('title', 'winkelmand')
 
 @section('links')
 <script src="{{asset('/js/winkelbanner.js')}}" defer></script>
@@ -73,7 +73,7 @@
                         </div>
                     </div>
                     <label for="inzetten_A" class="inzetten">
-                        <input type="checkbox" name="inzetten_A" id="inzetten_A">Meteen gebruiken<span>&nbsp;(5 over)</span>
+                        <input type="checkbox" name="inzetten_A" id="inzetten_A">Meteen gebruiken
                     </label>
                     <div>
                         <img src="{{asset('/media/aanbod/boeket_charmant.png')}}">
@@ -88,7 +88,7 @@
                         </div>                      
                     </div>
                     <label for="inzetten_B" class="inzetten">
-                        <input type="checkbox" name="inzetten_B" id="inzetten_B">Meteen gebruiken<span>&nbsp;(5 over)</span>
+                        <input type="checkbox" name="inzetten_B" id="inzetten_B">Meteen gebruiken
                     </label>
                     <div>
                         <img src="{{asset('/media/aanbod/boeket_magnifiek.png')}}">
@@ -103,7 +103,7 @@
                         </div>                        
                     </div>
                     <label for="inzetten_C" class="inzetten">
-                        <input type="checkbox" name="" id="inzetten_C">Meteen gebruiken<span>&nbsp;(5 over)</span>
+                        <input type="checkbox" name="" id="inzetten_C">Meteen gebruiken
                     </label>
                 </fieldset>
                 <br>

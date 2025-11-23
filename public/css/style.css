@@ -36,10 +36,10 @@
     --font2: "DM Mono", monospace;
 }
 
-html, h1, h2, h3 {font-family: var(--font);}
+html, h1, h2 {font-family: var(--font);}
 html {cursor: url('../boeket.cur'), auto;}
 h2 {margin-bottom: var(--gap-small);}
-h3 {text-align: center;}
+h3 {font-size: 1.1rem; margin-bottom: var(--gap-mini);}
 a {color: var(--color-text); cursor: url('../boeket-pointer2.cur'), auto;}
 label, .plusmin div, select, input, u {  cursor: url('../boeket-pointer2.cur'), wait;}
 img {width: 100%;}
@@ -705,9 +705,16 @@ fieldset.aantal #cadeau-prijs>input[type="number"] {
 
 /* CHECKOUT */
 ul {
-    list-style-position: inside;
+    list-style-position: outside;
     list-style-type: '❀ ';
+    margin-left: 1.4rem;
     margin-bottom: var(--gap-small);
+}
+
+li {margin-top: var(--gap-small);}
+
+li span {
+    display: inline-block;
 }
 
 button {
@@ -820,6 +827,11 @@ button {
     img.verticaal {
         width: calc((100% - 2 * var(--gap-medium)) / 4);
     }
+
+    li span {
+    display: inline;
+}
+
 
     
 }
