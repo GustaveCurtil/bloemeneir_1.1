@@ -66,7 +66,7 @@
                 <div>
                     <p><b><span id="amount">0 dingen</span></b> in <span class="desktop">het</span> winkelmandje</p>
                     <p>
-                    <u>bekijk winkelmandje / kassa</u>
+                    <u>beheer winkelmandje</u>
                     </p>
                 </div> 
             </div>

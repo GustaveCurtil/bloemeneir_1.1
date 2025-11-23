@@ -95,7 +95,7 @@ function gaNaarBetaling() {
             geenMoment.classList.add('active')
             return false; 
         } else {
-            window.location.href = '/winkel/kassa';
+            window.location.href = '/winkel/afrekenen';
             return true;
         } 
     }

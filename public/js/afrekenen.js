@@ -15,11 +15,11 @@ let overzicht = document.querySelector('ul#overzicht');
 addItem("Schattig boeket", boeket_A, 29.00);
 addItem("Charmant boeket", boeket_B, 39.00);
 addItem("Magnifiek boeket", boeket_C, 49.00);
-addItem("Schattige 5-beurtenkaart", kaart_A, 120.00);
+addItem("Schattige 5-beurtenkaart", kaart_A, 145.00);
 addBoolean("5-beurtenkaart inzetten", inzetten_A);
-addItem("Charmante 5-beurtenkaart", kaart_B, 160.00);
+addItem("Charmante 5-beurtenkaart", kaart_B, 190.00);
 addBoolean("5-beurtenkaart inzetten", inzetten_B);
-addItem("Magnifiek 5-beurtenkaart", kaart_C, 200.00);
+addItem("Magnifiek 5-beurtenkaart", kaart_C, 239.00);
 addBoolean("5-beurtenkaart inzetten", inzetten_C);
 addItem("Cadeaubon", cadeau);
 

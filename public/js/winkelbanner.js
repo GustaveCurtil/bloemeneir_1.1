@@ -89,7 +89,8 @@ function resetWinkelwagen() {
     localStorage.setItem("inzetten_A", false);
     localStorage.setItem("inzetten_B", false);
     localStorage.setItem("inzetten_C", false);
-    console.log(boeket_A )
+    localStorage.setItem("afhaalmoment", null);
+
     updateMandjes()
     updateWinkelmandje()
 }

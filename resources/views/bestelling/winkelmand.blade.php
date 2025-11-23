@@ -64,7 +64,7 @@
                         <img src="{{asset('/media/aanbod/boeket_schattig.png')}}">
                         <label for="kaart_A">
                             <p>Schattige 5 beurtenkaart</p>
-                            <p>120 euro (gratis vaas)</p>
+                            <p>145 euro (gratis vaas)</p>
                         </label>
                         <div class="plusmin">
                             <input type="number" id="kaart_A" data-aanbod="kaart_A" placeholder="0" min="0">
@@ -79,7 +79,7 @@
                         <img src="{{asset('/media/aanbod/boeket_charmant.png')}}">
                         <label for="kaart_B">
                             <p>Charmante 5 beurtenkaart</p>
-                            <p>160 euro (gratis vaas)</p>
+                            <p>190 euro (gratis vaas)</p>
                         </label>
                         <div class="plusmin">
                             <input type="number" id="kaart_B" data-aanbod="kaart_B" placeholder="0" min="0">
@@ -94,7 +94,7 @@
                         <img src="{{asset('/media/aanbod/boeket_magnifiek.png')}}">
                         <label for="kaart_C">
                             <p>Magnifieke 5 beurtenkaart</p>
-                            <p>200 euro (gratis vaas)</p>
+                            <p>239 euro (gratis vaas)</p>
                         </label>
                         <div class="plusmin">
                             <input type="number" id="kaart_C" data-aanbod="kaart_C" placeholder="0" min="0">
@@ -142,7 +142,7 @@
                 </fieldset>
                 <p class="error lege-bestelling">⚠️ <b>Je hebt nog geen bestelling gemaakt.</b></p>
                 <p class="error geen-moment">⚠️ <b>Je hebt nog afhaalmoment opgegeven.</b></p>
-                <input type="button" value="naar de kassa" onclick="gaNaarBetaling()">
+                <input type="button" value="afrekenen" onclick="gaNaarBetaling()">
             </form>
     </main>
 

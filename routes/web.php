@@ -28,7 +28,7 @@ Route::get('/gdpr', function () {
 })->name('gdpr');
 
 Route::get('/winkel/winkelmandje', [PageController::class, 'bestellen'])->name('shopping-basket');
-Route::get('/winkel/kassa', [PageController::class, 'kassa'])->name('kassa');
+Route::get('/winkel/afrekenen', [PageController::class, 'afrekenen'])->name('afrekenen');
 
 Route::get('/checkout', [PageController::class, 'checkout'])->name('checkout');
 

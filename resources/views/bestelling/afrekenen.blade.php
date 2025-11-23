@@ -1,15 +1,15 @@
 @extends('_layout')
 
 @section('links')
-<script src="{{asset('/js/kassa.js')}}" defer></script>
+<script src="{{asset('/js/afrekenen.js')}}" defer></script>
 @endsection
 
-@section('title', 'kassa')
+@section('title', 'afrekenen')
 
 @section('main')
 <main>
     <div class="left-right">
-        <h2>Kassa</h2>
+        <h2>Afrekenen</h2>
         <a href="/winkel/winkelmandje">bestelling aanpassen</a>
     </div>
     <section>
