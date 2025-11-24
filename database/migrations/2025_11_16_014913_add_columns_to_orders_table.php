@@ -12,12 +12,13 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('orders', function (Blueprint $table) {
-            $table->foreignId('date_id')->nullable()->constrained('dates')->cascadeOnDelete();
             $table->date('takeaway_date')->nullable();
             $table->time('takeaway_start_time')->nullable();
             $table->time('takeaway_end_time')->nullable();
             $table->boolean('is_collected')->nullable();
             $table->string('comment')->nullable();
+            $table->integer('total_price');
+            $table->integer('total_discount');
         });
     }
 

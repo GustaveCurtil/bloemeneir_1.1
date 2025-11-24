@@ -16,8 +16,8 @@ Route::get('/sfeer', function () {
 })->name('over');
 
 Route::get('/winkel', function () {
-    return view('aanbod');
-})->name('aanbod');
+    return view('winkel');
+})->name('winkel');
 
 Route::get('/info', function () {
     return view('contact');

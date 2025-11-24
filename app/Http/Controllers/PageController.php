@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Stripe\Stripe;
+use App\Models\Date;
 use App\Models\Order;
 use App\Models\Client;
 use App\Models\Holiday;
@@ -16,81 +17,34 @@ class PageController extends Controller
 
     public function bestellen()
     {
-        $order = session('order');
-        $client = session('client');
-        if ($order && $order->payed) {
-            $order =null;
-        }
-        Carbon::setLocale('nl');
+       $now = Carbon::now();
 
-        $now = Carbon::now();
-        $startDate = Carbon::today();
+        $data = Date::where('is_public', true)
+                ->whereDate('takeaway_date', '>=', $now)
+                ->where(function ($query) use ($now) {
+                    // Include items with no last_order_date/time or not yet passed
+                    $query->whereNull('last_order_date')
+                            ->orWhereNull('last_order_time')
+                            ->orWhereRaw("STR_TO_DATE(CONCAT(last_order_date, ' ', last_order_time), '%Y-%m-%d %H:%i:%s') >= ?", [$now]);
+                })
+                ->orderBy('takeaway_date', 'asc')
+                ->get()
+                ->map(function ($item) {
+            // Format the date in Dutch
+            $formattedDate = \Carbon\Carbon::parse($item->takeaway_date)
+                                ->translatedFormat('l d F');
 
-        $now = Carbon::now('Europe/Brussels');
+            // Format times without leading zeros
+            $startTime = \Carbon\Carbon::parse($item->takeaway_start_time)->format('G\u');
+            $endTime   = \Carbon\Carbon::parse($item->takeaway_end_time)->format('G\u');
 
-        // Wednesday 18:00 of this week
-        $wednesdayCutoff = $now->copy()->startOfWeek()->addDays(2)->setTime(18, 0, 0);
+            // Combine into final string
+            $item->formatted = $formattedDate . " ({$startTime} - {$endTime})";
 
-        // Determine start of the active week
-        $weekStart = $now->copy()->startOfWeek();
+            return $item;
+        });
 
-        // If it’s after Wednesday 18:00, move to next week
-        if ($now->gt($wednesdayCutoff)) {
-            $weekStart->addWeek();
-        }
-
-        // Friday and Saturday of that (possibly next) week
-        $firstFriday = $weekStart->copy()->addDays(4);   // Friday
-        $firstSaturday = $firstFriday->copy()->addDay();  // Saturday
-        \Log::info('Now: ' . $now);
-        \Log::info('Cutoff: ' . $wednesdayCutoff);
-        \Log::info('Friday: ' . $firstFriday);
-        \Log::info('Saturday: ' . $firstSaturday);
-        $dates = collect();
-        $weeksChecked = 0;
-        $neededDates = 6;
-        $maxWeeksToCheck = 10; // veiligheidsstop om niet oneindig te loopen
-
-        while ($dates->count() < $neededDates && $weeksChecked < $maxWeeksToCheck) {
-            // bepaal de start van de week die we nu checken
-            $currentWeekStart = $weekStart->copy()->addWeeks($weeksChecked);
-
-            // Friday = maandag + 4 dagen
-            $friday = $currentWeekStart->copy()->addDays(4);
-            $saturday = $friday->copy()->addDay();
-
-            // Holiday-check: zorg dat we de juiste kolom gebruiken (hier 'date')
-            $weekIsBlocked = Holiday::whereBetween(
-                'week',
-                [
-                    $currentWeekStart->copy()->startOfWeek(Carbon::MONDAY)->toDateString(),
-                    $currentWeekStart->copy()->endOfWeek(Carbon::MONDAY)->toDateString()
-                ]
-            )->exists();
-
-            if (! $weekIsBlocked) {
-                $dates->push([
-                    'date'      => $friday->toDateString(),
-                    'formatted' => $friday->translatedFormat('j F'),
-                    'day'       => $friday->translatedFormat('l'),
-                ]);
-
-                // check nogmaals of we na het pushen al genoeg hebben
-                if ($dates->count() < $neededDates) {
-                    $dates->push([
-                        'date'      => $saturday->toDateString(),
-                        'formatted' => $saturday->translatedFormat('j F'),
-                        'day'       => $saturday->translatedFormat('l'),
-                    ]);
-                }
-            }
-
-            $weeksChecked++;
-        }
-
-        $data = $dates->sortBy('date')->values()->take($neededDates);
-
-        return view('bestelling.winkelmand', compact('order', 'client', 'data'));
+        return view('bestelling.winkelmand', compact('data'));
     }
 
     public function afrekenen() {
@@ -103,7 +57,7 @@ class PageController extends Controller
         $client = Client::findOrFail($request->client_id);
         $order  = Order::findOrFail($request->order_id);
         if ($order->payed) {
-            return redirect()->route('aanbod');
+            return redirect()->route('winkel');
         }
         // Convert the selected date to a Carbon instance
         $orderDate = Carbon::parse($order->day);

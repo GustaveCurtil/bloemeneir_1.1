@@ -12,3 +12,20 @@ button.add-to-basket img {
     height: var(--height-line);
     width: var(--height-line);
 }
+
+.code {
+    display: flex;
+    margin-bottom: 0;
+}
+
+.code input {
+    flex-grow: 1;
+    margin-bottom: 0;
+    font-family: var(--font2);
+}
+
+.code button {
+    background-color: var(--color-text);
+    color: var(--color-bg);
+    font-family: var(--font2);
+}

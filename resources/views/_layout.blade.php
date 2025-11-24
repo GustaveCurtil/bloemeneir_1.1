@@ -35,13 +35,13 @@
         </div>
         <nav>
             <a href="{{ route('over') }}" class="{{ request()->routeIs('over') ? 'actief' : '' }}">over ons</a>
-            <a href="{{ route('aanbod') }}" class="{{ request()->routeIs('aanbod') || request()->routeIs('shopping-basket') || request()->routeIs('kassa') ? 'actief' : '' }}">boeket bestellen</a>
+            <a href="{{ route('winkel') }}" class="{{ request()->routeIs('winkel') || request()->routeIs('shopping-basket') || request()->routeIs('kassa') ? 'actief' : '' }}">winkeltje</a>
             <a href="{{ route('contact') }}" class="{{ request()->routeIs('contact') ? 'actief' : '' }}">contact</a>
         </nav>
     </header>
     <div>
         @yield('main')
-        @if (!Route::is('landing') && !Route::is('shopping-basket'))
+        @if (!Route::is('landing') && !Route::is('shopping-basket') && !Route::is('afrekenen'))
         <footer>
             <p>website gemaakt met ♥ door<a href="https://kurtgustil.be/" target="_blank">kurtgustil</a></p>
             <p><a href="https://www.instagram.com/bloemenier/#" target="_blank">instagram</a></p>
@@ -58,11 +58,11 @@
         <p>↑</p>
     </div>
   </div>
-  @if (!Route::is('landing') && !Route::is('shopping-basket') && !Route::is('gdpr'))
+  @if (!Route::is('landing') && !Route::is('shopping-basket') && !Route::is('gdpr') && !Route::is('afrekenen'))
     <div id="shopping-card">
         <div>
             <div onclick="window.location.href='/winkel/winkelmandje'">
-                <img src="{{asset('/media/aanbod/winkelmandje.png')}}" alt="">
+                <img src="{{asset('/media/winkel/winkelmandje.png')}}" alt="">
                 <div>
                     <p><b><span id="amount">0 dingen</span></b> in <span class="desktop">het</span> winkelmandje</p>
                     <p>

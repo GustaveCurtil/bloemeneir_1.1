@@ -39,7 +39,7 @@
 html, h1, h2 {font-family: var(--font);}
 html {cursor: url('../boeket.cur'), auto;}
 h2 {margin-bottom: var(--gap-small);}
-h3 {font-size: 1.1rem; margin-bottom: var(--gap-mini);}
+h3 {font-size: 1.1rem; margin-bottom: var(--gap-small);}
 a {color: var(--color-text); cursor: url('../boeket-pointer2.cur'), auto;}
 label, .plusmin div, select, input, u {  cursor: url('../boeket-pointer2.cur'), wait;}
 img {width: 100%;}
@@ -50,7 +50,7 @@ select.error {background-color: var(--color-yellow);}
 
 section {width: 100%; margin-top: var(--gap-small); margin-bottom: var(--gap-medium);}
 .desktop {display: none;}
-span.mobile {display: inline;}
+.mobile {display: inline;}
 
 /* WebKit browsers (Chrome, Edge, Safari) */
 ::-webkit-scrollbar {
@@ -690,7 +690,7 @@ fieldset.vraag>*:not(:last-child) {
     margin-bottom: var(--gap-normal);
 }   
 
-label.inzetten {
+label.inzetten, label.mailing {
     display: inline-flex;
     padding-top: var(--gap-small);
     font-size: 0.8rem;
@@ -732,7 +732,7 @@ button {
 
 
 @media screen and (min-width: 800px) {
-    /* span.mobile {display: none;} */
+    .mobile {display: none;}
     .desktop {display: flex;}
     span.desktop {display: inline;}
     section#aanbod, section.fichkes {
