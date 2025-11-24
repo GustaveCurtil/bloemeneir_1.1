@@ -13,8 +13,9 @@ return new class extends Migration
     {
         Schema::create('gift_vouchers', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('order_id')->constrained('orders')->cascadeOnDelete();
+            $table->foreignId('order_id')->nullable()->constrained('orders')->cascadeOnDelete();
             $table->string('code')->unique();
+            $table->integer('amount');
             $table->timestamps();
         });
     }

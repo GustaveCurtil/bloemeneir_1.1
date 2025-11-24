@@ -5,6 +5,7 @@ use App\Http\Controllers\PageController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\VoucherController;
 use App\Http\Controllers\DashboardController;
 
 Route::get('/', function () {
@@ -37,6 +38,7 @@ Route::post('/login', [LoginController::class, 'login'])->name('login');
 // Route::get('/maak', [LoginController::class, 'createUser']);
 
 Route::post('/order', [OrderController::class, 'store'])->name('order');
+Route::post('/check-code', [VoucherController::class, 'checkCode']);
 
 
 

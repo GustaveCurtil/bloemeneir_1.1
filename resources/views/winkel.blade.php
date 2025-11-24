@@ -24,11 +24,26 @@
             <p>❄ Extra openingsdagen tijdens de kerstperiode ❄</p>
         </section>
         <section>
-            <form action="" class="code">
-                    <input type="text" name="" id="" placeholder="code kaart of bon">
+            <form action="/check-code" method="POST" class="code">
+                    @csrf
+                    <input type="text" name="code" placeholder="code beurtenkaart of bon" required>
                     <button type="submit">toevoegen</button>
             </form>
         </section>
+        @if (isset($code))
+        <section>    
+            @if (!$giftVoucher && !$turnVoucher)
+            <p>De ingevulde code ("{{$code}}") is ongeldig.</p>
+            @endif
+            @if ($giftVoucher)
+            <p>Cadeaubon: €{{ $giftVoucher->amount }} (veel plezier ermee)</p>
+            @endif
+
+            @if ($turnVoucher)
+            <p>Geldige turn voucher: {{ $turnVoucher->option1 }} boeketten</p>
+            @endif
+        </section>
+        @endif
         <section class="fichkes">
             <div>
                 <a>
