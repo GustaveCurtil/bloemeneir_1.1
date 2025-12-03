@@ -23,10 +23,50 @@ class VoucherController extends Controller
         $giftVoucher = GiftVoucher::where('code', $code)->first();
         $turnVoucher = TurnVoucher::where('code', $code)->first();
 
-        return view('winkel', [
-            'giftVoucher' => $giftVoucher,
-            'turnVoucher' => $turnVoucher,
-            'code' => $code,
+        // ❌ No matching vouchers
+        if (!$giftVoucher && !$turnVoucher) {
+            return redirect()->route('afrekenen')
+                ->withErrors(['code' => "De code '{$code}' is ongeldig."])
+                ->withInput();
+        }
+
+        // Load used codes
+        $previousCodes = session('previousCodes', []);
+
+        // ❌ Already used
+        if (in_array($code, $previousCodes)) {
+            return redirect()->route('afrekenen')
+                ->withErrors(['code' => "De code '{$code}' is reeds gebruikt."])
+                ->withInput();
+        }
+
+        // Store new used code
+        $previousCodes[] = $code;
+
+        // $amountA = session('amountA', 0);
+        // $amountB = session('amountB', 0);
+        // $amountC = session('amountC', 0);
+        // $amountGift = session('amountGift', 0);
+
+        // // Only add if voucher exists
+        // if ($turnVoucher) {
+        //     $amountA += $turnVoucher->option1 ?? 0;
+        //     $amountB += $turnVoucher->option2 ?? 0;
+        //     $amountC += $turnVoucher->option3 ?? 0;
+        // }
+
+        // if ($giftVoucher) {
+        //     $amountGift += $giftVoucher->amount ?? 0;
+        // }
+
+        session([
+            // 'amountA' => $amountA,
+            // 'amountB' => $amountB,
+            // 'amountC' => $amountC,
+            // 'amountGift' => $amountGift,
+            'previousCodes' => $previousCodes, 
         ]);
+
+        return redirect()->route('afrekenen');
     }
 }

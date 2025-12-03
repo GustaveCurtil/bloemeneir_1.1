@@ -3,18 +3,20 @@
 @section('title', 'informatie')
 
 @section('links')
+<script src="{{asset('/js/omhoog.js')}}" defer></script>
 <script src="{{asset('/js/kopieren.js')}}" defer></script>
 <script src="{{asset('/js/winkelbanner.js')}}" defer></script>
-
+<link rel="preload" as="image" href="{{asset('/media/huis.png')}}">
 @endsection
 
 @section('main')
 
     <main>
       <section id="contact">
-        <h2 style="text-align: center">Afhaalmomenten</h2>
+        <h2 style="text-align: center">Algemene afhaalmomenten</h2>
         <p>Vrijdag tussen 15u en 19u</p>
         <p>Zaterdag tussen 10u en 13u</p>
+        <p style="font-style: italic; padding-top:var(--gap-small); font-size: 0.9rem;">Te bestellen vòòr woensdag 18u</p>
       </section>
         <section id="contact">
           <h2 style="text-align: center">Kessel-Lo</h2>

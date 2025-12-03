@@ -1,6 +1,23 @@
-@import url('https://fonts.googleapis.com/css2?family=Mynerve&display=swap');
+/* @import url('https://fonts.googleapis.com/css2?family=Mynerve&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Comic+Relief:wght@400;700&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&display=swap'); */
+
+
+@font-face {
+    font-family: 'Mynerve';
+    src: url('/fonts/Mynerve.woff2') format('woff2'),
+         url('/fonts/Mynerve.woff') format('woff');
+    font-display: block;
+}
+
+@font-face {
+    font-family: 'DM Mono';
+    font-style: normal;
+    font-weight: 300 500;
+    src: url('/fonts/DMMono-Regular.woff2') format('woff2'),
+         url('/fonts/DMMono-Regular.woff') format('woff');
+    font-display: block;
+}
 
 *, html {
     padding: 0;
@@ -24,6 +41,7 @@
     --gap-mini: 0.2rem;
 
     --color-bg:#f3e8ca;
+    --color-fichkes: #efe5d9;
     --color-text: #354604;
     --color-black: black;
     --color-green: #a3b17e;
@@ -116,6 +134,10 @@ header>div {
     justify-content: space-evenly;
 }
 
+header>div>a {
+    cursor: url('../boeket.cur'), auto;
+}
+
 header>div>img {
     height: 6rem;
     width: auto;
@@ -127,6 +149,7 @@ header svg {
 }
 
 nav {
+    font-size: 1.2rem;
     width: 100%;
     max-width: 500px;
     display: flex;
@@ -138,7 +161,7 @@ nav a {
     text-decoration: none;
     padding: 0.4rem 0.8rem 0.4rem 0.8rem;
     font-weight: 600;
-    background-color: var(--color-bg);
+    background-color: var(--color-fichkes);
     display: inline-flex;
 }
 
@@ -187,7 +210,7 @@ footer {
     min-height: var(--height-footer);
     display: flex; flex-direction: column; justify-content: center; align-items: center;
 }
-footer p { line-height: calc((var(--height-footer) / 4)); font-size: 0.9rem; display: inline; font-family: var(--font2);}
+footer p { line-height: var(--height-line); font-size: 0.9rem; display: inline; font-family: var(--font2);}
 footer>p>a { user-select: none; text-underline-offset: var(--gap-mini); cursor: url('../boeket-pointer2.cur'), auto; cursor: default; font-size: 0.9rem; padding-left: 0.2rem;}
 /* a:-webkit-any-link {
     cursor: url('../boeket-pointer2.cur'), pointer;
@@ -229,16 +252,15 @@ main#landing {
 
 }
 
-div.slogan {
-    position: sticky;
-    top: 0;
+section.slogan {
     display: flex;
     flex-direction: column;
     justify-content: center;
     flex-grow: 1;
+    margin-bottom: var(--gap-big);
 }
 
-div.slogan p {
+section.slogan p {
     font-size: 1.1rem;
     font-family: var(--font2);
     text-align: center;
@@ -275,6 +297,46 @@ img#logo {
 
 
 /* SFEER PAGINA */
+section.dagen {
+    margin-bottom: var(--gap-big);
+}
+
+section.dagen>p {
+    text-align: center;
+    padding-bottom: var(--gap-small);
+}
+section>div.data {
+    width: 100%;
+    max-width: 400px;
+    margin: 0 auto;
+    border: 1px solid var(--color-text);
+    padding: var(--gap-small);
+    background-color:#efe5d9;
+}
+
+section>div.data>div>div {
+    width: 100%;
+    display: inline-flex;
+    justify-content: space-between;
+    padding: var(--gap-mini);
+   cursor: url('../boeket-pointer2.cur'), auto !important;
+}
+
+section>div.data>div>div:hover, section>div.data>div>div.active {
+    background-color: #354604;
+    color: #e3dab8;
+}
+
+section>div.data>div>div>span:first-of-type>span {
+    text-decoration: underline;
+}
+
+
+section>div.data>div.group:not(:last-of-type) {
+    margin-bottom: var(--gap-small);
+    padding-bottom: var(--gap-small);
+    border-bottom: 1px solid var(--color-text);
+}
 
 section.fototekst {
     display: flex;
@@ -354,6 +416,17 @@ section.fichkes>div>p {
     text-align: center;
 }
 
+.bonnen a {
+    width: 60%;
+    margin: 0 auto;
+}
+
+.bonnen img {
+        width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
 
 
 @keyframes wiggle {
@@ -368,7 +441,7 @@ div#shopping-card {
 
     width: 100%;
     height: var(--height-footer);
-    line-height: calc(var(--height-footer)/4);
+    line-height: calc(var(--height-footer)/5);
 
     background-color: var(--color-green);
 
@@ -407,8 +480,11 @@ div#shopping-card > div > div:first-of-type * {
 }
 
 div#shopping-card>div>div:first-of-type>div {
-    width: auto;
-    display: block;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
     min-height: auto;
     font-family: var(--font2);
 }
@@ -419,15 +495,29 @@ div#shopping-card>div>div:first-of-type>img {
     margin-right: var(--gap-small);
 }
 
+div#shopping-card>div>div:first-of-type>img:not(.active) {
+    display: none;
+}
+
 div#shopping-card>div>div:last-of-type {
     font-size: 2rem;
     cursor: url('../boeket-pointer2.cur'), auto;
     padding: 0 var(--gap-small);
 }
 
-@media screen and (width > 600px) {
+div#shopping-card p {
+    text-align: center;
+    width: 100%; 
+}
+
+@media screen and (width > 700px) {
     div#shopping-card>div>div:first-of-type {
         justify-content: center;
+    }
+
+    div#shopping-card p {
+        text-align: center;
+        width: 100%; 
     }
 }
 
@@ -505,7 +595,7 @@ input, select {
     border: 1px solid var(--color-text);
     border-radius: 0;
     color: var(--color-text);
-    margin-bottom: var(--gap-medium);
+    margin-bottom: var(--gap-normal);
     background-color: #efe5d9;
 
     font-family: var(--font);
@@ -594,7 +684,8 @@ input[type="submit"], input[type="button"] {
     font-weight: 600;
     line-height: var(--height-field);
     font-family: var(--font2);
-    margin-bottom: var(--gap-medium);
+    margin-bottom:0;
+    text-decoration: underline
 }
 
 input[type="checkbox"], input[type="radio"] {
@@ -672,9 +763,9 @@ fieldset.aantal input[type="number"] {
 fieldset.aantal input::placeholder {color: var(--color-text);}
 
 fieldset.aantal>div .plusmin {background-color: #efe5d9;}
-fieldset.aantal>div:nth-child(1) .plusmin>* {border-color: #887f1e;}
-fieldset.aantal>div:nth-child(2) .plusmin>* {border-color: #f1c47c}
-fieldset.aantal>div:nth-child(3) .plusmin>* {border-color: #9e3238;}
+fieldset.aantal>div:nth-child(1) .plusmin>*, .fichkes.boeketten p:nth-child(1) button {border-color: #887f1e;}
+fieldset.aantal>div:nth-child(2) .plusmin>*, .fichkes.boeketten p:nth-child(2) button {border-color: #d0a965}
+fieldset.aantal>div:nth-child(3) .plusmin>*, .fichkes.boeketten p:nth-child(3) button {border-color: #9e3238;}
 
 .aantal div.afbeelding {
     height: calc( (2* var(--height-line)));
@@ -704,11 +795,19 @@ fieldset.aantal #cadeau-prijs>input[type="number"] {
 }
 
 /* CHECKOUT */
-ul {
+ul{
     list-style-position: outside;
-    list-style-type: '❀ ';
     margin-left: 1.4rem;
     margin-bottom: var(--gap-small);
+    font-size: 0.9rem;
+}
+
+li#boeketten {
+    list-style-type: '❀ ';
+}
+
+li#kaarten {
+    list-style-type: '▰ ';
 }
 
 li {margin-top: var(--gap-small);}
@@ -716,7 +815,9 @@ li {margin-top: var(--gap-small);}
 li span {
     display: inline-block;
 }
-
+ul p {
+    margin-top: var(--gap-mini);
+}
 button {
     height: var(--height-field);
 
@@ -730,8 +831,45 @@ button {
     padding: 0 var(--gap-mini);
 }
 
+.code {
+    display: flex;
 
-@media screen and (min-width: 800px) {
+    margin-bottom: 0;
+}
+
+.code input {
+    flex-grow: 1;
+    margin-bottom: 0;
+    font-family: var(--font2);
+    border-right: 0;
+    font-size: 0.9rem;
+}
+
+.code button {
+    background-color: #efe5d9;
+    color: var(--color-text);
+    font-family: var(--font2);
+    aspect-ratio: 1/1;
+    cursor: url('../boeket-pointer2.cur'), auto;
+}
+
+.totaal {
+    padding: var(--gap-small);
+    margin: var(--gap-normal) 0;
+    border: 1px solid var(--color-text);
+
+    font-weight: 600;
+
+    display: flex;
+    justify-content: space-between;
+}
+
+div[data-name] {
+    font-size: 0.9rem;
+    margin-bottom: var(--gap-normal);
+}
+
+@media screen and (min-width: 700px) {
     .mobile {display: none;}
     .desktop {display: flex;}
     span.desktop {display: inline;}
@@ -749,9 +887,12 @@ button {
     }
 
     section.fichkes.bonnen a {
-            width: 60%;
+            width: 40%;
     }
 
+    section>div.data {
+    max-width: calc((100% - 2 * var(--gap-medium)) / 2);
+    }
 
     section#kaart {
         height: 300px;
@@ -768,27 +909,35 @@ button {
     }
 
     section.fichkes.bonnen>div>p {
-        width: 40%;
+        width: 60%;
     }
 
-    .fichkes a[data-boeket="boeket1"]:hover img {
-        content: url("/media/aanbod/fiche_schattig3.png");
+    .fichkes img[data-aanbod="boeket_A"]:hover {
+        content: url("/media/winkel/fiche_schattig3.png");
     }
 
-    .fichkes a[data-boeket="boeket2"]:hover img {
-        content: url("/media/aanbod/fiche_charmant3.png");
+    .fichkes img[data-aanbod="boeket_B"]:hover {
+        content: url("/media/winkel/fiche_charmant3.png");
     }
 
-    .fichkes a[data-boeket="boeket3"]:hover img {
-        content: url("/media/aanbod/fiche_magnifiek3.png");
+    .fichkes img[data-aanbod="boeket_C"]:hover {
+        content: url("/media/winkel/fiche_magnifiek3.png");
     }
 
-    .fichkes a[data-boeket="cadeaubon"]:hover img {
-        content: url("/media/aanbod/cadeaubonfichke2.png");
+    .fichkes a[data-aanbod="cadeau"]:hover img {
+        content: url("/media/winkel/cadeaubon2.png");
     }
 
-    .fichkes a[data-boeket="beurtenkaart"]:hover img {
-        content: url("/media/aanbod/cadeaubonfichke2.png");
+    .fichkes a[data-aanbod="kaart_A"]:hover img {
+        content: url("/media/winkel/kaart_schattig2.png");
+    }
+
+    .fichkes a[data-aanbod="kaart_B"]:hover img {
+        content: url("/media/winkel/kaart_charmant2.png");
+    }
+
+    .fichkes a[data-aanbod="kaart_C"]:hover img {
+        content: url("/media/winkel/kaart_magnifiek2.png");
     }
 
     section.fototekst {

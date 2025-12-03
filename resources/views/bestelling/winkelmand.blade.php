@@ -14,10 +14,9 @@
             <h2>Winkelmandje</h2>
             <a href="/winkel">terug</a>
         </div>
-        <h3>Bestellingen op afhalen</h3>
-        <p>Boeket voor deze week graag vòòr woensdag 18u bestellen.</p>
-        <br>
-        <p>De volledige opbrengst van de verkoop op <b>12 en 13 december</b> schenken we aan de ☀ <b>Warmste Week</b> ☀</p>
+        {{-- <p>Boeketten kunnen nog 2 dagen op voorhand tot 18u worden besteld.</p>
+        <br> --}}
+        <p style="text-align: center">Het weekend van 12 en 13 december<br>werken we ten voordele van<br>🔥 de Warmste Week 🔥</p>
         <br>
         
         <form>
@@ -117,9 +116,11 @@
                         € <input type="number" id="cadeau" data-aanbod="cadeau" placeholder="00" min="0">
                     </div>                        
                 </div>
-                <label for="cadeaubon" class="mailing">
+                {{-- <label for="cadeaubon" class="mailing">
                     <input type="checkbox" name="" id="cadeaubon">Stuur code door via mail <br class="mobile">(i.p.v. bon te komen halen)
-                </label>
+                </label> --}}
+                <br>
+                <p><i class="small">Codes van bonnen en beurtenkaarten worden via mail gestuurd.</i></p>
             </fieldset>
             <fieldset class="vraag">
                 <p>Ik kom mijn bestelling ophalen op:</p>

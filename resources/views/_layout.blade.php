@@ -6,15 +6,19 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
 
     <meta property="og:locale" content="nl_BE" />
-    <meta property="og:title" content="Bloemenier ❀">
+    <meta property="og:title" content="Bloemenier ❀ prachtige boeketten op bestelling in Kessel-Lo">
     <meta property="og:type" content="website" />
     <meta property="og:url" content="{{ url()->current() }}" />
     <meta property="og:image" content="{{ url('media/logo.png') }}" />
     <meta property="og:description" content="Bloemenier is een bloemist in Kessel-Lo en maakt prachtige boeketten op bestelling." />
-    <meta name="keywords" content="bloemen , boeketten , bloem , boeket , cadeau , Leuven , bestellen , online, kessel-lo">
+    <meta name="keywords" content="bloemen , boeketten , bloem , boeket , cadeau , Leuven , bestellen , online, kessel-Lo">
 
-    <link rel="shortcut icon" href="{{ asset('media/logo.png') }}" type="image/x-icon">
+    <link rel="preload" href="/fonts/Mynerve.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/DMMono-Regular.woff2" as="font" type="font/woff2" crossorigin>
+
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+    <link rel="shortcut icon" href="{{ asset('media/logo.png') }}" type="image/x-icon">
+    
 
     @yield('links')
 
@@ -35,18 +39,17 @@
         </div>
         <nav>
             <a href="{{ route('over') }}" class="{{ request()->routeIs('over') ? 'actief' : '' }}">over ons</a>
-            <a href="{{ route('winkel') }}" class="{{ request()->routeIs('winkel') || request()->routeIs('shopping-basket') || request()->routeIs('kassa') ? 'actief' : '' }}">winkeltje</a>
+            <a href="{{ route('winkel') }}" class="{{ request()->routeIs('winkel') || request()->routeIs('shopping-basket') || request()->routeIs('kassa') ? 'actief' : '' }}">bestellingen</a>
             <a href="{{ route('contact') }}" class="{{ request()->routeIs('contact') ? 'actief' : '' }}">contact</a>
         </nav>
     </header>
     <div>
         @yield('main')
-        @if (!Route::is('landing') && !Route::is('shopping-basket') && !Route::is('afrekenen'))
+        @if (!Route::is('landing'))
         <footer>
-            <p>website gemaakt met ♥ door<a href="https://kurtgustil.be/" target="_blank">kurtgustil</a></p>
-            <p><a href="https://www.instagram.com/bloemenier/#" target="_blank">instagram</a></p>
+            <p><a href="https://www.instagram.com/bloemenier/#" target="_blank">instagram</a> ❀ <a href="https://kurtgustil.be/" target="_blank">kurtgustil</a> websites</p>
             @if (!Route::is('gdpr'))
-            <p><a href="{{ route('gdpr') }}">GDPR</a></p>
+            <p>geen cookies ❀ <a href="{{ route('gdpr') }}">GDPR</a></p>
             @endif
             @if (Route::is('gdpr'))
             <p><a href="{{ route('overzicht') }}">inloggen</a></p>
@@ -62,7 +65,9 @@
     <div id="shopping-card">
         <div>
             <div onclick="window.location.href='/winkel/winkelmandje'">
-                <img src="{{asset('/media/winkel/winkelmandje.png')}}" alt="">
+                <img src="{{asset('/media/winkel/winkelmandje1.png')}}" alt="" class="active">
+                <img src="{{asset('/media/winkel/winkelmandje2.png')}}" alt="">
+                <img src="{{asset('/media/winkel/winkelmandje3.png')}}" alt="">
                 <div>
                     <p><b><span id="amount">0 dingen</span></b> in <span class="desktop">het</span> winkelmandje</p>
                     <p>

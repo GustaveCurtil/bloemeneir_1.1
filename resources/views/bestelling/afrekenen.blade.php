@@ -1,7 +1,7 @@
 @extends('_layout')
 
 @section('links')
-<script src="{{asset('/js/afrekenen.js')}}" defer></script>
+<script src="{{asset('/js/afrekenen2.js')}}" defer></script>
 @endsection
 
 @section('title', 'afrekenen')
@@ -13,23 +13,50 @@
         <a href="/winkel/winkelmandje">bestelling aanpassen</a>
     </div>
     <section>
-            <h3>Overzicht bestelling</h3>
-            <ul id="overzicht">
-                
-            </ul>
-            <p><b>Totaal: <span id="prijs"></span></b></p>
-        </section>
+        <h3>Overzicht bestelling</h3>
+        <ul>
+        </ul>
+        <div class="totaal">
+            <p>Totaal:</p>
+            <p class="prijs"></p></b>
+        </div>
+        <div>
+            @foreach ($turnCards as $card)
+            <div data-name="{{$card->name}}">
+                <p>▰ 5-beurtenkaart (code: '{{$card->code}}')</p>
+                <p>&nbsp;⤷  <span>{{ $card->option1 ?? $card->option2 ?? $card->option3 ?? 0 }}</span> resterende {{$card->name}}e boeketten</p>
+            </div>
+            @endforeach
+            @foreach ($giftCards as $card)
+            <div data-name="{{$card->name}}">
+                <p>▰ {{$card->code}}: cadeaubon ter waarde van €{{$card->amount}},00</p>
+                <p>&nbsp;⤷  <span>{{$card->amount}}</span> resterende boeketten</p>
+            </div>
+            @endforeach
+        </div> 
+        <form action="{{ route('check-code') }}" method="POST" class="code">
+                @csrf
+                <input type="text" name="code" placeholder="code beurtenkaart of bon" required value="">
+                <button type="submit">+</button>
+        </form>  
+        @error('code')
+        <p class="error active" style="font-size: 0.9rem">{{ $message }}</p>
+        @enderror
+        <br>
+    </section>
+
     <form action="">
         <h3>Jouw gegevens</h3>
         <fieldset>
-                    <label for="naam">jouw voornaam*:</label>
+                    <label for="naam">jouw voornaam*</label>
                     <input type="text" name="first_name" id="naam" value="{{ old('first_name', $client->first_name ?? '') }}" placeholder="vul hier in" required>
-                    <label for="achternaam">jouw achternaam:</label>
+                    <label for="achternaam">jouw achternaam <i class="small">(optioneel)</i></label>
                     <input type="text" name="last_name" id="achternaam" value="{{ old('last_name', $client->last_name ?? '') }}" placeholder="vul hier in" required>
-                    <label for="email">email*:</label>
-                    <input type="email" name="email" id="email" value="{{ old('email', $client->email ?? '') }}" placeholder="vul hier in" required>
-                    <label for="nummer">telefoonnummer <i class="small">(in case of)</i>:</label>
+                    <label for="nummer">telefoonnummer <i class="small">(optioneel)</i></label>
                     <input type="tel" name="phone" id="nummer" value="{{ old('phone', $client->phone ?? '') }}" placeholder="vul hier in">
+                    <label for="email">e-mailadres*</label>
+                    <input type="email" name="email" id="email" value="{{ old('email', $client->email ?? '') }}" placeholder="vul hier in" required>
+                    <input type="email" name="email" id="email" value="{{ old('email', $client->email ?? '') }}" placeholder="herhaal e-mailadres" required>
                     <label class="rij">
                         <input type="checkbox" name="nieuwsbrief" value="1"
                             {{ old('nieuwsbrief', $client->nieuwsbrief ?? 0) == 1 ? 'checked' : '' }}>
@@ -107,4 +134,19 @@
         }
     });
 </script> --}}
+
+<script>
+    let amount_A = 0;
+    let amount_B = 0
+    let amount_C = 0
+    let amountGift = 0
+    @foreach ($turnCards as $card)
+        amount_A += {{ $card->option1 ?? 0 }};
+        amount_B += {{ $card->option2 ?? 0 }};
+        amount_C += {{ $card->option3 ?? 0 }};
+    @endforeach
+    @foreach ($giftCards as $card)
+        amountGift += {{$card->amount}};
+    @endforeach
+</script>
 @endsection

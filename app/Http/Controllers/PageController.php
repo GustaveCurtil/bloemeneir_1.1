@@ -8,6 +8,8 @@ use App\Models\Order;
 use App\Models\Client;
 use App\Models\Holiday;
 use Stripe\PaymentIntent;
+use App\Models\GiftVoucher;
+use App\Models\TurnVoucher;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Mail;
@@ -48,7 +50,33 @@ class PageController extends Controller
     }
 
     public function afrekenen() {
-        return view('bestelling.afrekenen');
+        // $amountA = session('amountA', 0);
+        // $amountB = session('amountB', 0);
+        // $amountC = session('amountC', 0);
+        // $amountGift = session('amountGift', 0);
+        $previousCodes = session('previousCodes', []);
+        // $cardList = [];
+        // foreach ($previousCodes as $code) {
+        //     $giftVoucher = GiftVoucher::where('code', $code)->first();
+        //     $turnVoucher = TurnVoucher::where('code', $code)->first();
+        // }
+
+        $turnCards = [];
+        $giftCards = [];
+
+        foreach ($previousCodes as $code) {
+            $giftVoucher = GiftVoucher::where('code', $code)->first();
+            $turnVoucher = TurnVoucher::where('code', $code)->first();
+            if ($giftVoucher) {
+                $giftCards[] = $giftVoucher;
+            } else if ($turnVoucher) {
+                $turnCards[] = $turnVoucher;
+            }
+        }
+        
+        return view('bestelling.afrekenen', compact(
+            'turnCards', 'giftCards'
+        ));
     }
 
 

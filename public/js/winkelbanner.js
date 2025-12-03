@@ -19,6 +19,8 @@ let totaal = 0;
 let winkelmandje = document.querySelector('#shopping-card');
 const knoppen = document.querySelectorAll('button[data-aanbod]');
 
+let tekeningen = document.querySelectorAll('#shopping-card img')
+
 document.addEventListener('DOMContentLoaded', () => {
     updateMandjes()
     berekenTotaal();
@@ -70,9 +72,15 @@ function updateWinkelmandje() {
     if (totaal > 0) {
         winkelmandje.classList.add('active');
         if (totaal === 1) {
-            aantalDingen.textContent = totaal + " iets"
+            aantalDingen.textContent = totaal + " iets";
+            changeImage(1)
         } else {
-            aantalDingen.textContent = totaal + " dingen"
+            aantalDingen.textContent = totaal + " dingen";
+            if (totaal === 2) {
+                changeImage(2)
+            } else {
+                changeImage(3)
+            }
         }
         
     } else {
@@ -93,4 +101,17 @@ function resetWinkelwagen() {
 
     updateMandjes()
     updateWinkelmandje()
+}
+
+function changeImage(number) {
+    tekeningen.forEach(tekening => {
+        tekening.classList.remove('active')
+    });
+    if (number < 2) {
+        tekeningen[0].classList.add('active')
+    } else if (number === 2) {
+        tekeningen[1].classList.add('active');
+    } else {
+        tekeningen[2].classList.add('active');
+    }
 }

@@ -22,7 +22,7 @@
                 <li>E-mailadres</li>
                 <li>Telefoonnummer (optioneel)</li>
             </ul>
-            <p>Daarnaast gebruiken we een cookie die je helpt je gegevens sneller in te vullen bij een volgende bestelling. Deze cookie bevat geen gevoelige informatie en wordt enkel gebruikt om het bestelproces te vergemakkelijken.</p>
+            <p>Wij gebruiken geen cookies!</p>
         </section>
         <section>
             <h2>3. Waarom verzamelen we deze gegevens?</h2>
@@ -44,7 +44,7 @@
         </section>
         <section>
             <h2>6. Cookies</h2>
-            <p>Onze website gebruikt enkel een functionele cookie die je helpt om je gegevens sneller opnieuw in te vullen bij een nieuwe bestelling. We gebruiken geen tracking- of analysecookies.</p>
+            <p>Wij gebruiken geen cookies!</p>
         </section>
         <section>
             <h2>7. Jouw rechten</h2>

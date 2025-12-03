@@ -14,10 +14,14 @@ return new class extends Migration
         Schema::create('turn_vouchers', function (Blueprint $table) {
             $table->id();
             $table->foreignId('order_id')->nullable()->constrained('orders')->cascadeOnDelete();
-            $table->tinyInteger('option1')->nullable();
-            $table->tinyInteger('option2')->nullable();
-            $table->tinyInteger('option3')->nullable();
+            $table->string('name')->nullable();
             $table->string('code')->unique();
+            $table->tinyInteger('option1')->nullable();
+            $table->tinyInteger('option1_original')->nullable();
+            $table->tinyInteger('option2')->nullable();
+            $table->tinyInteger('option2_original')->nullable();
+            $table->tinyInteger('option3')->nullable();
+            $table->tinyInteger('option3_original')->nullable();
             $table->timestamps();
         });
     }
