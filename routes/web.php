@@ -8,11 +8,11 @@ use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\VoucherController;
 use App\Http\Controllers\DashboardController;
 
-// Route::get('/', function () {
-//     return view('landing');
-// })->name('landing');
-
 Route::get('/', function () {
+    return view('landing');
+})->name('landing');
+
+Route::get('/over', function () {
     return view('over');
 })->name('over');
 

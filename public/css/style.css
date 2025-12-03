@@ -211,7 +211,7 @@ footer {
     display: flex; flex-direction: column; justify-content: center; align-items: center;
 }
 footer p { line-height: var(--height-line); font-size: 0.9rem; display: inline; font-family: var(--font2);}
-footer>p>a { user-select: none; text-underline-offset: var(--gap-mini); cursor: url('../boeket-pointer2.cur'), auto; cursor: default; font-size: 0.9rem; padding-left: 0.2rem;}
+footer>p>a { user-select: none; text-underline-offset: var(--gap-mini); cursor: url('../boeket-pointer2.cur'), auto; font-size: 0.9rem; padding-left: 0.2rem;}
 /* a:-webkit-any-link {
     cursor: url('../boeket-pointer2.cur'), pointer;
 } */
@@ -298,23 +298,31 @@ img#logo {
 
 /* SFEER PAGINA */
 section.dagen {
-    margin-bottom: var(--gap-big);
+    margin-bottom: var(--gap-normal);
+}
+section.dagen>div {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+}
+section.dagen>div>div {
+    width: 100%;
 }
 
-section.dagen>p {
+section.dagen>div p {
     text-align: center;
     padding-bottom: var(--gap-small);
 }
-section>div.data {
+section>div>div>div.data {
+    max-width: 600px;
     width: 100%;
-    max-width: 400px;
     margin: 0 auto;
     border: 1px solid var(--color-text);
     padding: var(--gap-small);
     background-color:#efe5d9;
 }
 
-section>div.data>div>div {
+section>div>div>div.data>div>div {
     width: 100%;
     display: inline-flex;
     justify-content: space-between;
@@ -322,17 +330,17 @@ section>div.data>div>div {
    cursor: url('../boeket-pointer2.cur'), auto !important;
 }
 
-section>div.data>div>div:hover, section>div.data>div>div.active {
+section>div>div>div.data>div>div:hover, section>div>div>div.data>div>div.active {
     background-color: #354604;
     color: #e3dab8;
 }
 
-section>div.data>div>div>span:first-of-type>span {
+section>div>div>div.data>div>div>span:first-of-type>span {
     text-decoration: underline;
 }
 
 
-section>div.data>div.group:not(:last-of-type) {
+section>div>div>div.data>div.group:not(:last-of-type) {
     margin-bottom: var(--gap-small);
     padding-bottom: var(--gap-small);
     border-bottom: 1px solid var(--color-text);
@@ -383,12 +391,10 @@ section.fichkes {
 
     justify-content: center;
     align-items: center;
-    margin-bottom: 0;
 }
 
 section.fichkes.bonnen {
     flex-direction: column;
-    padding-bottom: var(--gap-big);
 }
 
 section.fichkes>div {
@@ -404,7 +410,7 @@ section.fichkes.bonnen>div {
     height: auto;
     flex-wrap: wrap;
     flex-direction: row;
-    margin-top: var(--gap-big);
+    margin-bottom: var(--gap-big);
 }
 
 section.fichkes>div>p {
@@ -890,9 +896,9 @@ div[data-name] {
             width: 40%;
     }
 
-    section>div.data {
-    max-width: calc((100% - 2 * var(--gap-medium)) / 2);
-    }
+section.dagen>div>div {
+    width: 100%;
+}
 
     section#kaart {
         height: 300px;
