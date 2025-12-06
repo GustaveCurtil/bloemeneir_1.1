@@ -43,27 +43,7 @@ class VoucherController extends Controller
         // Store new used code
         $previousCodes[] = $code;
 
-        // $amountA = session('amountA', 0);
-        // $amountB = session('amountB', 0);
-        // $amountC = session('amountC', 0);
-        // $amountGift = session('amountGift', 0);
-
-        // // Only add if voucher exists
-        // if ($turnVoucher) {
-        //     $amountA += $turnVoucher->option1 ?? 0;
-        //     $amountB += $turnVoucher->option2 ?? 0;
-        //     $amountC += $turnVoucher->option3 ?? 0;
-        // }
-
-        // if ($giftVoucher) {
-        //     $amountGift += $giftVoucher->amount ?? 0;
-        // }
-
         session([
-            // 'amountA' => $amountA,
-            // 'amountB' => $amountB,
-            // 'amountC' => $amountC,
-            // 'amountGift' => $amountGift,
             'previousCodes' => $previousCodes, 
         ]);
 

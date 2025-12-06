@@ -146,7 +146,6 @@ function addBoeketKaartGroup(label, cfg) {
   total += betaaldeBoeketten * prijsBoeket;
   total += kaarten * prijsKaart;
 
-
 }
 
 // -----------------------------
@@ -171,6 +170,8 @@ function applyBeurten(label, boeketten) {
 
   return boeketten;
 }
+
+
 
 function applyKortingen() {
   const kortingen = document.querySelectorAll(`[data-name="cadeau"]`);
@@ -220,9 +221,16 @@ function updateTotal() {
 // -----------------------------
 // Run everything
 // -----------------------------
+total += Number(cadeau);
+
 for (const [label, cfg] of Object.entries(products)) {
   addBoeketKaartGroup(label, cfg);
 }
+
+addLine(
+            "cadeaubon",
+            `Cadeaubon ter waarde van €${ Number(cadeau)}`
+        );
 
 
 updateTotal();
@@ -244,4 +252,5 @@ setValue("inzetten_B", getBool("inzetten_B") ? 1 : 0);
 setValue("inzetten_C", getBool("inzetten_C") ? 1 : 0);
 setValue("cadeau", getNumber("cadeau"));
 setValue("day", localStorage.getItem('afhaalmoment'));
+setValue("totaal", newTotal);
 

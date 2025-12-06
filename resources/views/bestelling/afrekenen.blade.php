@@ -16,6 +16,7 @@
         <h3>Overzicht bestelling</h3>
         <ul>
         </ul>
+        <p>Afhaalmoment: </p>
         <div class="totaal">
             <p>TOTAAL:</p>
             <p class="prijs"></p></b>
@@ -30,7 +31,7 @@
             @endforeach
             @foreach ($giftCards as $card)
             <div data-name="cadeau">
-                <p>▩ cadeau van €{{$card->original_amount}},00 <span style="font-size: 0.7rem">(code: '{{$card->code}}')</span></p>
+                <p>▩ cadeaubon van €{{$card->original_amount}},00 <span style="font-size: 0.7rem">(code: '{{$card->code}}')</span></p>
                 <p>&nbsp;⤷  geldig tot {{$card->valid_date}}</p>
                 <p>&nbsp;⤷  <span>€<span>{{$card->amount}}</span>,00</span> over</p>
             </div>
@@ -76,6 +77,7 @@
                     <input type="hidden" name="inzetten_C" value="0">
                     <input type="hidden" name="cadeau" value="0">
                     <input type="hidden" name="day" value="0">
+                    <input type="hidden" name="totaal" value="0">
                     @foreach ($turnCards as $card)
                     <input type="hidden" name="turnCardCodes[]" value="{{$card->code}}">             
                     @endforeach

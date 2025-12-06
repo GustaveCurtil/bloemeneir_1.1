@@ -674,6 +674,10 @@ li#boeketten {
     list-style-type: '❀ ';
 }
 
+li#cadeaubon {
+    list-style-type: '▩ ';
+}
+
 li#kaarten {
     list-style-type: '▰ ';
 }

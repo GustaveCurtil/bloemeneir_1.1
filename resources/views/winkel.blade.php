@@ -138,8 +138,8 @@
                     <p>Het weekend van 12 en 13 december<br>werken we ten voordele van<br>de Warmste Week</p>
                     <div class="data">
                         <div class="group">
-                            <div data-datum="2025-12-12"><span>🔥 <span>di 12 december</span></span><span>15u tot 19u</span></div>
-                            <div data-datum="2025-12-13"><span>🔥 <span>wo 13 december</span></span><span>10u tot 13u</span></div>                   
+                            <div data-datum="2025-12-12"><span>🔥 <span>vr 12 december</span></span><span>15u tot 19u</span></div>
+                            <div data-datum="2025-12-13"><span>🔥 <span>za 13 december</span></span><span>10u tot 13u</span></div>                   
                         </div>
 
                     </div>

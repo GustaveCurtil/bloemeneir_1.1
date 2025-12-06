@@ -6,6 +6,8 @@ use Stripe\Stripe;
 use App\Models\Order;
 use App\Models\Client;
 use Stripe\PaymentIntent;
+use App\Models\GiftVoucher;
+use App\Models\TurnVoucher;
 use Illuminate\Http\Request;
 use Stripe\Checkout\Session;
 use Illuminate\Support\Carbon;
@@ -32,6 +34,7 @@ class OrderController extends Controller
             'inzetten_B' => 'required|boolean',
             'inzetten_C' => 'required|boolean',
             'cadeau' => 'required|integer|min:0',
+            'totaal' => 'required|integer|min:0',
 
             'turnCardCodes' => 'array',
             'turnCardCodes.*' => 'string',
@@ -42,9 +45,20 @@ class OrderController extends Controller
             'day' => 'required'
         ]);
 
-        // 1️⃣ calculate real price
-        // $total = $this->calculateTotal($validated);
-        $total = 100;
+        $turnCards = TurnVoucher::whereIn('code', $validated['turnCardCodes'] ?? [])->get();
+        $giftCards = GiftVoucher::whereIn('code', $validated['giftCardCodes'] ?? [])->get();
+
+        // calculate price
+        $total = $this->berekenTotaal($validated, $turnCards, $giftCards);
+
+        // even checken of de berekening van de totale prijs overeenkomt met de frontend berekening ---> want da's dus wel belangrijk?
+        if ((float)$total !== (float)$validated['totaal']) {
+            // moet ik iets speciaals doen als dit niet het geval is?
+            dd("Het back-end totaal van: " .$total . " is niet hetzelfde als het front-end totaal van: " . $validated['totaal']);
+        } else {
+            dd($total . " komt overeen met de frontend! <3");
+        }
+        
 
         $client = Client::create([
             'first_name' => $validated['first_name'],
@@ -80,6 +94,80 @@ class OrderController extends Controller
             'clientSecret' => $intent->client_secret,
             'order' => $order
         ]);
+    }
+
+    public function berekenTotaal($validated, $turnCards, $giftCards) {
+
+        $kaartAbeurten = 0;
+        $kaartBbeurten = 0;
+        $kaartCbeurten = 0;
+
+        foreach ($turnCards as $card) {
+            $kaartAbeurten += (int) $card->option1;
+            $kaartBbeurten += (int) $card->option2;
+            $kaartCbeurten += (int) $card->option3;
+        }
+
+        $cadeauKorting = 0;
+
+        foreach ($giftCards as $card) {
+            $cadeauKorting += (int) $card->amount;
+        }
+
+        $kaartAaantal = $validated['kaart_A'];
+        $kaartBaantal = $validated['kaart_B'];
+        $kaartCaantal = $validated['kaart_C'];
+
+        //eerst berekenen hoeveel boeketten moeten aangerekend worden nadat de beurten van de kaarten zijn afgetrokken
+        $boeketAaantal = $validated['boeket_A'];
+        $boeketBaantal = $validated['boeket_B'];
+        $boeketCaantal = $validated['boeket_C'];
+
+        $cadeau = $validated['cadeau'];
+
+        if ($validated['inzetten_A']) {
+            $kaartAbeurten += $kaartAaantal * 5;
+        }
+
+        if ($validated['inzetten_B']) {
+            $kaartBbeurten += $kaartBaantal * 5;
+        }
+
+        if ($validated['inzetten_C']) {
+            $kaartCbeurten += $kaartCaantal * 5;
+        }
+
+        if ($kaartAbeurten > 0 && $boeketAaantal > 0) {
+            $af_te_trekken = min($kaartAbeurten, $boeketAaantal);
+            $kaartAbeurten   -= $af_te_trekken;
+            $boeketAaantal   -= $af_te_trekken;
+        }
+        if ($kaartBbeurten > 0 && $boeketBaantal > 0) {
+            $af_te_trekken = min($kaartBbeurten, $boeketBaantal);
+            $kaartBbeurten   -= $af_te_trekken;
+            $boeketBaantal   -= $af_te_trekken;
+        }
+        if ($kaartCbeurten > 0 && $boeketCaantal > 0) {
+            $af_te_trekken = min($kaartCbeurten, $boeketCaantal);
+            $kaartCbeurten   -= $af_te_trekken;
+            $boeketCaantal   -= $af_te_trekken;
+        }
+
+        $boeketAtotaal = $boeketAaantal *  config('prijzen.boeketten.schattig');
+        $boeketBtotaal = $boeketBaantal *  config('prijzen.boeketten.charmant');
+        $boeketCtotaal = $boeketCaantal *  config('prijzen.boeketten.magnifiek');
+
+        $kaartAtotaal = $kaartAaantal *  config('prijzen.5-beurtenkaarten.schattig');
+        $kaartBtotaal = $kaartBaantal *  config('prijzen.5-beurtenkaarten.charmant');
+        $kaartCtotaal = $kaartCaantal *  config('prijzen.5-beurtenkaarten.magnifiek');
+
+        $total = $kaartAtotaal + $kaartBtotaal + $kaartCtotaal + $boeketAtotaal + $boeketBtotaal + $boeketCtotaal + $cadeau;
+
+        $af_te_trekken_korting = min($total, $cadeauKorting);
+        $total   -= $af_te_trekken_korting;
+        $cadeauKorting   -= $af_te_trekken_korting;
+
+        return $total;
     }
 
     public function store(Request $request)
