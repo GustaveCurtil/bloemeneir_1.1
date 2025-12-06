@@ -69,4 +69,9 @@ class VoucherController extends Controller
 
         return redirect()->route('afrekenen');
     }
+
+    public function deleteCode(Request $request)
+    {
+
+    }
 }

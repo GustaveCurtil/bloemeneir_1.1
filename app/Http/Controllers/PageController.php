@@ -50,16 +50,8 @@ class PageController extends Controller
     }
 
     public function afrekenen() {
-        // $amountA = session('amountA', 0);
-        // $amountB = session('amountB', 0);
-        // $amountC = session('amountC', 0);
-        // $amountGift = session('amountGift', 0);
+
         $previousCodes = session('previousCodes', []);
-        // $cardList = [];
-        // foreach ($previousCodes as $code) {
-        //     $giftVoucher = GiftVoucher::where('code', $code)->first();
-        //     $turnVoucher = TurnVoucher::where('code', $code)->first();
-        // }
 
         $turnCards = [];
         $giftCards = [];
@@ -73,6 +65,10 @@ class PageController extends Controller
                 $turnCards[] = $turnVoucher;
             }
         }
+            
+        // 🔥 Sort by valid_date ascending (oldest first)
+        $turnCards = collect($turnCards)->sortBy('valid_date')->values()->all();
+        $giftCards = collect($giftCards)->sortBy('valid_date')->values()->all();
         
         return view('bestelling.afrekenen', compact(
             'turnCards', 'giftCards'

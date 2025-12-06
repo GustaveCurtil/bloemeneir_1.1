@@ -1,6 +1,44 @@
+:root {
+    --width-max: 800px;
+    --height-header: 3rem;
+}
+
+header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    max-width: 100%;
+    top: 0;
+    background-color: var(--color-fichkes);
+    border-bottom: 1px solid var(--color-text);
+    padding: 0 var(--gap-small);
+}
+
+header>div {
+    display: inline-flex;
+    align-items: center;
+    width: auto;
+}
+
+header>div>a {
+    padding: 0 var(--gap-small);
+}
+
+a {
+    font-family: var(--font2);
+}
+
 main {
     max-width: 100%;
-    padding-top: 0;
+    height: calc(100svh - var(--height-header));
+    overflow-y: auto;
+}
+
+form {
+    width: var(--width-max);
+    margin: 0 auto;
 }
 
 table {
@@ -21,4 +59,12 @@ tbody tr:hover {
 
 section {
     max-width: 100%;
+}
+
+section.inloggen {
+    height: 100%;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }

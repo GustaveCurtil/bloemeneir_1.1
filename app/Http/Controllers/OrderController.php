@@ -2,14 +2,85 @@
 
 namespace App\Http\Controllers;
 
+use Stripe\Stripe;
 use App\Models\Order;
 use App\Models\Client;
+use Stripe\PaymentIntent;
 use Illuminate\Http\Request;
+use Stripe\Checkout\Session;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cookie;
 
 class OrderController extends Controller
 {
+
+    public function pay(Request $request) {
+        $validated = $request->validate([
+            'first_name' => 'required|string|max:255',
+            'last_name' => 'nullable|string|max:255',
+            'phone'      => 'nullable|max:20',
+            'email'      => 'required|email|max:255',
+            'nieuwsbrief'=> 'nullable|boolean',
+
+            'boeket_A' => 'required|integer|min:0',
+            'boeket_B' => 'required|integer|min:0',
+            'boeket_C' => 'required|integer|min:0',
+            'kaart_A' => 'required|integer|min:0',
+            'kaart_B' => 'required|integer|min:0',
+            'kaart_C' => 'required|integer|min:0',
+            'inzetten_A' => 'required|boolean',
+            'inzetten_B' => 'required|boolean',
+            'inzetten_C' => 'required|boolean',
+            'cadeau' => 'required|integer|min:0',
+
+            'turnCardCodes' => 'array',
+            'turnCardCodes.*' => 'string',
+
+            'giftCardCodes' => 'array',
+            'giftCardCodes.*' => 'string',
+
+            'day' => 'required'
+        ]);
+
+        // 1️⃣ calculate real price
+        // $total = $this->calculateTotal($validated);
+        $total = 100;
+
+        $client = Client::create([
+            'first_name' => $validated['first_name'],
+            'last_name'  => $validated['last_name'],
+            'phone'      => $validated['phone'],
+            'email'      => $validated['email'],
+            'nieuwsbrief'=> $validated['nieuwsbrief'],
+        ]);
+
+        // 2️⃣ create draft order
+        $order = Order::create([
+            'client_id' => $client->id,   // or null, or $request->client_id
+            'option1'   => $validated['boeket_A'],
+            'option2'   => $validated['boeket_B'],
+            'option3'   => $validated['boeket_C'],
+            'day'       => $validated['day'],
+            'payed'     => false, // default until payment succeeds
+        ]);
+
+        // 3️⃣ create paymentintent
+        Stripe::setApiKey(env('STRIPE_SECRET'));
+        $intent = PaymentIntent::create([
+            'amount' => $total * 100,
+            'currency' => 'eur',
+            'payment_method_types' => ['card', 'bancontact'],
+        ]);
+
+        // save intent id
+        // $order->update(['payment_intent_id' => $intent->id]);
+
+        // 4️⃣ show payment page
+        return view('payment', [
+            'clientSecret' => $intent->client_secret,
+            'order' => $order
+        ]);
+    }
 
     public function store(Request $request)
     {

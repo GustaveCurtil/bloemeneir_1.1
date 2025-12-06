@@ -60,7 +60,7 @@
             </fieldset>
             <fieldset class="aantal" id="kaarten">
                 <div>
-                    <img src="{{asset('/media/winkel/boeket_schattig.png')}}">
+                    <img src="{{asset('/media/winkel/mini_kaart_schattig.png')}}">
                     <label for="kaart_A">
                         <p>Schattige 5 beurtenkaart</p>
                         <p>145 euro (gratis vaas)</p>
@@ -75,7 +75,7 @@
                     <input type="checkbox" name="inzetten_A" id="inzetten_A">Meteen gebruiken
                 </label>
                 <div>
-                    <img src="{{asset('/media/winkel/boeket_charmant.png')}}">
+                    <img src="{{asset('/media/winkel/mini_kaart_charmant.png')}}">
                     <label for="kaart_B">
                         <p>Charmante 5 beurtenkaart</p>
                         <p>190 euro (gratis vaas)</p>
@@ -90,7 +90,7 @@
                     <input type="checkbox" name="inzetten_B" id="inzetten_B">Meteen gebruiken
                 </label>
                 <div>
-                    <img src="{{asset('/media/winkel/boeket_magnifiek.png')}}">
+                    <img src="{{asset('/media/winkel/mini_kaart_magnifiek.png')}}">
                     <label for="kaart_C">
                         <p>Magnifieke 5 beurtenkaart</p>
                         <p>239 euro (gratis vaas)</p>
@@ -107,7 +107,7 @@
             </fieldset>
             <fieldset class="aantal">
                 <div>
-                    <img src="{{asset('/media/winkel/boeket_magnifiek.png')}}">
+                    <img src="{{asset('/media/winkel/mini_cadeau.png')}}">
                     <label for="cadeau">
                         <p>Cadeaubon</p>
                         <p>Bedrag naar keuze</p>
@@ -120,7 +120,7 @@
                     <input type="checkbox" name="" id="cadeaubon">Stuur code door via mail <br class="mobile">(i.p.v. bon te komen halen)
                 </label> --}}
                 <br>
-                <p><i class="small">Codes van bonnen en beurtenkaarten worden via mail gestuurd.</i></p>
+                <p><i class="small">Codes van bonnen en beurtenkaarten worden via mail gestuurd en zijn 6 maanden geldig.</i></p>
             </fieldset>
             <fieldset class="vraag">
                 <p>Ik kom mijn bestelling ophalen op:</p>

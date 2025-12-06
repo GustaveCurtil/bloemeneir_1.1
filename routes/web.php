@@ -8,11 +8,11 @@ use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\VoucherController;
 use App\Http\Controllers\DashboardController;
 
-Route::get('/', function () {
-    return view('landing');
-})->name('landing');
+// Route::get('/', function () {
+//     return view('landing');
+// })->name('landing');
 
-Route::get('/over', function () {
+Route::get('/', function () {
     return view('over');
 })->name('over');
 
@@ -40,9 +40,11 @@ Route::post('/login', [LoginController::class, 'login'])->name('login');
 Route::post('/order', [OrderController::class, 'store'])->name('order');
 Route::post('/check-code', [VoucherController::class, 'checkCode'])->name('check-code');
 
-
+Route::post('/betalen', [OrderController::class, 'pay'])->name('checkout.pay');
 
 
 Route::get('/order', [PaymentController::class, 'orderForm']);
 // Route::post('/order', [PaymentController::class, 'processOrder'])->name('order');
 Route::get('/success', [PaymentController::class, 'success'])->name('checkout.success');
+
+

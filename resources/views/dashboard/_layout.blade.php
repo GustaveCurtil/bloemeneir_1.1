@@ -6,29 +6,27 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
 
     <link rel="shortcut icon" href="{{ asset('media/logo_overzicht.png') }}" type="image/x-icon">
-    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/default.css') }}">
     <link rel="stylesheet" href="{{ asset('css/dashboard.css') }}">
 
     @yield('links')
 
-    <title>Overzicht ❀ @yield('title')</title>
+    <title>Overzicht Bloemenier ❀</title>
 </head>
 
 <body>
-  <div>
     <header>
         <div>
-            <h1>Overzicht bestellingen</h1>
-            <a href="{{route('landing')}}">Naar website</a>
+            <h1>Overzicht Bloemenier ❀</h1>
+            @auth
+            <a href="">Bla</a> ✿
+            <a>blabla</a> ✿
+            <a href="">blablabla</a> ✿
+            @endauth
         </div>
+        
+        <a href="{{route('over')}}">Naar website</a>
     </header>
-    <div>
-        @yield('main')
-    </div>
-    <div id="omhoog">
-        <p>↑</p>
-    </div>
-  </div>
-    
+    @yield('main')
 </body>
 </html>

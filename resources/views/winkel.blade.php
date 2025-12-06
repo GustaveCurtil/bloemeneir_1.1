@@ -5,6 +5,7 @@
 @section('links')
 <script src="{{asset('/js/winkelbanner.js')}}" defer></script>
 <script src="{{asset('/js/winkelen.js')}}" defer></script>
+<script src="{{asset('/js/afhaalmoment.js')}}" defer></script>
 <link rel="stylesheet" href="{{ asset('css/winkel.css') }}">
 <link rel="preload" as="image" href="/media/winkel/fiche_schattig1.png">
 <link rel="preload" as="image" href="/media/winkel/fiche_charmant1.png">
@@ -133,7 +134,7 @@
                         <br>
                 </div>
                 <div>
-                    <h3 style="text-align: center">Agenda</h3>
+                    <h3 style="text-align: center">Uitzonderlijke momenten</h3>
                     <p>Het weekend van 12 en 13 december<br>werken we ten voordele van<br>de Warmste Week</p>
                     <div class="data">
                         <div class="group">

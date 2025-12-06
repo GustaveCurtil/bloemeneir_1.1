@@ -5,7 +5,6 @@
 @section('links')
 <script src="{{asset('/js/omhoog.js')}}" defer></script>
 <script src="{{asset('/js/winkelbanner.js')}}" defer></script>
-<script src="{{asset('/js/afhaalmoment.js')}}" defer></script>
 <link rel="preload" as="image" href="{{ asset('media/bloemen/bloemen2.png') }}">
 <link rel="preload" as="image" href="{{ asset('media/bloemen/bloemen1.png') }}">
 <link rel="preload" as="image" href="{{ asset('media/bloemen/bloemen3.png') }}">
@@ -15,7 +14,7 @@
 
     <main>
         <section class="slogan">
-            <p>Doe jezelf of iemand anders<br>een groot plezier<br>en bestel een boeket<br>bij Bloemenier</p>
+            <p>Doe jezelf of iemand anders<br>een groot plezier,<br>en <a href="/winkel">bestel een boeket</a><br>bij Bloemenier!</p>
         </section>
         <section class="gallerij">
             <img src="{{asset('media/bloemen/bloemen2.png')}}" alt="" class="verticaal">

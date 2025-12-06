@@ -17,20 +17,22 @@
         <ul>
         </ul>
         <div class="totaal">
-            <p>Totaal:</p>
+            <p>TOTAAL:</p>
             <p class="prijs"></p></b>
         </div>
         <div>
             @foreach ($turnCards as $card)
             <div data-name="{{$card->name}}">
-                <p>▰ 5-beurtenkaart (code: '{{$card->code}}')</p>
+                <p>▰ 5-beurtenkaart <span style="font-size: 0.7rem">(code: '{{$card->code}}')</span></p>
+                <p>&nbsp;⤷  geldig tot {{$card->valid_date}}</p>
                 <p>&nbsp;⤷  <span>{{ $card->option1 ?? $card->option2 ?? $card->option3 ?? 0 }}</span> resterende {{$card->name}}e boeketten</p>
             </div>
             @endforeach
             @foreach ($giftCards as $card)
-            <div data-name="{{$card->name}}">
-                <p>▰ {{$card->code}}: cadeaubon ter waarde van €{{$card->amount}},00</p>
-                <p>&nbsp;⤷  <span>{{$card->amount}}</span> resterende boeketten</p>
+            <div data-name="cadeau">
+                <p>▩ cadeau van €{{$card->original_amount}},00 <span style="font-size: 0.7rem">(code: '{{$card->code}}')</span></p>
+                <p>&nbsp;⤷  geldig tot {{$card->valid_date}}</p>
+                <p>&nbsp;⤷  <span>€<span>{{$card->amount}}</span>,00</span> over</p>
             </div>
             @endforeach
         </div> 
@@ -40,28 +42,46 @@
                 <button type="submit">+</button>
         </form>  
         @error('code')
-        <p class="error active" style="font-size: 0.9rem">{{ $message }}</p>
+        <p class="error active" style="font-size: 0.9rem; margin-top: var(--gap-mini)">{{ $message }}</p>
         @enderror
         <br>
     </section>
 
-    <form action="">
+    <form action="{{ route('checkout.pay') }}" method="POST">
+        @csrf
         <h3>Jouw gegevens</h3>
         <fieldset>
                     <label for="naam">jouw voornaam*</label>
-                    <input type="text" name="first_name" id="naam" value="{{ old('first_name', $client->first_name ?? '') }}" placeholder="vul hier in" required>
+                    <input type="text" name="first_name" id="naam" value="{{ old('first_name', $client->first_name ?? 'gust') }}" placeholder="vul hier in" required>
                     <label for="achternaam">jouw achternaam <i class="small">(optioneel)</i></label>
-                    <input type="text" name="last_name" id="achternaam" value="{{ old('last_name', $client->last_name ?? '') }}" placeholder="vul hier in" required>
+                    <input type="text" name="last_name" id="achternaam" value="{{ old('last_name', $client->last_name ?? '') }}" placeholder="vul hier in">
                     <label for="nummer">telefoonnummer <i class="small">(optioneel)</i></label>
                     <input type="tel" name="phone" id="nummer" value="{{ old('phone', $client->phone ?? '') }}" placeholder="vul hier in">
                     <label for="email">e-mailadres*</label>
-                    <input type="email" name="email" id="email" value="{{ old('email', $client->email ?? '') }}" placeholder="vul hier in" required>
-                    <input type="email" name="email" id="email" value="{{ old('email', $client->email ?? '') }}" placeholder="herhaal e-mailadres" required>
+                    <input type="email" name="email" id="email" value="{{ old('email', $client->email ?? 'gust@cool.be') }}" placeholder="vul hier in" required >
+                    <input type="email" name="email" id="email" value="{{ old('email', $client->email ?? 'gust@cool.be') }}" placeholder="herhaal e-mailadres" required >
                     <label class="rij">
                         <input type="checkbox" name="nieuwsbrief" value="1"
                             {{ old('nieuwsbrief', $client->nieuwsbrief ?? 0) == 1 ? 'checked' : '' }}>
                         nieuwsbrief&nbsp;<i class="small">(max 4x per jaar)</i>
                     </label>
+                    <input type="hidden" name="boeket_A" value="0">
+                    <input type="hidden" name="boeket_B" value="0">
+                    <input type="hidden" name="boeket_C" value="0">
+                    <input type="hidden" name="kaart_A" value="0">
+                    <input type="hidden" name="kaart_B" value="0">
+                    <input type="hidden" name="kaart_C" value="0">
+                    <input type="hidden" name="inzetten_A" value="0">
+                    <input type="hidden" name="inzetten_B" value="0">
+                    <input type="hidden" name="inzetten_C" value="0">
+                    <input type="hidden" name="cadeau" value="0">
+                    <input type="hidden" name="day" value="0">
+                    @foreach ($turnCards as $card)
+                    <input type="hidden" name="turnCardCodes[]" value="{{$card->code}}">             
+                    @endforeach
+                    @foreach ($giftCards as $card)
+                    <input type="hidden" name="giftCardCodes[]" value="{{$card->code}}">
+                    @endforeach
         </fieldset>
         <input type="submit" value="Betaal met Bancontact">
     </form>
@@ -145,8 +165,8 @@
         amount_B += {{ $card->option2 ?? 0 }};
         amount_C += {{ $card->option3 ?? 0 }};
     @endforeach
-    @foreach ($giftCards as $card)
-        amountGift += {{$card->amount}};
-    @endforeach
+    // @foreach ($giftCards as $card)
+    //     amountGift += {{$card->amount}};
+    // @endforeach
 </script>
 @endsection

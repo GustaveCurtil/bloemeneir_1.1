@@ -14,12 +14,13 @@
     <meta name="keywords" content="bloemen , boeketten , bloem , boeket , cadeau , Leuven , bestellen , online, kessel-Lo">
 
     <link rel="preload" href="/fonts/Mynerve.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="preload" href="/fonts/DMMono-Regular.woff2" as="font" type="font/woff2" crossorigin>
-
+    <link rel="preload" href="/fonts/DMMono-Regular.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="stylesheet" href="{{ asset('css/default.css') }}">
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
     <link rel="shortcut icon" href="{{ asset('media/logo.png') }}" type="image/x-icon">
-    
-
+    @if (!request()->routeIs('winkel') && !request()->routeIs('shopping-basket') && !request()->routeIs('afrekenen'))
+    <script src="{{asset('/js/bestellingenFlow.js')}}" defer></script>
+    @endif
     @yield('links')
 
     <title>Bloemenier ❀ @yield('title')</title>
@@ -39,7 +40,7 @@
         </div>
         <nav>
             <a href="{{ route('over') }}" class="{{ request()->routeIs('over') ? 'actief' : '' }}">over ons</a>
-            <a href="{{ route('winkel') }}" class="{{ request()->routeIs('winkel') || request()->routeIs('shopping-basket') || request()->routeIs('kassa') ? 'actief' : '' }}">bestellingen</a>
+            <a id="bestel-flow" href="{{ route('winkel') }}" class="{{ request()->routeIs('winkel') || request()->routeIs('shopping-basket') || request()->routeIs('afrekenen') ? 'actief' : '' }}">winkel</a>
             <a href="{{ route('contact') }}" class="{{ request()->routeIs('contact') ? 'actief' : '' }}">contact</a>
         </nav>
     </header>
@@ -61,7 +62,7 @@
         <p>↑</p>
     </div>
   </div>
-  @if (!Route::is('landing') && !Route::is('shopping-basket') && !Route::is('gdpr') && !Route::is('afrekenen'))
+  @if (Route::is('winkel'))
     <div id="shopping-card">
         <div>
             <div onclick="window.location.href='/winkel/winkelmandje'">
@@ -78,6 +79,12 @@
             <div onclick="resetWinkelwagen()">x</div>
         </div>
     </div>
+    @endif
+    @if(request()->routeIs('winkel') || request()->routeIs('shopping-basket') || request()->routeIs('afrekenen')) 
+    <script>
+        const url = window.location.href;
+        sessionStorage.setItem('huidigBestelPad', url);
+    </script>
     @endif
     
 </body>

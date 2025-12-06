@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('turn_vouchers', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('order_id')->nullable()->constrained('orders')->cascadeOnDelete();
+            $table->foreignId('order_id')->nullable()->constrained('orders');
             $table->string('name')->nullable();
             $table->string('code')->unique();
             $table->tinyInteger('option1')->nullable();
@@ -22,6 +22,7 @@ return new class extends Migration
             $table->tinyInteger('option2_original')->nullable();
             $table->tinyInteger('option3')->nullable();
             $table->tinyInteger('option3_original')->nullable();
+            $table->date('valid_date');
             $table->timestamps();
         });
     }

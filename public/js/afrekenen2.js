@@ -54,12 +54,15 @@ const products = {
   }
 };
 
+const cadeau = localStorage.getItem("cadeau") || null;
+
 // -----------------------------
 // DOM references
 // -----------------------------
 let overzicht = document.querySelector("ul");
 let totalPlaceholder = document.querySelector(".totaal .prijs");
 let total = 0;
+let newTotal;
 
 // -----------------------------
 // Main function for each group
@@ -72,7 +75,7 @@ function addBoeketKaartGroup(label, cfg) {
   // ---------------------------------------
   // 1. Apply KORTINGEN from DOM first
   // ---------------------------------------
-  boeketten = applyKorting(label, boeketten);
+  boeketten = applyBeurten(label, boeketten);
   let boekettenAfterDOMKorting = boeketten;
 
   // ---------------------------------------
@@ -142,12 +145,14 @@ function addBoeketKaartGroup(label, cfg) {
   // ---------------------------------------
   total += betaaldeBoeketten * prijsBoeket;
   total += kaarten * prijsKaart;
+
+
 }
 
 // -----------------------------
 // Update korting-rows
 // -----------------------------
-function applyKorting(label, boeketten) {
+function applyBeurten(label, boeketten) {
   const kortingen = document.querySelectorAll(`[data-name="${label}"]`);
 
   kortingen.forEach(el => {
@@ -167,11 +172,49 @@ function applyKorting(label, boeketten) {
   return boeketten;
 }
 
+function applyKortingen() {
+  const kortingen = document.querySelectorAll(`[data-name="cadeau"]`);
+  if (kortingen.length > 0) {
+    newTotal = total;
+    kortingen.forEach(el => {
+      let span = el.querySelector("p:last-of-type>span");
+      let spanSpan = span.querySelector("span");
+      let korting = Number(spanSpan.textContent);
+
+      amountGift += korting;
+
+      let used = Math.min(korting, newTotal);
+
+      if (used > 0) {
+        if (total >= used) {
+          newTotal -= used;
+          amountGift = 0
+        } else {
+          newTotal = 0
+          used = 0;
+        }
+      }
+
+      if (used > 0) {
+        span.innerHTML = `<s>${formatEuro(korting)}</s> ${formatEuro(korting - used)} euro`;
+      }
+    });
+  }
+}
+
 // -----------------------------
 // Update total price
 // -----------------------------
 function updateTotal() {
-  totalPlaceholder.textContent = `${formatEuro(total)} euro`;
+  applyKortingen()
+
+  console.log(newTotal)
+  if (newTotal >= 0) {
+    totalPlaceholder.innerHTML = `<s>${formatEuro(total)}</s> ${formatEuro(newTotal)} euro`;
+  } else {
+    totalPlaceholder.innerHTML = `${formatEuro(total)} euro`;
+  }
+  
 }
 
 // -----------------------------
@@ -181,4 +224,24 @@ for (const [label, cfg] of Object.entries(products)) {
   addBoeketKaartGroup(label, cfg);
 }
 
+
 updateTotal();
+
+
+function setValue(fieldName, newValue) {
+    const el = document.querySelector(`input[name="${fieldName}"]`);
+    if (el) el.value = newValue;
+}
+
+setValue("boeket_A", getNumber("boeket_A"));
+setValue("boeket_B", getNumber("boeket_B"));
+setValue("boeket_C", getNumber("boeket_C"));
+setValue("kaart_A", getNumber("kaart_A"));
+setValue("kaart_B", getNumber("kaart_B"));
+setValue("kaart_C", getNumber("kaart_C"));
+setValue("inzetten_A", getBool("inzetten_A") ? 1 : 0);
+setValue("inzetten_B", getBool("inzetten_B") ? 1 : 0);
+setValue("inzetten_C", getBool("inzetten_C") ? 1 : 0);
+setValue("cadeau", getNumber("cadeau"));
+setValue("day", localStorage.getItem('afhaalmoment'));
+
