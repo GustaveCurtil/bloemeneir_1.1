@@ -56,7 +56,7 @@ a {color: var(--color-text); cursor: url('../boeket-pointer2.cur'), auto; text-u
 label, .plusmin div, select, input, u {  cursor: url('../boeket-pointer2.cur'), wait;}
 img {width: 100%;}
 i.small {font-size: 0.8rem; opacity: .69; font-style: normal;}
-p.error {color: var(--color-red); margin-bottom: var(--gap-normal);}
+p.error {color: var(--color-red); margin-bottom: var(--gap-normal); font-weight: 600;}
 p.error:not(.active) {display: none;}
 select.error {background-color: var(--color-yellow);}
 

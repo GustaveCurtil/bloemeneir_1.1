@@ -741,6 +741,31 @@ div[data-name] {
     margin-bottom: var(--gap-normal);
 }
 
+div[data-name]>div {
+    width: 100%;
+    display: inline-flex;
+    justify-content: space-between;
+}
+
+form.verwijderen {
+    display: inline;
+    width: auto;
+    margin: 0;
+    line-height: 0.9rem;
+}
+
+form.verwijderen input[type='submit'] {
+    border: none;
+    background-color: transparent;
+    width: auto;
+    font-family: var(--font);
+    text-decoration: none;
+    font-size: 0.9rem;
+    height: auto;
+    line-height: normal;
+}
+
+
 @media screen and (min-width: 700px) {
     a:hover {
         text-underline-offset: 4px;

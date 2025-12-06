@@ -39,6 +39,7 @@ Route::post('/login', [LoginController::class, 'login'])->name('login');
 
 Route::post('/order', [OrderController::class, 'store'])->name('order');
 Route::post('/check-code', [VoucherController::class, 'checkCode'])->name('check-code');
+Route::post('/delete-code', [VoucherController::class, 'deleteCode'])->name('delete-code');
 
 Route::post('/betalen', [OrderController::class, 'pay'])->name('checkout.pay');
 

@@ -54,9 +54,9 @@ class OrderController extends Controller
         // even checken of de berekening van de totale prijs overeenkomt met de frontend berekening ---> want da's dus wel belangrijk?
         if ((float)$total !== (float)$validated['totaal']) {
             // moet ik iets speciaals doen als dit niet het geval is?
-            dd("Het back-end totaal van: " .$total . " is niet hetzelfde als het front-end totaal van: " . $validated['totaal']);
+            dd("Het back-end totaal van: " .$total . " is niet hetzelfde als het front-end totaal van: " . $validated['totaal'] .". Dit is lastig. Als je dit ziet, zou je aub een print screen kunnen nemen van deze pagina en de vorige en deze doorsturen naar gustave.curtil@tutanota.com aub? Dan kan ik dit probleem asap oplossen. Dank u! xx");
         } else {
-            dd($total . " komt overeen met de frontend! <3");
+            dd("Perfect! De backend berekening van het totaal (" . $total . " euro) komt overeen met die van de frontend code! <3");
         }
         
 

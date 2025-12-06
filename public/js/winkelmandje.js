@@ -73,11 +73,13 @@ document.addEventListener('DOMContentLoaded', () => {
         if (afhaalmoment.value === localStorage.getItem("afhaalmoment")) {
             afhaalmoment.selected = true;
             momentGekozen = true;
+            localStorage.setItem("afhaalmoment_geformatteerd", afhaalmoment.textContent)
         }
     });
 
     afhaalselector.addEventListener('input', (e) => {
         localStorage.setItem("afhaalmoment", e.target.value);
+        localStorage.setItem("afhaalmoment_geformatteerd", e.target.options[e.target.selectedIndex].text)
         momentGekozen = true;
     })
     

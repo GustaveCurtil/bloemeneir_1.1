@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\GiftVoucher;
 use App\Models\TurnVoucher;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Redirect;
 
 class VoucherController extends Controller
 {
@@ -30,6 +32,20 @@ class VoucherController extends Controller
                 ->withInput();
         }
 
+        $now = Carbon::now()->addDays(2);
+
+        if ($giftVoucher && $giftVoucher->valid_date < $now) {
+            return redirect()->route('afrekenen')
+                ->withErrors(['code' => "De cadeaubon met code '{$code}' is verlopen op {$giftVoucher->valid_date}."])
+                ->withInput();
+        }
+
+        if ($turnVoucher && $turnVoucher->valid_date < $now) {
+            return redirect()->route('afrekenen')
+                ->withErrors(['code' => "De 5-beurtenkaart met code '{$code}' is verlopen op {$turnVoucher->valid_date}."])
+                ->withInput();
+        }
+
         // Load used codes
         $previousCodes = session('previousCodes', []);
 
@@ -52,6 +68,28 @@ class VoucherController extends Controller
 
     public function deleteCode(Request $request)
     {
+        // Validate input
+        $data = $request->validate([
+            'code' => 'required|string',
+        ]);
 
+        // Retrieve existing codes from session
+        $previousCodes = session('previousCodes', []);
+
+        // If the code exists in the array, remove it
+        if (in_array($data['code'], $previousCodes)) {
+            // Filter out the code
+            $previousCodes = array_filter($previousCodes, function ($c) use ($data) {
+                return $c !== $data['code'];
+            });
+
+            // Reindex array to avoid gaps
+            $previousCodes = array_values($previousCodes);
+
+            // Save updated array back to session
+            session(['previousCodes' => $previousCodes]);
+        }
+
+        return redirect()->route('afrekenen');
     }
 }

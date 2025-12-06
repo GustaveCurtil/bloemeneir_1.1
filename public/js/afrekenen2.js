@@ -176,7 +176,6 @@ function applyBeurten(label, boeketten) {
 function applyKortingen() {
   const kortingen = document.querySelectorAll(`[data-name="cadeau"]`);
   if (kortingen.length > 0) {
-    newTotal = total;
     kortingen.forEach(el => {
       let span = el.querySelector("p:last-of-type>span");
       let spanSpan = span.querySelector("span");
@@ -207,10 +206,11 @@ function applyKortingen() {
 // Update total price
 // -----------------------------
 function updateTotal() {
+  newTotal = total;
   applyKortingen()
 
   console.log(newTotal)
-  if (newTotal >= 0) {
+  if (newTotal !== total) {
     totalPlaceholder.innerHTML = `<s>${formatEuro(total)}</s> ${formatEuro(newTotal)} euro`;
   } else {
     totalPlaceholder.innerHTML = `${formatEuro(total)} euro`;
@@ -221,17 +221,19 @@ function updateTotal() {
 // -----------------------------
 // Run everything
 // -----------------------------
+
+let afhaalPlaceholder = document.querySelector('#afhaalmoment_geformatteerd')
+afhaalPlaceholder.textContent = localStorage.getItem('afhaalmoment_geformatteerd')
+
 total += Number(cadeau);
 
 for (const [label, cfg] of Object.entries(products)) {
   addBoeketKaartGroup(label, cfg);
 }
 
-addLine(
-            "cadeaubon",
-            `Cadeaubon ter waarde van €${ Number(cadeau)}`
-        );
-
+if (Number(cadeau) > 0) {
+  addLine("cadeaubon", `Cadeaubon ter waarde van €${ Number(cadeau)}`);
+} 
 
 updateTotal();
 

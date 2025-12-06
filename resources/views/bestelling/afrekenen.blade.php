@@ -14,9 +14,9 @@
     </div>
     <section>
         <h3>Overzicht bestelling</h3>
+        <p style="font-size: 0.9rem; padding-bottom: 0.4rem">Gekozen afhaalmoment: <span class="mobile"><br></span><span id="afhaalmoment_geformatteerd"></span></p>
         <ul>
         </ul>
-        <p>Afhaalmoment: </p>
         <div class="totaal">
             <p>TOTAAL:</p>
             <p class="prijs"></p></b>
@@ -24,14 +24,14 @@
         <div>
             @foreach ($turnCards as $card)
             <div data-name="{{$card->name}}">
-                <p>▰ 5-beurtenkaart <span style="font-size: 0.7rem">(code: '{{$card->code}}')</span></p>
+                <div><span>▰ 5-beurtenkaart <span style="font-size: 0.7rem">(code: '{{$card->code}}')</span></span><form action="{{ route('delete-code') }}" method="POST"  class="verwijderen">@csrf<input type="hidden" name="code" value="{{$card->code}}"><input type="submit" value="x"></form></div>
                 <p>&nbsp;⤷  geldig tot {{$card->valid_date}}</p>
                 <p>&nbsp;⤷  <span>{{ $card->option1 ?? $card->option2 ?? $card->option3 ?? 0 }}</span> resterende {{$card->name}}e boeketten</p>
             </div>
             @endforeach
             @foreach ($giftCards as $card)
             <div data-name="cadeau">
-                <p>▩ cadeaubon van €{{$card->original_amount}},00 <span style="font-size: 0.7rem">(code: '{{$card->code}}')</span></p>
+                <div><span>▩ cadeaubon van €{{$card->original_amount}},00 <span style="font-size: 0.7rem">(code: '{{$card->code}}')</span></span><form action="{{ route('delete-code') }}" method="POST"  class="verwijderen">@csrf<input type="hidden" name="code" value="{{$card->code}}"><input type="submit" value="x"></form></div>
                 <p>&nbsp;⤷  geldig tot {{$card->valid_date}}</p>
                 <p>&nbsp;⤷  <span>€<span>{{$card->amount}}</span>,00</span> over</p>
             </div>

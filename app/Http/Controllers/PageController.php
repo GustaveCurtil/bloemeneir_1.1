@@ -22,29 +22,29 @@ class PageController extends Controller
        $now = Carbon::now();
 
         $data = Date::where('is_public', true)
-                ->whereDate('takeaway_date', '>=', $now)
-                ->where(function ($query) use ($now) {
-                    // Include items with no last_order_date/time or not yet passed
-                    $query->whereNull('last_order_date')
-                            ->orWhereNull('last_order_time')
-                            ->orWhereRaw("STR_TO_DATE(CONCAT(last_order_date, ' ', last_order_time), '%Y-%m-%d %H:%i:%s') >= ?", [$now]);
-                })
-                ->orderBy('takeaway_date', 'asc')
-                ->get()
-                ->map(function ($item) {
-            // Format the date in Dutch
-            $formattedDate = \Carbon\Carbon::parse($item->takeaway_date)
-                                ->translatedFormat('l d F');
+            ->whereDate('takeaway_date', '>=', $now)
+            ->where(function ($query) use ($now) {
+                // Include items with no last_order_date/time or not yet passed
+                $query->whereNull('last_order_date')
+                        ->orWhereNull('last_order_time')
+                        ->orWhereRaw("STR_TO_DATE(CONCAT(last_order_date, ' ', last_order_time), '%Y-%m-%d %H:%i:%s') >= ?", [$now]);
+            })
+            ->orderBy('takeaway_date', 'asc')
+            ->get()
+            ->map(function ($item) {
+                // Format the date in Dutch
+                $formattedDate = \Carbon\Carbon::parse($item->takeaway_date)
+                                    ->translatedFormat('l d F');
 
-            // Format times without leading zeros
-            $startTime = \Carbon\Carbon::parse($item->takeaway_start_time)->format('G\u');
-            $endTime   = \Carbon\Carbon::parse($item->takeaway_end_time)->format('G\u');
+                // Format times without leading zeros
+                $startTime = \Carbon\Carbon::parse($item->takeaway_start_time)->format('G\u');
+                $endTime   = \Carbon\Carbon::parse($item->takeaway_end_time)->format('G\u');
 
-            // Combine into final string
-            $item->formatted = $formattedDate . " ({$startTime} - {$endTime})";
+                // Combine into final string
+                $item->formatted = $formattedDate . " ({$startTime} - {$endTime})";
 
-            return $item;
-        });
+                return $item;
+            });
 
         return view('bestelling.winkelmand', compact('data'));
     }
