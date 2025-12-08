@@ -10,10 +10,13 @@ class GiftVoucher extends Model
         'order_id',
         'code',
         'amount',
+        'original_amount',
+        'valid_date'
     ];
+
 
     public function order()
     {
         return $this->belongsTo(Order::class);
-    }
+    }       
 }

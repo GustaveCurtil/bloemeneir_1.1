@@ -53,38 +53,41 @@
         <h3>Jouw gegevens</h3>
         <fieldset>
                     <label for="naam">jouw voornaam*</label>
-                    <input type="text" name="first_name" id="naam" value="{{ old('first_name', $client->first_name ?? 'gust') }}" placeholder="vul hier in" required>
+                    <input type="text" name="first_name" id="naam" value="gust" placeholder="vul hier in" required>
                     <label for="achternaam">jouw achternaam <i class="small">(optioneel)</i></label>
-                    <input type="text" name="last_name" id="achternaam" value="{{ old('last_name', $client->last_name ?? '') }}" placeholder="vul hier in">
+                    <input type="text" name="last_name" id="achternaam" placeholder="vul hier in">
                     <label for="nummer">telefoonnummer <i class="small">(optioneel)</i></label>
-                    <input type="tel" name="phone" id="nummer" value="{{ old('phone', $client->phone ?? '') }}" placeholder="vul hier in">
+                    <input type="tel" name="phone" id="nummer" placeholder="vul hier in">
                     <label for="email">e-mailadres*</label>
-                    <input type="email" name="email" id="email" value="{{ old('email', $client->email ?? 'gust@cool.be') }}" placeholder="vul hier in" required >
-                    <input type="email" name="email" id="email" value="{{ old('email', $client->email ?? 'gust@cool.be') }}" placeholder="herhaal e-mailadres" required >
+                    @error('email')
+                        <p class="error active">De e-mailadressen moeten overeenkomen.</p>
+                    @enderror
+                    <input type="email" name="email" id="email" value="gust@cool.be" placeholder="vul hier in" required >
+                    <input type="email" name="email_confirmation"  id="email_confirmation" placeholder="herhaal e-mailadres" required>
                     <label class="rij">
                         <input type="checkbox" name="nieuwsbrief" value="1"
                             {{ old('nieuwsbrief', $client->nieuwsbrief ?? 0) == 1 ? 'checked' : '' }}>
                         nieuwsbrief&nbsp;<i class="small">(max 4x per jaar)</i>
                     </label>
-                    <input type="hidden" name="boeket_A" value="0">
-                    <input type="hidden" name="boeket_B" value="0">
-                    <input type="hidden" name="boeket_C" value="0">
-                    <input type="hidden" name="kaart_A" value="0">
-                    <input type="hidden" name="kaart_B" value="0">
-                    <input type="hidden" name="kaart_C" value="0">
-                    <input type="hidden" name="inzetten_A" value="0">
-                    <input type="hidden" name="inzetten_B" value="0">
-                    <input type="hidden" name="inzetten_C" value="0">
-                    <input type="hidden" name="cadeau" value="0">
-                    <input type="hidden" name="day" value="0">
-                    <input type="hidden" name="totaal" value="0">
-                    @foreach ($turnCards as $card)
-                    <input type="hidden" name="turnCardCodes[]" value="{{$card->code}}">             
-                    @endforeach
-                    @foreach ($giftCards as $card)
-                    <input type="hidden" name="giftCardCodes[]" value="{{$card->code}}">
-                    @endforeach
         </fieldset>
+        <input type="hidden" name="boeket_A" value="0">
+        <input type="hidden" name="boeket_B" value="0">
+        <input type="hidden" name="boeket_C" value="0">
+        <input type="hidden" name="kaart_A" value="0">
+        <input type="hidden" name="kaart_B" value="0">
+        <input type="hidden" name="kaart_C" value="0">
+        <input type="hidden" name="inzetten_A" value="0">
+        <input type="hidden" name="inzetten_B" value="0">
+        <input type="hidden" name="inzetten_C" value="0">
+        <input type="hidden" name="cadeau" value="0">
+        <input type="hidden" name="day" value="0">
+        <input type="hidden" name="totaal" value="0">
+        @foreach ($turnCards as $card)
+        <input type="hidden" name="turnCardCodes[]" value="{{$card->code}}">             
+        @endforeach
+        @foreach ($giftCards as $card)
+        <input type="hidden" name="giftCardCodes[]" value="{{$card->code}}">
+        @endforeach
         <input type="submit" value="Betaal met Bancontact">
     </form>
 </main>

@@ -89,18 +89,11 @@ function updateWinkelmandje() {
 }
 
 function resetWinkelwagen() {
-    Object.keys(inkoopMap).forEach(item => {
-        inkoopMap[item] = 0;
-        console.log(item + ": " + inkoopMap[item] )
-        localStorage.setItem(item, 0);
-    });
-    localStorage.setItem("inzetten_A", false);
-    localStorage.setItem("inzetten_B", false);
-    localStorage.setItem("inzetten_C", false);
-    localStorage.setItem("afhaalmoment", null);
-
+    localStorage.clear();
+    setActiveDate()
     updateMandjes()
     updateWinkelmandje()
+    
 }
 
 function changeImage(number) {

@@ -24,11 +24,12 @@ class PageController extends Controller
         $data = Date::where('is_public', true)
             ->whereDate('takeaway_date', '>=', $now)
             ->where(function ($query) use ($now) {
-                // Include items with no last_order_date/time or not yet passed
-                $query->whereNull('last_order_date')
-                        ->orWhereNull('last_order_time')
-                        ->orWhereRaw("STR_TO_DATE(CONCAT(last_order_date, ' ', last_order_time), '%Y-%m-%d %H:%i:%s') >= ?", [$now]);
-            })
+                $query->where('last_order_date', '>', $now->toDateString())
+                    ->orWhere(function ($q) use ($now) {
+                        $q->where('last_order_date', $now->toDateString())
+                            ->where('last_order_time', '>=', $now->toTimeString());
+                    });
+                })
             ->orderBy('takeaway_date', 'asc')
             ->get()
             ->map(function ($item) {

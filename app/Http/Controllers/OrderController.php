@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Stripe\Stripe;
+use App\Models\Date;
 use App\Models\Order;
 use App\Models\Client;
 use Stripe\PaymentIntent;
@@ -17,11 +18,12 @@ class OrderController extends Controller
 {
 
     public function pay(Request $request) {
+        
         $validated = $request->validate([
             'first_name' => 'required|string|max:255',
             'last_name' => 'nullable|string|max:255',
             'phone'      => 'nullable|max:20',
-            'email'      => 'required|email|max:255',
+            'email'      => 'required|email|max:255|confirmed',
             'nieuwsbrief'=> 'nullable|boolean',
 
             'boeket_A' => 'required|integer|min:0',
@@ -45,55 +47,245 @@ class OrderController extends Controller
             'day' => 'required'
         ]);
 
+
+        // STAP 1 : BEREKEN TOTAALBEDRAG
+    
+        //zoek de kortingskaarten en -bonnen op
         $turnCards = TurnVoucher::whereIn('code', $validated['turnCardCodes'] ?? [])->get();
         $giftCards = GiftVoucher::whereIn('code', $validated['giftCardCodes'] ?? [])->get();
 
-        // calculate price
-        $total = $this->berekenTotaal($validated, $turnCards, $giftCards);
+        $totals = $this->berekenTotaal($validated, $turnCards, $giftCards);
+        $subTotal = $totals["subtotal"];
+        $total = $totals["total"];
 
-        // even checken of de berekening van de totale prijs overeenkomt met de frontend berekening ---> want da's dus wel belangrijk?
+        // even checken of de berekening van de totale prijs overeenkomt met de frontend berekening ---> want da's dus wel belangrijk
         if ((float)$total !== (float)$validated['totaal']) {
-            // moet ik iets speciaals doen als dit niet het geval is?
+            // wat kan ik doen als ze niet gelijk zijn? Een melding met de vraag om print screens te nemen en deze door te sturen naar gustave.curtil@tutanota.com...
             dd("Het back-end totaal van: " .$total . " is niet hetzelfde als het front-end totaal van: " . $validated['totaal'] .". Dit is lastig. Als je dit ziet, zou je aub een print screen kunnen nemen van deze pagina en de vorige en deze doorsturen naar gustave.curtil@tutanota.com aub? Dan kan ik dit probleem asap oplossen. Dank u! xx");
-        } else {
-            dd("Perfect! De backend berekening van het totaal (" . $total . " euro) komt overeen met die van de frontend code! <3");
+        } 
+
+
+        // STAP 2: CONTROLEER OF DATA KLOPT
+
+        $now = Carbon::now();
+        $date = Date::where('takeaway_date', $validated['day'])
+                    ->where(function ($query) use ($now) {
+                        $query->where('last_order_date', '>', $now->toDateString())
+                            ->orWhere(function ($q) use ($now) {
+                                $q->where('last_order_date', $now->toDateString())
+                                    ->where('last_order_time', '>=', $now->toTimeString());
+                            });
+                    })
+                    ->first();
+
+        if (!$date || !$date->takeaway_date || !$date->takeaway_start_time || !$date->takeaway_end_time) {
+            abort(403, 'Datum werd niet teruggevonden. Wil je aub contact opnemen met gustave.curtil@tutanota.com met een printscreen van het voorgaande scherm?');
         }
+
+        $takeaway_date = $date->takeaway_date;
+        $takeaway_start_time = $date->takeaway_start_time;
+        $takeaway_end_time = $date->takeaway_end_time;
+
+
+        // STAP 2: ZOEK OF MAAK KLANT AAN
+
+        $clientId = $request->session()->get('client_id');
+
+        if ($clientId) {
+            $client = Client::find($clientId);
+        }
+
+        if (isset($client)) {
+
+            // Indien e-mailadres gewijzigd is, maak een nieuwe client aan gewoon
+            if ($client->email !== $validated['email']) {
+                $client = Client::create([
+                    'first_name' => $validated['first_name'],
+                    'last_name'  => $validated['last_name'],
+                    'phone'      => $validated['phone'],
+                    'email'      => $validated['email'],
+                    'nieuwsbrief'=> $validated['nieuwsbrief'] ?? 0,
+                    'device_id'  => uniqid()
+                ]);
+
+            // Zelfde e-mailadress? De andere dingen even updaten. 
+            } else {
+                $client->update([
+                    'first_name' => $validated['first_name'],
+                    'last_name'  => $validated['last_name'],
+                    'phone'      => $validated['phone'],
+                    'nieuwsbrief'=> $validated['nieuwsbrief'] ?? 0,
+                ]);
+            }
+        } else {
+            // indien e-mail adres al bestaat, update die klant
+            // indien nieuw e-mail adres, maak nieuwe klant aan
+            $client = Client::firstOrCreate(
+                ['email' => $validated['email']],
+                [
+                    'first_name' => $validated['first_name'],
+                    'last_name'  => $validated['last_name'],
+                    'phone'      => $validated['phone'],
+                    'nieuwsbrief'=> $validated['nieuwsbrief'] ?? 0,
+                    'device_id'  => uniqid()
+                ]
+            );
+        }
+
+        $request->session()->put('client_id', $client->id);
+
+
+        // 2. check voor bestelling in session 
+        // (die ook gelinkt moet zijn met de huidige client, anders verwijder bestelling en maak nieuwe aan)
         
+        $orderId = $request->session()->get('order_id');
+        $order = $orderId ? Order::find($orderId) : null;
 
-        $client = Client::create([
-            'first_name' => $validated['first_name'],
-            'last_name'  => $validated['last_name'],
-            'phone'      => $validated['phone'],
-            'email'      => $validated['email'],
-            'nieuwsbrief'=> $validated['nieuwsbrief'],
-        ]);
+        // Check bestaande order
+        if ($order) {
+            if ($order->payed) {
+                abort(403, 'Bestelling al betaald. Wil je aub contact opnemen met gustave.curtil@tutanota.com met een printscreen van het voorgaande scherm aub?');
+            }
+            if ($order->client_id !== $client->id) {
+                abort(403, 'Deze bestelling hoort bij een andere klant.  Wil je aub contact opnemen met gustave.curtil@tutanota.com met een printscreen van het voorgaande scherm aub?');
+            }
 
-        // 2️⃣ create draft order
-        $order = Order::create([
-            'client_id' => $client->id,   // or null, or $request->client_id
-            'option1'   => $validated['boeket_A'],
-            'option2'   => $validated['boeket_B'],
-            'option3'   => $validated['boeket_C'],
-            'day'       => $validated['day'],
-            'payed'     => false, // default until payment succeeds
-        ]);
+            // Update bestaande order
+            $order->update([
+                'day'                   => $validated['day'],
+                'total_price'           => $subTotal,
+                'total_discount'        => $total,
+                'option1'               => $validated['boeket_A'],
+                'option2'               => $validated['boeket_B'],
+                'option3'               => $validated['boeket_C'],
+                'takeaway_date'         => $takeaway_date,
+                'takeaway_start_time'   => $takeaway_start_time,
+                'takeaway_end_time'     => $takeaway_end_time,
+            ]);
 
-        // 3️⃣ create paymentintent
+        } else {
+            // Maak nieuwe order
+            $order = Order::create([
+                'client_id'             => $client->id,
+                'day'                   => $validated['day'],
+                'total_price'           => $subTotal,
+                'total_discount'        => $total,
+                'option1'               => $validated['boeket_A'],
+                'option2'               => $validated['boeket_B'],
+                'option3'               => $validated['boeket_C'],
+                'payed'                 => false,
+                'takeaway_date'         => $takeaway_date,
+                'takeaway_start_time'   => $takeaway_start_time,
+                'takeaway_end_time'      => $takeaway_end_time,
+            ]);
+        }
+
+        $request->session()->put('order_id', $order->id);
+
+
+        // maak of update een NIEUW cadeaubon of verwijder huidige cadeaubon als de waarde 0 is geworden. (functie terugtevinden in Order Model)
+        $giftCard = $order->setGiftVoucher($validated['cadeau']);
+
+        //MAG WEG
+
+        // if ((int)$validated['cadeau'] === 0) {
+        //     // Remove the gift voucher if it exists
+        //     $giftVoucher = $order->giftVoucher;
+        //     if ($giftVoucher) {
+        //         $giftVoucher->delete();
+        //     }
+        // } else {
+        //     // Either update existing voucher or create a new one
+        //     $giftVoucher = $order->giftVoucher;
+
+        //     if ($giftVoucher) {
+        //         // Update existing voucher
+        //         $giftVoucher->update([
+        //             'amount' => $validated['cadeau'],
+        //             'original_amount' => $validated['cadeau'], // if needed
+        //             'valid_date' => now()->addMonthsNoOverflow(6)->addDay(),
+        //         ]);
+        //     } else {
+        //         // Create new voucher
+        //         GiftVoucher::create([
+        //             'order_id' => $order->id,
+        //             'amount' => $validated['cadeau'],
+        //             'original_amount' => $validated['cadeau'],
+        //             'code' => $this->genereerGiftCode(),
+        //             'valid_date' => now()->addMonthsNoOverflow(6)->addDay(),
+        //         ]);
+        //     }
+        // }
+
+
+        // maak of update de NIEUWE kaarten
+
+        // if ($validated['kaart_A'] === 0 && $validated['kaart_B'] === 0 && $validated['kaart_C'] === 0) {
+        //     $turnVouchers = $order->turnVouchers;
+        //     DELETE THE turnVOUCHERS
+        // } else {
+        //     $turnVouchers = $order->turnVouchers;
+        //     CHECK IF $validated['kaart_A'] === $turnVouchers with the name 'schattig';
+        //     CHECK IF $validated['kaart_B'] === $turnVouchers with the name 'charmant';
+        //     CHECK IF $validated['kaart_C'] === $turnVouchers with the name 'magnifiek';
+        //     IF IT IS ALL GOOD, PURSUE, 
+
+        //     OTHERWHISE DELETE ALL THE $giftVouchers FROM DATABASE and just create new ones...
+        //         CREATING A NEW 
+        // }
+
+        // $giftVouchers = $order->giftVouchers;
+        // $turnVouchers = $order->turnVouchers;
+
+
+        // 3. en hop naar stripe
+
         Stripe::setApiKey(env('STRIPE_SECRET'));
-        $intent = PaymentIntent::create([
-            'amount' => $total * 100,
-            'currency' => 'eur',
-            'payment_method_types' => ['card', 'bancontact'],
+
+        $customer = \Stripe\Customer::create([
+            'name' => $validated['first_name'] . " " . $validated['last_name'],
+            'email' => $validated['email'],
         ]);
 
-        // save intent id
-        // $order->update(['payment_intent_id' => $intent->id]);
+        // Create Stripe Checkout Session
+        $session = Session::create([
+            'payment_method_types' => ['bancontact', 'card'], // Bancontact enabled
+            'mode' => 'payment',
 
-        // 4️⃣ show payment page
-        return view('payment', [
-            'clientSecret' => $intent->client_secret,
-            'order' => $order
+            'line_items' => [[
+                'quantity' => 1,
+                'price_data' => [
+                    'currency' => 'eur',
+                    'unit_amount' => $total * 100,
+                    'product_data' => [
+                        'name' => 'Bloemen & kaarten order #' . $order->id,
+                    ],
+                ],
+            ]],
+
+            'metadata' => [
+                'clientId' => $client->id,
+                'orderId' => $order->id,
+            ],
+
+            'customer' => $customer->id,
+
+            'success_url' => url('/success?session_id={CHECKOUT_SESSION_ID}&order=' . $order->id),
+            'cancel_url' => route('afrekenen'), 
         ]);
+
+        // Redirect instantly to Stripe payment page
+        return redirect($session->url);
+    }
+
+    private function genereerGiftCode()
+    {
+        do {
+            $flower = collect(config('flowers.gift_flowers'))->random();
+            $code   = $flower . sprintf('%04d', random_int(0, 9999));
+        } while (GiftVoucher::where('code', $code)->exists());
+
+        return $code;
     }
 
     public function berekenTotaal($validated, $turnCards, $giftCards) {
@@ -102,10 +294,14 @@ class OrderController extends Controller
         $kaartBbeurten = 0;
         $kaartCbeurten = 0;
 
+        $kortingAbeurten = 0;
+        $kortingBbeurten = 0;
+        $kortingCbeurten = 0;
+
         foreach ($turnCards as $card) {
-            $kaartAbeurten += (int) $card->option1;
-            $kaartBbeurten += (int) $card->option2;
-            $kaartCbeurten += (int) $card->option3;
+            $kortingAbeurten += (int) $card->option1;
+            $kortingBbeurten += (int) $card->option2;
+            $kortingCbeurten += (int) $card->option3;
         }
 
         $cadeauKorting = 0;
@@ -137,6 +333,22 @@ class OrderController extends Controller
             $kaartCbeurten += $kaartCaantal * 5;
         }
 
+        if ($kortingAbeurten > 0 && $boeketAaantal > 0) {
+            $af_te_trekken = min($kortingAbeurten, $boeketAaantal);
+            $kortingAbeurten   -= $af_te_trekken;
+            $boeketAaantal   -= $af_te_trekken;
+        }
+        if ($kortingBbeurten > 0 && $boeketBaantal > 0) {
+            $af_te_trekken = min($kortingBbeurten, $boeketBaantal);
+            $kortingBbeurten   -= $af_te_trekken;
+            $boeketBaantal   -= $af_te_trekken;
+        }
+        if ($kortingCbeurten > 0 && $boeketCaantal > 0) {
+            $af_te_trekken = min($kortingCbeurten, $boeketCaantal);
+            $kortingCbeurten   -= $af_te_trekken;
+            $boeketCaantal   -= $af_te_trekken;
+        }
+
         if ($kaartAbeurten > 0 && $boeketAaantal > 0) {
             $af_te_trekken = min($kaartAbeurten, $boeketAaantal);
             $kaartAbeurten   -= $af_te_trekken;
@@ -161,13 +373,30 @@ class OrderController extends Controller
         $kaartBtotaal = $kaartBaantal *  config('prijzen.5-beurtenkaarten.charmant');
         $kaartCtotaal = $kaartCaantal *  config('prijzen.5-beurtenkaarten.magnifiek');
 
-        $total = $kaartAtotaal + $kaartBtotaal + $kaartCtotaal + $boeketAtotaal + $boeketBtotaal + $boeketCtotaal + $cadeau;
+        $subtotal = $kaartAtotaal 
+                + $kaartBtotaal 
+                + $kaartCtotaal 
+                + $boeketAtotaal 
+                + $boeketBtotaal 
+                + $boeketCtotaal 
+                + $cadeau;   // total BEFORE korting
 
-        $af_te_trekken_korting = min($total, $cadeauKorting);
-        $total   -= $af_te_trekken_korting;
-        $cadeauKorting   -= $af_te_trekken_korting;
+        $af_te_trekken_korting = min($subtotal, $cadeauKorting);
+        $total = $subtotal - $af_te_trekken_korting;
 
-        return $total;
+        $cadeauKorting -= $af_te_trekken_korting;
+
+        return [
+            'kaartAbeurten' => $kaartAbeurten,
+            'kaartBbeurten' => $kaartBbeurten,
+            'kaartCbeurten' => $kaartCbeurten,
+            'kortingAbeurten' => $kortingAbeurten,
+            'kortingBbeurten' => $kortingBbeurten,
+            'kortingCbeurten' => $kortingCbeurten,
+        
+            'subtotal' => $subtotal,   // before korting
+            'total'    => $total,      // after korting
+        ];
     }
 
     public function store(Request $request)

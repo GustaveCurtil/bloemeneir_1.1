@@ -14,4 +14,8 @@
         <p>Tot binnenkort, <span style="text-transform: capitalize;">{{$client->first_name}}</span>!</p>
     </section>
 </main>
+
+<script>
+    localStorage.clear();
+</script>
 @endsection

@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Mail\MailPetrannesophie;
 use Stripe\Stripe;
+use App\Models\Order;
+use App\Models\Client;
 use Stripe\PaymentIntent;
 use App\Mail\OrderConfirmed;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use App\Mail\MailPetrannesophie;
 use Illuminate\Support\Facades\Mail;
 
 class PaymentController extends Controller
@@ -76,76 +78,139 @@ class PaymentController extends Controller
 
     }
 
-    
+
     public function success(Request $request)
     {
-        $paymentIntentId = $request->query('payment_intent');
-
-        if (!$paymentIntentId) {
-
-            return "Geen betaling gevonden.";
-
-        }
-
         \Stripe\Stripe::setApiKey(env('STRIPE_SECRET'));
 
+        $sessionId = $request->query('session_id');
+
+        if (!$sessionId) {
+            return "Geen betaling gevonden (geen session_id).";
+        }
+
+        // 1. Retrieve the checkout session
+        $session = \Stripe\Checkout\Session::retrieve($sessionId);
+
+        // 2. Extract payment_intent ID from the session
+        $paymentIntentId = $session->payment_intent;
+        if (!$paymentIntentId) {
+            return "Geen payment intent ID gevonden.";
+        }
+
+        // 3. Retrieve the actual PaymentIntent object
         $paymentIntent = \Stripe\PaymentIntent::retrieve($paymentIntentId);
 
-        $clientId = $paymentIntent->metadata->client_id ?? null;
-        $orderId  = $paymentIntent->metadata->order_id ?? null;
+        if ($paymentIntent->status !== 'succeeded') {
+            dd($paymentIntent->status);
+        }
+
+        $clientId = $session->metadata->clientId ?? null;
+        $orderId  = $session->metadata->orderId ?? null;
 
         if (!$clientId || !$orderId) {
             return "Geen klant- of bestelgegevens gevonden.";
         }
 
-        // Fetch client and order
-        $client = \App\Models\Client::find($clientId);
-        $order  = \App\Models\Order::find($orderId);
-    
-        if ($paymentIntent->status === 'succeeded') {
-            
-                $orderDate = Carbon::parse($order->day);
-                Carbon::setLocale('nl');
-                $weekday = $orderDate->translatedFormat('l'); // "vrijdag", "maandag", etc.
-                $formattedDate = $orderDate->translatedFormat('d F'); // "26 september"
+        $client = Client::find($clientId);
+        $order = Order::find($orderId);
+        
+        //1.bekijk alle boeketten
 
-            if (!$order->payed) {
+        //2.bekijk de cadeaubon: genereer code en maak aan.
 
-                $order->payed = true;
+        //3.bekijk alle oude 5 beurtenkaarten en bereken hoeveel er overblijven
+        $previousCodes= [];
 
-                // $order->stripe_payment_intent_id = $paymentIntent->id;
-                $order->save(); 
-                Mail::to($client->email)->send(new OrderConfirmed($order, $weekday, $formattedDate));
-                Mail::to('info@bloemenier.be')
-                    // ->cc([
-                    //     'annesophie@fullscalearchitecten.be',
-                    //     'gustave.curtil@tutanota.com',
-                    // ])
-                    ->send(new MailPetrannesophie($order, $weekday, $formattedDate));
-            }
+        //4.bekijk alle nieuwe 5 beurtenkaarten: genereen code, maak aan
 
-            $request->session()->forget('order');
+        //5.bekijk alle oude cadeaubonnne en bereken hoevel er overblijven
 
-            return view('bestelling.succes', [
-                'client' => $client,
-                'dag' => $weekday,
-                'datum' => $formattedDate
-            ]);
 
-        } elseif ($paymentIntent->status === 'processing') {
 
-            return "⏳ Je betaling wordt nog verwerkt. Even geduld!";
+        $orderDate = Carbon::parse($order->day);
+        Carbon::setLocale('nl');
+        $weekday = $orderDate->translatedFormat('l'); // "vrijdag", "maandag", etc.
+        $formattedDate = $orderDate->translatedFormat('d F'); // "26 september"
 
-        } elseif ($paymentIntent->status === 'requires_payment_method') {
-
-            return redirect()->route('checkout', [
-                'client_id' => $order->client_id,
-                'order_id' => $order->id
-            ])->with('message', 'Betaling mislukt of geannuleerd.');
-
-        } else {
-
-            return "⚠️ Onbekende status: {$paymentIntent->status}";
-        }
+        return view('bestelling.succes', [
+            'paymentIntent' => $paymentIntent,
+            'status' => $paymentIntent->status,
+            'client' => $client,
+            'dag' => $weekday,
+            'datum' => $formattedDate
+        ]);
     }
+    
+    // public function success(Request $request)
+    // {
+    //     $paymentIntentId = $request->query('payment_intent');
+
+    //     if (!$paymentIntentId) {
+
+    //         return "Geen betaling gevonden.";
+
+    //     }
+
+    //     \Stripe\Stripe::setApiKey(env('STRIPE_SECRET'));
+
+    //     $paymentIntent = \Stripe\PaymentIntent::retrieve($paymentIntentId);
+
+    //     $clientId = $paymentIntent->metadata->client_id ?? null;
+    //     $orderId  = $paymentIntent->metadata->order_id ?? null;
+
+    //     if (!$clientId || !$orderId) {
+    //         return "Geen klant- of bestelgegevens gevonden.";
+    //     }
+
+    //     // Fetch client and order
+    //     $client = \App\Models\Client::find($clientId);
+    //     $order  = \App\Models\Order::find($orderId);
+    
+    //     if ($paymentIntent->status === 'succeeded') {
+            
+    //             $orderDate = Carbon::parse($order->day);
+    //             Carbon::setLocale('nl');
+    //             $weekday = $orderDate->translatedFormat('l'); // "vrijdag", "maandag", etc.
+    //             $formattedDate = $orderDate->translatedFormat('d F'); // "26 september"
+
+    //         if (!$order->payed) {
+
+    //             $order->payed = true;
+
+    //             // $order->stripe_payment_intent_id = $paymentIntent->id;
+    //             $order->save(); 
+    //             Mail::to($client->email)->send(new OrderConfirmed($order, $weekday, $formattedDate));
+    //             Mail::to('info@bloemenier.be')
+    //                 // ->cc([
+    //                 //     'annesophie@fullscalearchitecten.be',
+    //                 //     'gustave.curtil@tutanota.com',
+    //                 // ])
+    //                 ->send(new MailPetrannesophie($order, $weekday, $formattedDate));
+    //         }
+
+    //         $request->session()->forget('order');
+
+    //         return view('bestelling.succes', [
+    //             'client' => $client,
+    //             'dag' => $weekday,
+    //             'datum' => $formattedDate
+    //         ]);
+
+    //     } elseif ($paymentIntent->status === 'processing') {
+
+    //         return "⏳ Je betaling wordt nog verwerkt. Even geduld!";
+
+    //     } elseif ($paymentIntent->status === 'requires_payment_method') {
+
+    //         return redirect()->route('checkout', [
+    //             'client_id' => $order->client_id,
+    //             'order_id' => $order->id
+    //         ])->with('message', 'Betaling mislukt of geannuleerd.');
+
+    //     } else {
+
+    //         return "⚠️ Onbekende status: {$paymentIntent->status}";
+    //     }
+    // }
 }

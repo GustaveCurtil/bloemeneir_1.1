@@ -48,4 +48,8 @@ Route::get('/order', [PaymentController::class, 'orderForm']);
 // Route::post('/order', [PaymentController::class, 'processOrder'])->name('order');
 Route::get('/success', [PaymentController::class, 'success'])->name('checkout.success');
 
+Route::get('/session-test', function (Illuminate\Http\Request $request) {
+    $request->session()->put('foo', 'bar');
+    dd($request->session()->get('foo'));
+});
 

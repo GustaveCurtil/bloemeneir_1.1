@@ -1,6 +1,6 @@
 let bestelFlowLink = document.querySelector('a#bestel-flow');
 
-let bestelUrl = sessionStorage.getItem('huidigBestelPad');
+let bestelUrl = localStorage.getItem('huidigBestelPad');
 
 if (bestelUrl) {
     bestelFlowLink.href = bestelUrl;
