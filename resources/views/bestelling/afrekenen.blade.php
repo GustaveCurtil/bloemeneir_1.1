@@ -67,7 +67,7 @@
                     <input type="email" name="email" id="email" value="gust@cool.be" placeholder="vul hier in" required >
                     <input type="email" name="email_confirmation"  id="email_confirmation" placeholder="herhaal e-mailadres" required>
                     <label class="rij">
-                        <input type="checkbox" name="nieuwsbrief" value="1"
+                        <input id="nieuwsbrief" type="checkbox" name="nieuwsbrief" value="1"
                             {{ old('nieuwsbrief', $client->nieuwsbrief ?? 0) == 1 ? 'checked' : '' }}>
                         nieuwsbrief&nbsp;<i class="small">(max 4x per jaar)</i>
                     </label>

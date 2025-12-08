@@ -20,6 +20,7 @@ class LoginController extends Controller
         $users = [
             'anne-sophie' => 'tampopo',  // username => password
             'petra'  => 'tampopo',
+            'test' => 'test',
         ];
 
         $naam = $request->input('naam');
@@ -32,11 +33,11 @@ class LoginController extends Controller
         return back()->withErrors(['login' => 'Naam of wachtwoord is onjuist.']);
     }
 
-    // public function createUser() {
-    //     User::create([
-    //         'name' => 'anne-sophie',
-    //         'password' => bcrypt('tampopo'),
-    //         'role' => 'patron'
-    //     ]);
-    // }
+    public function createUser() {
+        User::create([
+            'name' => 'test',
+            'password' => bcrypt('test'),
+            'role' => 'patron'
+        ]);
+    }
 }

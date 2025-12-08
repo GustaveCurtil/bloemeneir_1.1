@@ -67,8 +67,26 @@ class PageController extends Controller
             }
         }
             
-        // 🔥 Sort by valid_date ascending (oldest first)
-        $turnCards = collect($turnCards)->sortBy('valid_date')->values()->all();
+        // 🔥 Sort by name and then by valid_date ascending (oldest first)
+        $order = [
+            'schattig'  => 1,
+            'charmant'  => 2,
+            'magnifiek' => 3,
+        ];
+        $turnCards = collect($turnCards)
+            ->sort(function ($a, $b) use ($order) {
+                // Compare by name order first
+                $nameComparison = ($order[$a->name] ?? 999) <=> ($order[$b->name] ?? 999);
+
+                if ($nameComparison !== 0) {
+                    return $nameComparison;
+                }
+
+                // If names are the same, compare by valid_date
+                return $a->valid_date <=> $b->valid_date;
+            })
+            ->values()
+            ->all();
         $giftCards = collect($giftCards)->sortBy('valid_date')->values()->all();
         
         return view('bestelling.afrekenen', compact(

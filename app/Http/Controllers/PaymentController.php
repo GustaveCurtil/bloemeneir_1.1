@@ -6,6 +6,7 @@ use Stripe\Stripe;
 use App\Models\Order;
 use App\Models\Client;
 use Stripe\PaymentIntent;
+use App\Models\TurnVoucher;
 use App\Mail\OrderConfirmed;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
@@ -105,6 +106,8 @@ class PaymentController extends Controller
             dd($paymentIntent->status);
         }
 
+        $metadata = $session->metadata;
+
         $clientId = $session->metadata->clientId ?? null;
         $orderId  = $session->metadata->orderId ?? null;
 
@@ -115,23 +118,81 @@ class PaymentController extends Controller
         $client = Client::find($clientId);
         $order = Order::find($orderId);
 
+
+        // eerst de kortingskaarten en -bonnen fixen en aantallen aanpassen
+        $turnVoucherIds = $metadata['turnVoucherIds'];
+        $turnVoucherIdsArray = array_map('intval', explode(',', $turnVoucherIds));
+
+        $schattigVouchers = TurnVoucher::whereIn('id', $turnVoucherIdsArray)
+        ->where('name', 'schattig')
+        ->orderBy('valid_date', 'asc')
+        ->get();
+
+        $restKortingAbeurten = (int) $metadata['restKortingAbeurten'];
+
+        
+        // Step 1: Calculate total of all option1's
+        $totalOption1 = $schattigVouchers->sum(function($voucher) {
+            return (int) $voucher->option1;
+        });
+
+        // Step 2: Determine how much we need to reduce
+        $reductionAmount = $totalOption1 - $restKortingAbeurten;
+        if ($reductionAmount < 0) {
+            dd('probleem!');
+        }
+
+        if ($reductionAmount <= 0) {
+            // No reduction needed, total is already less than or equal to restKortingAbeurten
+            return;
+        }
+
+        // Step 3: Reduce option1's starting from the oldest
+        foreach ($schattigVouchers as $voucher) {
+            $optionAmount = (int) $voucher->option1;
+
+            if ($reductionAmount < 0) {
+                dd('probleem!');
+            }
+
+            if ($reductionAmount <= 0) {
+                break; // done reducing
+            }
+
+            if ($optionAmount >= $reductionAmount) {
+                // Reduce this voucher partially
+                $voucher->option1 = $optionAmount - $reductionAmount;
+                $voucher->save();
+                $reductionAmount = 0;
+                break;
+            } else {
+                // Deplete this voucher completely
+                $voucher->option1 = 0;
+                $voucher->save();
+                $reductionAmount -= $optionAmount;
+            }
+        }
+
+        dd($schattigVouchers);
+        // now comes the difficult part.
+        // The restKortingAbeurten are the amount of discounts that are left over. 
+        // So what i want, is to check every schattigeVoucher, check for the actual amount in the column option1 and reduce that amount.
+        // If it hits 0, then move on to the next schattigeVoucher untill all the restKortingABeurten are handled.
+        // So actually, another way to see this: the amount of all the option1's should be exactly the same as restKortingAbeurten.
+        
+
+
         $giftvoucher = $order->giftVoucher;
+
         $turnCardsA = $order->schattigeVouchers;
         $turnCardsB = $order->charmanteVouchers;
         $turnCardsC = $order->magnifiekeVouchers;
-        
-        //1.bekijk alle boeketten
 
-        //2.bekijk de cadeaubon: genereer code en maak aan.
+        dd($metadata);
 
-        //3.bekijk alle oude 5 beurtenkaarten en bereken hoeveel er overblijven
-        $previousCodes= [];
-
-        //4.bekijk alle nieuwe 5 beurtenkaarten: genereen code, maak aan
-
-        //5.bekijk alle oude cadeaubonnne en bereken hoevel er overblijven
-
-        dd($turnCardsC);
+        foreach ($turnCardsA as $turnCard) {
+            # code...
+        }
 
         $orderDate = Carbon::parse($order->day);
         Carbon::setLocale('nl');

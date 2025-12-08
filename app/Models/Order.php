@@ -115,13 +115,13 @@ class Order extends Model
                 $column_name = 'option3';
                 break;
             default:
-                return null;
+                return collect();
         }
 
         $existing->each->delete();
 
         if ($amount === 0) {
-            return null;
+            return collect();
         }
 
         $vouchers = [];

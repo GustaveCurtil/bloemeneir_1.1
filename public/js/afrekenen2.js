@@ -258,3 +258,33 @@ setValue("totaal", newTotal);
 
 // KLANTENGEGEVENS OPSLAAN IN LOCALSTORAGE
 
+const inputs = [
+    'input#naam',
+    'input#achternaam',
+    'input#nummer',
+    'input#email',
+    'input#email_confirmation', 
+    'input#nieuwsbrief'
+];
+
+inputs.forEach(selector => {
+    const input = document.querySelector(selector);
+
+    if (input.type === 'checkbox') {
+        input.checked = localStorage.getItem(selector) === "true";  // true / false
+    } else {
+        input.value = localStorage.getItem(selector);
+    }
+
+    input.addEventListener('input', (e) => {
+        let value;
+
+        if (e.target.type === 'checkbox') {
+            value = e.target.checked;   // true / false
+        } else {
+            value = e.target.value;     // text, numbers, email, etc.
+        }
+
+        localStorage.setItem(selector, value);
+    });
+});

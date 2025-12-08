@@ -54,9 +54,9 @@ class OrderController extends Controller
         $turnCards = TurnVoucher::whereIn('code', $validated['turnCardCodes'] ?? [])->get();
         $giftCards = GiftVoucher::whereIn('code', $validated['giftCardCodes'] ?? [])->get();
 
-        $totals = $this->berekenTotaal($validated, $turnCards, $giftCards);
-        $subTotal = $totals["subtotal"];
-        $total = $totals["total"];
+        $orderInfo = $this->berekenTotaal($validated, $turnCards, $giftCards);
+        $subTotal = $orderInfo["subtotal"];
+        $total = $orderInfo["total"];
 
         // even checken of de berekening van de totale prijs overeenkomt met de frontend berekening ---> want da's dus wel belangrijk
         if ((float)$total !== (float)$validated['totaal']) {
@@ -146,12 +146,10 @@ class OrderController extends Controller
             if ($order->payed) {
                 abort(403, 'Bestelling al betaald. Wil je aub contact opnemen met gustave.curtil@tutanota.com met een printscreen van het voorgaande scherm aub?');
             }
-            if ($order->client_id !== $client->id) {
-                abort(403, 'Deze bestelling hoort bij een andere klant.  Wil je aub contact opnemen met gustave.curtil@tutanota.com met een printscreen van het voorgaande scherm aub?');
-            }
 
             // Update bestaande order
             $order->update([
+                'client_id'             => $client->id,
                 'day'                   => $validated['day'],
                 'total_price'           => $subTotal,
                 'total_discount'        => $total,
@@ -194,9 +192,11 @@ class OrderController extends Controller
         $turnCardsB = $order->setTurnVouchers($validated['kaart_B'], 'charmant');
         $turnCardsC = $order->setTurnVouchers($validated['kaart_C'], 'magnifiek');
 
-
         // STAP 6: METADATA PREPAREREN;
-        
+        $turnCardAIds = $turnCardsA->pluck('id')->toArray();
+        $turnCardBIds = $turnCardsB->pluck('id')->toArray();
+        $turnCardCIds = $turnCardsC->pluck('id')->toArray();
+
         $turnCardIds = $turnCards->pluck('id')->toArray();
         $giftCardIds = $giftCards->pluck('id')->toArray();
 
@@ -229,8 +229,22 @@ class OrderController extends Controller
             'metadata' => [
                 'clientId'      => $client->id,
                 'orderId'       => $order->id,
-                'turnCardIds'   => $turnCardIds,
-                'giftCardIds'   => $giftCardIds
+
+                'turnVoucherIds'   => implode(',', $turnCardIds),
+                'giftVoucherIds'   => implode(',', $giftCardIds),
+                
+                'turnCardAIds'   => implode(',', $turnCardAIds),
+                'turnCardBIds'   => implode(',', $turnCardBIds),
+                'turnCardCIds'   => implode(',', $turnCardCIds),
+
+                'restKaartAbeurten' => $orderInfo['restKaartAbeurten'],
+                'restKaartBbeurten' => $orderInfo['restKaartBbeurten'],
+                'restKaartCbeurten' => $orderInfo['restKaartCbeurten'],
+
+                'restKortingAbeurten' => $orderInfo['restKortingAbeurten'],
+                'restKortingBbeurten' => $orderInfo['restKortingBbeurten'],
+                'restKortingCbeurten' => $orderInfo['restKortingCbeurten'],
+                'restKortingCadeau'   => $orderInfo['restKortingCadeau'],
             ],
 
             'customer' => $customer->id,
@@ -352,12 +366,14 @@ class OrderController extends Controller
         $cadeauKorting -= $af_te_trekken_korting;
 
         return [
-            'kaartAbeurten' => $kaartAbeurten,
-            'kaartBbeurten' => $kaartBbeurten,
-            'kaartCbeurten' => $kaartCbeurten,
-            'kortingAbeurten' => $kortingAbeurten,
-            'kortingBbeurten' => $kortingBbeurten,
-            'kortingCbeurten' => $kortingCbeurten,
+            'restKaartAbeurten' => $kaartAbeurten,
+            'restKaartBbeurten' => $kaartBbeurten,
+            'restKaartCbeurten' => $kaartCbeurten,
+
+            'restKortingAbeurten' => $kortingAbeurten,
+            'restKortingBbeurten' => $kortingBbeurten,
+            'restKortingCbeurten' => $kortingCbeurten,
+            'restKortingCadeau'   => $cadeauKorting,
         
             'subtotal' => $subtotal,   // before korting
             'total'    => $total,      // after korting
