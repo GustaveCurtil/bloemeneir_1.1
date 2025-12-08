@@ -22,6 +22,7 @@ return new class extends Migration
             $table->tinyInteger('option2_original')->nullable();
             $table->tinyInteger('option3')->nullable();
             $table->tinyInteger('option3_original')->nullable();
+            $table->boolean('has_used');
             $table->date('valid_date');
             $table->timestamps();
         });

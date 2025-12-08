@@ -16,8 +16,14 @@ class TurnVoucher extends Model
         'option1_original',
         'option2_original',
         'option3_original',
+        'has_used',
         'valid_date',
     ];
+
+    public function order()
+    {
+        return $this->belongsTo(Order::class);
+    } 
 
     protected $appends = ['valid_till'];
 
@@ -35,6 +41,7 @@ class TurnVoucher extends Model
     {
         // If no order is linked, consider it "already paid"
         if (!$this->order) {
+            dd('echt?');
             return true;
         }
 

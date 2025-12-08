@@ -19,4 +19,34 @@ class DashboardController extends Controller
 
         return view('dashboard.dashboard', ['klanten' => $klanten, 'bestellingen' => $bestellingen]);
     }
+
+    public function afhaalmomenten()
+    {
+        return view('dashboard.afhaalmomenten');
+    }
+
+    public function bestellingen()
+    {
+        return view('dashboard.bestellingen');
+    }
+
+    public function bonnen()
+    {
+        return view('dashboard.bonnen');
+    }
+
+    public function kaarten()
+    {
+        return view('dashboard.kaarten');
+    }
+
+    public function klanten()
+    {
+        return view('dashboard.klanten');
+    }
+
+    public function development()
+    {
+        return view('dashboard.development');
+    }
 }

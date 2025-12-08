@@ -12,6 +12,7 @@ use App\Http\Controllers\DashboardController;
 //     return view('landing');
 // })->name('landing');
 
+// WAT DE KLANT ZIEN
 Route::get('/', function () {
     return view('over');
 })->name('over');
@@ -33,10 +34,6 @@ Route::get('/winkel/afrekenen', [PageController::class, 'afrekenen'])->name('afr
 
 Route::get('/checkout', [PageController::class, 'checkout'])->name('checkout');
 
-Route::get('/overzicht', [DashboardController::class, 'overzicht'])->name('overzicht');
-Route::post('/login', [LoginController::class, 'login'])->name('login');
-// Route::get('/maak', [LoginController::class, 'createUser']);
-
 Route::post('/order', [OrderController::class, 'store'])->name('order');
 Route::post('/check-code', [VoucherController::class, 'checkCode'])->name('check-code');
 Route::post('/delete-code', [VoucherController::class, 'deleteCode'])->name('delete-code');
@@ -52,4 +49,19 @@ Route::get('/session-test', function (Illuminate\Http\Request $request) {
     $request->session()->put('foo', 'bar');
     dd($request->session()->get('foo'));
 });
+
+
+// WAT PETRA EN ANNE-SOPHIE KUNNEN ZIEN
+Route::post('/login', [LoginController::class, 'login'])->name('login');
+// Route::get('/maak', [LoginController::class, 'createUser']);
+
+Route::get('/overzicht', [DashboardController::class, 'overzicht'])->name('overzicht');
+Route::get('/overzicht/bestellingen', [DashboardController::class, 'bestellingen'])->name('bestellingen');
+Route::get('/overzicht/bonnen', [DashboardController::class, 'bonnen'])->name('bonnen');
+Route::get('/overzicht/kaarten', [DashboardController::class, 'kaarten'])->name('kaarten');
+Route::get('/overzicht/klanten', [DashboardController::class, 'klanten'])->name('klanten');
+Route::get('/overzicht/afhaalmomenten', [DashboardController::class, 'afhaalmomenten'])->name('afhaalmomenten');
+Route::get('/overzicht/development', [DashboardController::class, 'development'])->name('development');
+
+
 

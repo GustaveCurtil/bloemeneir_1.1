@@ -35,12 +35,13 @@ class VoucherController extends Controller
         // ❌ De codes zijn nog niet betaald geweest
         if ($giftVoucher && !$giftVoucher->isPayed()) {
             return redirect()->route('afrekenen')
-                ->withErrors(['code' => "De code '{$code}' is nog niet betaald geweest."])
+                ->withErrors(['code' => "De cadeaubon met code '{$code}' is nog niet betaald geweest."])
                 ->withInput();
         }
+    
         if ($turnVoucher && !$turnVoucher->isPayed()) {
             return redirect()->route('afrekenen')
-                ->withErrors(['code' => "De code '{$code}' is nog niet betaald geweest."])
+                ->withErrors(['code' => "De 5-beurtenkaart code '{$code}' is nog niet betaald geweest."])
                 ->withInput();
         }
 
@@ -84,21 +85,28 @@ class VoucherController extends Controller
         $data = $request->validate([
             'code' => 'required|string',
         ]);
-
+        
         // Retrieve existing codes from session
         $previousCodes = session('previousCodes', []);
 
-        // If the code exists in the array, remove it
-        if (in_array($data['code'], $previousCodes)) {
-            // Filter out the code
-            $previousCodes = array_filter($previousCodes, function ($c) use ($data) {
-                return $c !== $data['code'];
+        // Normalize input code to lowercase
+        $currentCode = strtolower($data['code']);
+
+        // Normalize previous codes to lowercase for comparison matching
+        $previousCodesLower = array_map('strtolower', $previousCodes);
+
+        // If the code exists in the array (case-insensitive)
+        if (in_array($currentCode, $previousCodesLower)) {
+
+            // Remove the matching code, case-insensitive
+            $previousCodes = array_filter($previousCodes, function ($c) use ($currentCode) {
+                return strtolower($c) !== $currentCode;
             });
 
-            // Reindex array to avoid gaps
+            // Reindex to avoid numeric gaps
             $previousCodes = array_values($previousCodes);
 
-            // Save updated array back to session
+            // Save back to session
             session(['previousCodes' => $previousCodes]);
         }
 

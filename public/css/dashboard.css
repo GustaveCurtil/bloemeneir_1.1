@@ -30,6 +30,11 @@ a {
     font-family: var(--font2);
 }
 
+a.actief {
+    text-decoration: none;
+    pointer-events: none;
+}
+
 main {
     max-width: 100%;
     height: calc(100svh - var(--height-header));

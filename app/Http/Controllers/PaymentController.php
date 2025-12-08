@@ -82,28 +82,24 @@ class PaymentController extends Controller
 
     public function success(Request $request)
     {
+
+        // STAP 1: COLLECTEREN VAN STRIPE GEGEVENS
+
         \Stripe\Stripe::setApiKey(env('STRIPE_SECRET'));
 
         $sessionId = $request->query('session_id');
-
         if (!$sessionId) {
             return "Geen betaling gevonden (geen session_id).";
         }
-
-        // 1. Retrieve the checkout session
         $session = \Stripe\Checkout\Session::retrieve($sessionId);
-
-        // 2. Extract payment_intent ID from the session
         $paymentIntentId = $session->payment_intent;
         if (!$paymentIntentId) {
             return "Geen payment intent ID gevonden.";
         }
-
-        // 3. Retrieve the actual PaymentIntent object
         $paymentIntent = \Stripe\PaymentIntent::retrieve($paymentIntentId);
 
         if ($paymentIntent->status !== 'succeeded') {
-            dd($paymentIntent->status);
+            dd('status: "' . $paymentIntent->status . '" => Excuseer voor deze foutmelding: gelieve contact op te nemen met gustave.curtil@tutanota.com om dit probleem op te lossen.');
         }
 
         $metadata = $session->metadata;
@@ -119,68 +115,37 @@ class PaymentController extends Controller
         $order = Order::find($orderId);
 
 
-        // eerst de kortingskaarten en -bonnen fixen en aantallen aanpassen
+        // STAP 2: BESTAANDE 5-BEURTENKAARTEN UPDATEN
+        
         $turnVoucherIds = $metadata['turnVoucherIds'];
         $turnVoucherIdsArray = array_map('intval', explode(',', $turnVoucherIds));
 
         $schattigVouchers = TurnVoucher::whereIn('id', $turnVoucherIdsArray)
         ->where('name', 'schattig')
+        ->orderBy('valid_date', 'asc') // zodat eerst de kaarten worden opgebruikt die nog het minst lang geldig zijn.
+        ->get();
+        $charmantVouchers = TurnVoucher::whereIn('id', $turnVoucherIdsArray)
+        ->where('name', 'charmant')
+        ->orderBy('valid_date', 'asc')
+        ->get();
+        $magnifiekVouchers = TurnVoucher::whereIn('id', $turnVoucherIdsArray)
+        ->where('name', 'magnifiek')
         ->orderBy('valid_date', 'asc')
         ->get();
 
         $restKortingAbeurten = (int) $metadata['restKortingAbeurten'];
+        $restKortingBbeurten = (int) $metadata['restKortingBbeurten'];
+        $restKortingCbeurten = (int) $metadata['restKortingCbeurten'];
 
-        
-        // Step 1: Calculate total of all option1's
-        $totalOption1 = $schattigVouchers->sum(function($voucher) {
-            return (int) $voucher->option1;
-        });
+        $this->deductFromTurnVoucher($schattigVouchers, $restKortingAbeurten);
+        $this->deductFromTurnVoucher($charmantVouchers, $restKortingBbeurten);
+        $this->deductFromTurnVoucher($magnifiekVouchers, $restKortingCbeurten);
 
-        // Step 2: Determine how much we need to reduce
-        $reductionAmount = $totalOption1 - $restKortingAbeurten;
-        if ($reductionAmount < 0) {
-            dd('probleem!');
-        }
 
-        if ($reductionAmount <= 0) {
-            // No reduction needed, total is already less than or equal to restKortingAbeurten
-            return;
-        }
+        // STAP 3: NIEUWE 5-BEURTENKAARTEN UPDATEN
 
-        // Step 3: Reduce option1's starting from the oldest
-        foreach ($schattigVouchers as $voucher) {
-            $optionAmount = (int) $voucher->option1;
-
-            if ($reductionAmount < 0) {
-                dd('probleem!');
-            }
-
-            if ($reductionAmount <= 0) {
-                break; // done reducing
-            }
-
-            if ($optionAmount >= $reductionAmount) {
-                // Reduce this voucher partially
-                $voucher->option1 = $optionAmount - $reductionAmount;
-                $voucher->save();
-                $reductionAmount = 0;
-                break;
-            } else {
-                // Deplete this voucher completely
-                $voucher->option1 = 0;
-                $voucher->save();
-                $reductionAmount -= $optionAmount;
-            }
-        }
-
-        dd($schattigVouchers);
-        // now comes the difficult part.
-        // The restKortingAbeurten are the amount of discounts that are left over. 
-        // So what i want, is to check every schattigeVoucher, check for the actual amount in the column option1 and reduce that amount.
-        // If it hits 0, then move on to the next schattigeVoucher untill all the restKortingABeurten are handled.
-        // So actually, another way to see this: the amount of all the option1's should be exactly the same as restKortingAbeurten.
-        
-
+        $schattigNewVouchers = 
+        dd($metadata);
 
         $giftvoucher = $order->giftVoucher;
 
@@ -208,6 +173,67 @@ class PaymentController extends Controller
         ]);
     }
     
+    public function deductFromTurnVoucher($vouchers , $restKortingBeurten) {
+
+        $optionColumn = [
+            'schattig'   => 'option1',
+            'charmant'   => 'option2',
+            'magnifiek'  => 'option3',
+        ];
+
+        // Step 1: Calculate total of all optionX's
+        $totalOptionX = $vouchers->sum(function($voucher) use ($optionColumn) {
+            $column = $optionColumn[$voucher->name] ?? null;
+
+            if (!$column) {
+                abort(403, "Voucher met naam '{$voucher->name}' is ongeldig. Kan niet bepalen welke optie moet afgetrokken worden.");
+            }
+
+            return (int)$voucher->$column;
+        });
+
+        // Step 2: Determine how much we need to reduce
+        $reductionAmount = $totalOptionX - $restKortingBeurten;
+        if ($reductionAmount < 0) {
+            abort(403, 'Voor de één of de andere reden heb je nu minder beurten over dan voorheen de betaling! Dit zou absoluut niet mogen kunnen. Wilt u aub contact opnemen met gustave.curtil@tutanota.com, dan bekijken we samen hoe we dit kunnen oplossen');
+        }
+
+        if ($reductionAmount === 0) {
+            // No reduction needed, total is already less than or equal to restKortingAbeurten
+            return;
+        }
+
+        // Step 3: Reduce option1's starting from the oldest
+        foreach ($vouchers as $voucher) {
+            $column = $optionColumn[$voucher->name];
+            $optionAmount = (int)$voucher->$column;
+
+            if ($reductionAmount < 0) {
+                abort(403, 'VOor de één of de andere reden heb je nu minder beurten over dan voorheen de betaling! Dit zou absoluut niet mogen kunnen. Wilt u aub contact opnemen met gustave.curtil@tutanota.com, dan bekijken we samen hoe we dit kunnen oplossen');
+            }
+
+            if ($reductionAmount === 0) {
+                break; // done reducing
+            }
+
+            if ($optionAmount >= $reductionAmount) {
+                // Reduce this voucher partially
+                $voucher->$column = $optionAmount - $reductionAmount;
+                $voucher->save();
+                $reductionAmount = 0;
+                break;
+            } else {
+                // Deplete this voucher completely
+                $voucher->$column = 0;
+                $voucher->save();
+                $reductionAmount -= $optionAmount;
+            }
+        }
+    }
+
+
+
+
     // public function success(Request $request)
     // {
     //     $paymentIntentId = $request->query('payment_intent');

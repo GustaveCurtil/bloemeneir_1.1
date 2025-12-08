@@ -11,7 +11,7 @@
 
     @yield('links')
 
-    <title>Overzicht Bloemenier ❀</title>
+    <title>Overzicht ❀ @yield('title')</title>
 </head>
 
 <body>
@@ -19,9 +19,13 @@
         <div>
             <h1>Overzicht Bloemenier ❀</h1>
             @auth
-            <a href="">Bla</a> ✿
-            <a>blabla</a> ✿
-            <a href="">blablabla</a> ✿
+            <a href="{{ route('overzicht') }}" class="{{ request()->routeIs('overzicht') ? 'actief' : '' }}">overzicht</a> ✿
+            <a href="{{ route('bestellingen') }}" class="{{ request()->routeIs('bestellingen') ? 'actief' : '' }}">bestellingen</a> ✿
+            <a href="{{ route('bonnen') }}" class="{{ request()->routeIs('bonnen') ? 'actief' : '' }}">bonnen</a> ✿
+            <a href="{{ route('kaarten') }}" class="{{ request()->routeIs('kaarten') ? 'actief' : '' }}">kaarten</a> ✿
+            <a href="{{ route('klanten') }}" class="{{ request()->routeIs('klanten') ? 'actief' : '' }}">klanten</a> ✿
+            <a href="{{ route('afhaalmomenten') }}" class="{{ request()->routeIs('afhaalmomenten') ? 'actief' : '' }}">afhaalmomenten</a> ✿
+            <a href="{{ route('development') }}" class="{{ request()->routeIs('development') ? 'actief' : '' }}">development</a> ✿
             @endauth
         </div>
         
