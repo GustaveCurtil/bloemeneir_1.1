@@ -1,5 +1,7 @@
 @extends('_layout')
 
+@section('title', 'afrekenen')
+
 @section('links')
 <script src="{{asset('/js/afrekenen2.js')}}" defer></script>
 @endsection
@@ -173,5 +175,7 @@
     // @foreach ($giftCards as $card)
     //     amountGift += {{$card->amount}};
     // @endforeach
+
+    localStorage.setItem('huidigBestelPad', window.location.href);
 </script>
 @endsection

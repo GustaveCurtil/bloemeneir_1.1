@@ -16,6 +16,6 @@
 </main>
 
 <script>
-    localStorage.clear();
+    resetLocalStorage()
 </script>
 @endsection

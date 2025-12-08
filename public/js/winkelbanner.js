@@ -27,8 +27,6 @@ document.addEventListener('DOMContentLoaded', () => {
     if (winkelmandje) {
         updateWinkelmandje();
     }
-
-
 })
 
 
@@ -89,7 +87,8 @@ function updateWinkelmandje() {
 }
 
 function resetWinkelwagen() {
-    localStorage.clear();
+    resetLocalStorage()
+    berekenTotaal()
     setActiveDate()
     updateMandjes()
     updateWinkelmandje()

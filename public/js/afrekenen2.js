@@ -256,3 +256,5 @@ setValue("cadeau", getNumber("cadeau"));
 setValue("day", localStorage.getItem('afhaalmoment'));
 setValue("totaal", newTotal);
 
+// KLANTENGEGEVENS OPSLAAN IN LOCALSTORAGE
+

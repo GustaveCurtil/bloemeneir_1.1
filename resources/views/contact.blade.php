@@ -1,6 +1,6 @@
 @extends('_layout')
 
-@section('title', 'informatie')
+@section('title', 'contact')
 
 @section('links')
 <script src="{{asset('/js/omhoog.js')}}" defer></script>
@@ -13,10 +13,10 @@
 
     <main>
       <section id="contact">
-        <h2 style="text-align: center">Algemene afhaalmomenten</h2>
+        <h2 style="text-align: center">Afhaalmomenten</h2>
         <p>Vrijdag tussen 15u en 19u</p>
         <p>Zaterdag tussen 10u en 13u</p>
-        <p style="font-style: italic; padding-top:var(--gap-small); font-size: 0.9rem;">Te bestellen vòòr woensdag 18u</p>
+        <p style="font-style: italic; padding-top:var(--gap-small); font-size: 0.9rem;">Te bestellen vóór woensdag 18u</p>
       </section>
         <section id="contact">
           <h2 style="text-align: center">Kessel-Lo</h2>

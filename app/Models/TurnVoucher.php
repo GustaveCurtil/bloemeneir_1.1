@@ -13,6 +13,10 @@ class TurnVoucher extends Model
         'option1',
         'option2',
         'option3',
+        'option1_original',
+        'option2_original',
+        'option3_original',
+        'valid_date',
     ];
 
     protected $appends = ['valid_till'];
@@ -25,5 +29,15 @@ class TurnVoucher extends Model
             ->addDay()
             ->endOfDay()
             ->format('d/m/Y');
+    }
+
+    public function isPayed(): bool
+    {
+        // If no order is linked, consider it "already paid"
+        if (!$this->order) {
+            return true;
+        }
+
+        return $this->order->payed;
     }
 }

@@ -1,6 +1,6 @@
 @extends('_layout')
 
-@section('title', 'bestellen')
+@section('title', 'winkel')
 
 @section('links')
 <script src="{{asset('/js/winkelbanner.js')}}" defer></script>
@@ -127,25 +127,14 @@
             
             <div>
                 <div>
-                    <h3 style="text-align: center">Over het algemeen</h3>
-                    <p style="font-style: italic; font-size: 0.9rem;">Te bestellen vòòr woensdag 18u</p>
-                    <p>Vrijdag tussen 15u en 19u<br>
-                        Zaterdag tussen 10u en 13u</p>
-                        <br>
-                </div>
-                <div>
-                    <h3 style="text-align: center">Uitzonderlijke momenten</h3>
-                    <p>Het weekend van 12 en 13 december<br>werken we ten voordele van<br>de Warmste Week</p>
+                    <p>Het weekend van 12 en 13 december<br>werken we ten voordele van<br>🔥 de Warmste Week 🔥</p>
+                    <br>
+                    <p>Extra openingsdagen tijdens<br>❄ de kerstperiode ❄</p>
                     <div class="data">
                         <div class="group">
                             <div data-datum="2025-12-12"><span>🔥 <span>vr 12 december</span></span><span>15u tot 19u</span></div>
                             <div data-datum="2025-12-13"><span>🔥 <span>za 13 december</span></span><span>10u tot 13u</span></div>                   
                         </div>
-
-                    </div>
-                    <br>
-                    <p>Extra openingsdagen tijdens<br>❄ de kerstperiode ❄</p>
-                    <div class="data">
                         <div class="group">
                             <div data-datum="2025-12-23"><span><span>di 23 december</span></span><span>15u tot 19u</span></div>
                             <div data-datum="2025-12-24"><span><span>wo 24 december</span></span><span>10u tot 13u</span></div>
@@ -165,4 +154,7 @@
             </div>
             
         </section>
+    <script>
+    localStorage.setItem('huidigBestelPad', window.location.href);
+</script>
 @endsection

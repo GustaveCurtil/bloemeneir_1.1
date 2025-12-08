@@ -13,11 +13,11 @@ return new class extends Migration
     {
         Schema::create('dates', function (Blueprint $table) {
             $table->id();
-            $table->date('last_order_date')->nullable();
-            $table->time('last_order_time')->nullable();
+            $table->date('last_order_date');
+            $table->time('last_order_time')->default('18:00:00');
             $table->date('takeaway_date');
-            $table->time('takeaway_start_time')->nullable();
-            $table->time('takeaway_end_time')->nullable();
+            $table->time('takeaway_start_time');
+            $table->time('takeaway_end_time');
             $table->boolean('is_public')->default(false);
             $table->string('emoji')->nullable();
             $table->timestamps();

@@ -1,6 +1,6 @@
 @extends('_layout')
 
-@section('title', '')
+@section('title', 'over ons')
 
 @section('links')
 <script src="{{asset('/js/omhoog.js')}}" defer></script>

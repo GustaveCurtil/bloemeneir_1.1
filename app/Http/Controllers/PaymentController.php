@@ -114,6 +114,11 @@ class PaymentController extends Controller
 
         $client = Client::find($clientId);
         $order = Order::find($orderId);
+
+        $giftvoucher = $order->giftVoucher;
+        $turnCardsA = $order->schattigeVouchers;
+        $turnCardsB = $order->charmanteVouchers;
+        $turnCardsC = $order->magnifiekeVouchers;
         
         //1.bekijk alle boeketten
 
@@ -126,7 +131,7 @@ class PaymentController extends Controller
 
         //5.bekijk alle oude cadeaubonnne en bereken hoevel er overblijven
 
-
+        dd($turnCardsC);
 
         $orderDate = Carbon::parse($order->day);
         Carbon::setLocale('nl');

@@ -18,5 +18,15 @@ class GiftVoucher extends Model
     public function order()
     {
         return $this->belongsTo(Order::class);
-    }       
+    } 
+
+    public function isPayed(): bool
+    {
+        // If no order is linked, consider it "already paid"
+        if (!$this->order) {
+            return true;
+        }
+
+        return $this->order->payed;
+    }      
 }

@@ -25,10 +25,22 @@ class VoucherController extends Controller
         $giftVoucher = GiftVoucher::where('code', $code)->first();
         $turnVoucher = TurnVoucher::where('code', $code)->first();
 
-        // ❌ No matching vouchers
+        // ❌ vouchers bestaan niet
         if (!$giftVoucher && !$turnVoucher) {
             return redirect()->route('afrekenen')
                 ->withErrors(['code' => "De code '{$code}' is ongeldig."])
+                ->withInput();
+        }
+
+        // ❌ De codes zijn nog niet betaald geweest
+        if ($giftVoucher && !$giftVoucher->isPayed()) {
+            return redirect()->route('afrekenen')
+                ->withErrors(['code' => "De code '{$code}' is nog niet betaald geweest."])
+                ->withInput();
+        }
+        if ($turnVoucher && !$turnVoucher->isPayed()) {
+            return redirect()->route('afrekenen')
+                ->withErrors(['code' => "De code '{$code}' is nog niet betaald geweest."])
                 ->withInput();
         }
 

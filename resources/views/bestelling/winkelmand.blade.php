@@ -147,5 +147,8 @@
         </form>
 </main>
 
+<script>
+    localStorage.setItem('huidigBestelPad', window.location.href);
+</script>
 
 @endsection

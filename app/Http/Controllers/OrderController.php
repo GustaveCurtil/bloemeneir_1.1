@@ -87,7 +87,7 @@ class OrderController extends Controller
         $takeaway_end_time = $date->takeaway_end_time;
 
 
-        // STAP 2: ZOEK OF MAAK KLANT AAN
+        // STAP 3: ZOEK OF MAAK KLANT AAN
 
         $clientId = $request->session()->get('client_id');
 
@@ -135,7 +135,7 @@ class OrderController extends Controller
         $request->session()->put('client_id', $client->id);
 
 
-        // 2. check voor bestelling in session 
+        // STAP 4: ZOEK OF MAAK BESTELLING AAN
         // (die ook gelinkt moet zijn met de huidige client, anders verwijder bestelling en maak nieuwe aan)
         
         $orderId = $request->session()->get('order_id');
@@ -183,62 +183,25 @@ class OrderController extends Controller
         $request->session()->put('order_id', $order->id);
 
 
-        // maak of update een NIEUW cadeaubon of verwijder huidige cadeaubon als de waarde 0 is geworden. (functie terugtevinden in Order Model)
+        // STAP 5: maak of update een NIEUW cadeaubon 
+        
         $giftCard = $order->setGiftVoucher($validated['cadeau']);
 
-        //MAG WEG
 
-        // if ((int)$validated['cadeau'] === 0) {
-        //     // Remove the gift voucher if it exists
-        //     $giftVoucher = $order->giftVoucher;
-        //     if ($giftVoucher) {
-        //         $giftVoucher->delete();
-        //     }
-        // } else {
-        //     // Either update existing voucher or create a new one
-        //     $giftVoucher = $order->giftVoucher;
+        // STAP 5: maak of update NIEUWE 5-BEURTENKAARTEN
 
-        //     if ($giftVoucher) {
-        //         // Update existing voucher
-        //         $giftVoucher->update([
-        //             'amount' => $validated['cadeau'],
-        //             'original_amount' => $validated['cadeau'], // if needed
-        //             'valid_date' => now()->addMonthsNoOverflow(6)->addDay(),
-        //         ]);
-        //     } else {
-        //         // Create new voucher
-        //         GiftVoucher::create([
-        //             'order_id' => $order->id,
-        //             'amount' => $validated['cadeau'],
-        //             'original_amount' => $validated['cadeau'],
-        //             'code' => $this->genereerGiftCode(),
-        //             'valid_date' => now()->addMonthsNoOverflow(6)->addDay(),
-        //         ]);
-        //     }
-        // }
+        $turnCardsA = $order->setTurnVouchers($validated['kaart_A'], 'schattig');
+        $turnCardsB = $order->setTurnVouchers($validated['kaart_B'], 'charmant');
+        $turnCardsC = $order->setTurnVouchers($validated['kaart_C'], 'magnifiek');
 
 
-        // maak of update de NIEUWE kaarten
-
-        // if ($validated['kaart_A'] === 0 && $validated['kaart_B'] === 0 && $validated['kaart_C'] === 0) {
-        //     $turnVouchers = $order->turnVouchers;
-        //     DELETE THE turnVOUCHERS
-        // } else {
-        //     $turnVouchers = $order->turnVouchers;
-        //     CHECK IF $validated['kaart_A'] === $turnVouchers with the name 'schattig';
-        //     CHECK IF $validated['kaart_B'] === $turnVouchers with the name 'charmant';
-        //     CHECK IF $validated['kaart_C'] === $turnVouchers with the name 'magnifiek';
-        //     IF IT IS ALL GOOD, PURSUE, 
-
-        //     OTHERWHISE DELETE ALL THE $giftVouchers FROM DATABASE and just create new ones...
-        //         CREATING A NEW 
-        // }
-
-        // $giftVouchers = $order->giftVouchers;
-        // $turnVouchers = $order->turnVouchers;
+        // STAP 6: METADATA PREPAREREN;
+        
+        $turnCardIds = $turnCards->pluck('id')->toArray();
+        $giftCardIds = $giftCards->pluck('id')->toArray();
 
 
-        // 3. en hop naar stripe
+        // STAP 7: HOP NAAR STRIPE
 
         Stripe::setApiKey(env('STRIPE_SECRET'));
 
@@ -264,8 +227,10 @@ class OrderController extends Controller
             ]],
 
             'metadata' => [
-                'clientId' => $client->id,
-                'orderId' => $order->id,
+                'clientId'      => $client->id,
+                'orderId'       => $order->id,
+                'turnCardIds'   => $turnCardIds,
+                'giftCardIds'   => $giftCardIds
             ],
 
             'customer' => $customer->id,

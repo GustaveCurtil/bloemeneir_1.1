@@ -10,11 +10,15 @@
             <table>
                 <thead>
                     <th>naam</th>
-                    <th>nr</th>
                     <th>mail</th>
-                    <th>optie1</th>
-                    <th>optie2</th>
-                    <th>optie3</th>
+                    <th>❀ sch.</th>
+                    <th>❀ cha.</th>
+                    <th>❀ mag.</th>
+                    <th>▰ sch.</th>
+                    <th>▰ cha.</th>
+                    <th>▰ mag.</th>
+                    <th>▩ bon</th>
+                    <th>codes</th>
                     <th>dag</th>
                     <th>betaald</th>
                 </thead>
@@ -22,11 +26,15 @@
                     @foreach ($bestellingen as $bestelling)
                     <tr>
                         <td>{{$bestelling->client->first_name}}</td>
-                        <td>{{$bestelling->client->phone}}</td>
                         <td>{{$bestelling->client->email}}</td>
                         <td>{{$bestelling->option1}}</td>
                         <td>{{$bestelling->option2}}</td>
                         <td>{{$bestelling->option3}}</td>
+                        <td>{{$bestelling->schattigeVouchers->count()}}</td>
+                        <td>{{$bestelling->charmanteVouchers->count()}}</td>
+                        <td>{{$bestelling->magnifiekeVouchers->count()}}</td>
+                        <td>{{$bestelling->giftVoucher?->amount ?? "" }}</td>
+                        <td>3</td>
                         <td>{{$bestelling->day}}</td>
                         <td>
                             @if ($bestelling->payed)

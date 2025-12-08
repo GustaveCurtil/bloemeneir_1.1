@@ -21,6 +21,7 @@
     @if (!request()->routeIs('winkel') && !request()->routeIs('shopping-basket') && !request()->routeIs('afrekenen'))
     <script src="{{asset('/js/bestellingenFlow.js')}}" defer></script>
     @endif
+    <script src="{{asset('/js/resetLocalStorage.js')}}" defer></script>
     @yield('links')
 
     <title>Bloemenier ❀ @yield('title')</title>
@@ -40,7 +41,7 @@
         </div>
         <nav>
             <a href="{{ route('over') }}" class="{{ request()->routeIs('over') ? 'actief' : '' }}">over ons</a>
-            <a id="bestel-flow" href="{{ route('winkel') }}" class="{{ request()->routeIs('winkel') || request()->routeIs('shopping-basket') || request()->routeIs('afrekenen') ? 'actief' : '' }}">winkel</a>
+            <a id="bestel-flow" href="{{ route('winkel') }}" class="{{ request()->routeIs('winkel') || request()->routeIs('shopping-basket') || request()->routeIs('afrekenen') ? 'actief' : '' }}">bestel hier</a>
             <a href="{{ route('contact') }}" class="{{ request()->routeIs('contact') ? 'actief' : '' }}">contact</a>
         </nav>
     </header>
