@@ -1,5 +1,10 @@
 @extends('_layout')
 
+@section('links')
+<script src="{{asset('/js/winkelbanner.js')}}" defer></script>
+{{-- <script src="{{asset('/js/resetLocalStorage.js')}}" defer></script> --}}
+@endsection
+
 @section('title', 'Betaling')
 
 @section('main')
@@ -13,9 +18,29 @@
         <br>
         <p>Tot binnenkort, <span style="text-transform: capitalize;">{{$client->first_name}}</span>!</p>
     </section>
+    <section>
+        <h2>TEST-gegevens</h2>
+        <h3>Boeketten</h3>
+        <p>{{$order}}</p>
+        <br>
+        <h3>Nieuw aangekochte bonnen en kaarten</h3>
+        <p>{{$order->giftVoucher}}</p>
+        <p>{{$order->schattigeVouchers}}</p>
+        <p>{{$order->charmanteVouchers}}</p>
+        <p>{{$order->magnigiekeVouchers}}</p>
+        <br>
+        <h3>Bestaande ingevoerde bonnen en kaarten</h3>
+        <p>{{$order->giftVoucher}}</p>
+        <p>{{$order->schattigeVouchers}}</p>
+        <p>{{$order->charmanteVouchers}}</p>
+        <p>{{$order->magnigiekeVouchers}}</p>
+        
+    </section>
 </main>
 
 <script>
-    resetLocalStorage()
+    document.addEventListener('DOMContentLoaded', () => {
+        resetLocalStorage()
+    })
 </script>
 @endsection

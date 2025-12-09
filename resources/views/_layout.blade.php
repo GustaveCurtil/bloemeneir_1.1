@@ -18,10 +18,10 @@
     <link rel="stylesheet" href="{{ asset('css/default.css') }}">
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
     <link rel="shortcut icon" href="{{ asset('media/logo.png') }}" type="image/x-icon">
-    @if (!request()->routeIs('winkel') && !request()->routeIs('shopping-basket') && !request()->routeIs('afrekenen'))
+    <script src="{{asset('/js/resetLocalStorage.js')}}" defer></script>
+    @if (!request()->routeIs('winkel') && !request()->routeIs('shopping-basket') && !request()->routeIs('afrekenen') && !request()->routeIs('succes'))
     <script src="{{asset('/js/bestellingenFlow.js')}}" defer></script>
     @endif
-    <script src="{{asset('/js/resetLocalStorage.js')}}" defer></script>
     @yield('links')
 
     <title>Bloemenier ❀ @yield('title')</title>

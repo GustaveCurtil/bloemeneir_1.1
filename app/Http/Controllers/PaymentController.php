@@ -112,23 +112,41 @@ class PaymentController extends Controller
         }
 
         $client = Client::find($clientId);
-        $order = Order::find($orderId);
+        $order = Order::with('client')->findOrFail($orderId);
 
+
+        // STAP 2: CHECK EERST OF ORDER AL IS BETAALD GEWEEST (incl mail gestuurd dan)
+
+        $orderDate = Carbon::parse($order->day);
+        Carbon::setLocale('nl');
+        $weekday = $orderDate->translatedFormat('l'); // "vrijdag", "maandag", etc.
+        $formattedDate = $orderDate->translatedFormat('d F'); // "26 september"
+
+        if ($order->payed) {
+            return view('bestelling.succes', [
+                'paymentIntent' => $paymentIntent,
+                'status' => $paymentIntent->status,
+                'client' => $client,
+                'dag' => $weekday,
+                'datum' => $formattedDate,
+                'order' => $order,
+            ]);
+        }
 
         // STAP 2: BESTAANDE 5-BEURTENKAARTEN UPDATEN
         
         $turnVoucherIds = $metadata['turnVoucherIds'];
         $turnVoucherIdsArray = array_map('intval', explode(',', $turnVoucherIds));
 
-        $schattigVouchers = TurnVoucher::whereIn('id', $turnVoucherIdsArray)
+        $schattigOldVouchers = TurnVoucher::whereIn('id', $turnVoucherIdsArray)
         ->where('name', 'schattig')
         ->orderBy('valid_date', 'asc') // zodat eerst de kaarten worden opgebruikt die nog het minst lang geldig zijn.
         ->get();
-        $charmantVouchers = TurnVoucher::whereIn('id', $turnVoucherIdsArray)
+        $charmantOldVouchers = TurnVoucher::whereIn('id', $turnVoucherIdsArray)
         ->where('name', 'charmant')
         ->orderBy('valid_date', 'asc')
         ->get();
-        $magnifiekVouchers = TurnVoucher::whereIn('id', $turnVoucherIdsArray)
+        $magnifiekOldVouchers = TurnVoucher::whereIn('id', $turnVoucherIdsArray)
         ->where('name', 'magnifiek')
         ->orderBy('valid_date', 'asc')
         ->get();
@@ -137,43 +155,70 @@ class PaymentController extends Controller
         $restKortingBbeurten = (int) $metadata['restKortingBbeurten'];
         $restKortingCbeurten = (int) $metadata['restKortingCbeurten'];
 
-        $this->deductFromTurnVoucher($schattigVouchers, $restKortingAbeurten);
-        $this->deductFromTurnVoucher($charmantVouchers, $restKortingBbeurten);
-        $this->deductFromTurnVoucher($magnifiekVouchers, $restKortingCbeurten);
+        $this->deductFromTurnVoucher($schattigOldVouchers, $restKortingAbeurten);
+        $this->deductFromTurnVoucher($charmantOldVouchers, $restKortingBbeurten);
+        $this->deductFromTurnVoucher($magnifiekOldVouchers, $restKortingCbeurten);
 
 
         // STAP 3: NIEUWE 5-BEURTENKAARTEN UPDATEN
 
-        $schattigNewVouchers = 
-        dd($metadata);
+        $schattigNewVoucherIds = $metadata['turnCardAIds'];
+        $schattigNewVoucherIdsArray = array_map('intval', explode(',', $schattigNewVoucherIds));
 
-        $giftvoucher = $order->giftVoucher;
+        $charmantNewVoucherIds = $metadata['turnCardAIds'];
+        $charmantNewVoucherIdsArray = array_map('intval', explode(',', $charmantNewVoucherIds));
 
-        $turnCardsA = $order->schattigeVouchers;
-        $turnCardsB = $order->charmanteVouchers;
-        $turnCardsC = $order->magnifiekeVouchers;
+        $magnifiekNewVoucherIds = $metadata['turnCardAIds'];
+        $magnifiekNewVoucherIdsArray = array_map('intval', explode(',', $magnifiekNewVoucherIds));
 
-        dd($metadata);
+        // dd($schattigNewVoucherIds);
 
-        foreach ($turnCardsA as $turnCard) {
-            # code...
-        }
+        $schattigNewVouchers = TurnVoucher::whereIn('id', $schattigNewVoucherIdsArray)
+        ->where('name', 'schattig')
+        ->orderBy('valid_date', 'asc')
+        ->get();
+        $charmantNewVouchers = TurnVoucher::whereIn('id', $charmantNewVoucherIdsArray)
+        ->where('name', 'charmant')
+        ->orderBy('valid_date', 'asc')
+        ->get();
+        $magnifiekNewVouchers = TurnVoucher::whereIn('id', $magnifiekNewVoucherIdsArray)
+        ->where('name', 'magnifiek')
+        ->orderBy('valid_date', 'asc')
+        ->get();
 
-        $orderDate = Carbon::parse($order->day);
-        Carbon::setLocale('nl');
-        $weekday = $orderDate->translatedFormat('l'); // "vrijdag", "maandag", etc.
-        $formattedDate = $orderDate->translatedFormat('d F'); // "26 september"
+        // dd($schattigNewVouchers);
 
+        $restNewKortingAbeurten = (int) $metadata['restKaartAbeurten'];
+        $restNewKortingBbeurten = (int) $metadata['restKaartBbeurten'];
+        $restNewKortingCbeurten = (int) $metadata['restKaartCbeurten'];
+
+        $this->deductFromTurnVoucher($schattigNewVouchers, $restNewKortingAbeurten);
+        $this->deductFromTurnVoucher($charmantNewVouchers, $restNewKortingBbeurten);
+        $this->deductFromTurnVoucher($magnifiekNewVouchers, $restNewKortingCbeurten);
+        
+
+        //STAP 5: KEUR BETALING GOED EN STUUR MAIL
+
+        $order->payed = true;
+        $order->save();
+
+        Mail::to($order->client->email)
+            ->queue(
+                (new OrderConfirmed($order, $weekday, $formattedDate))
+                    ->onQueue('confirmation_emails')
+            );
+        
         return view('bestelling.succes', [
             'paymentIntent' => $paymentIntent,
             'status' => $paymentIntent->status,
             'client' => $client,
             'dag' => $weekday,
-            'datum' => $formattedDate
+            'datum' => $formattedDate,
+            'order' => $order,
         ]);
     }
     
-    public function deductFromTurnVoucher($vouchers , $restKortingBeurten) {
+    public function deductFromTurnVoucher($vouchers , $restBeurten) {
 
         $optionColumn = [
             'schattig'   => 'option1',
@@ -193,7 +238,7 @@ class PaymentController extends Controller
         });
 
         // Step 2: Determine how much we need to reduce
-        $reductionAmount = $totalOptionX - $restKortingBeurten;
+        $reductionAmount = $totalOptionX - $restBeurten;
         if ($reductionAmount < 0) {
             abort(403, 'Voor de één of de andere reden heb je nu minder beurten over dan voorheen de betaling! Dit zou absoluut niet mogen kunnen. Wilt u aub contact opnemen met gustave.curtil@tutanota.com, dan bekijken we samen hoe we dit kunnen oplossen');
         }

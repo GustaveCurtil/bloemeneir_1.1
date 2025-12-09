@@ -1,3 +1,4 @@
+
 function resetLocalStorage() {
     [
         'afhaalmoment', 
@@ -12,5 +13,6 @@ function resetLocalStorage() {
         'inzetten_A',
         'inzetten_B',
         'inzetten_C',
+        'huidigBestelPad'
     ].forEach(key => localStorage.removeItem(key));
 }   
