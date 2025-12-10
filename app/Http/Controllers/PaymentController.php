@@ -6,6 +6,7 @@ use Stripe\Stripe;
 use App\Models\Order;
 use App\Models\Client;
 use Stripe\PaymentIntent;
+use App\Models\GiftVoucher;
 use App\Models\TurnVoucher;
 use App\Mail\OrderConfirmed;
 use Illuminate\Http\Request;
@@ -15,70 +16,6 @@ use Illuminate\Support\Facades\Mail;
 
 class PaymentController extends Controller
 {
-    protected $products = [
-        'option1' => ['name' => 'Schattige boeketten', 'price' => 2900], 
-        'option2' => ['name' => 'Charmante boeketten', 'price' => 3900],
-        'option3' => ['name' => 'Magnifieke boeketten', 'price' => 4900],
-    ];
-
-
-    public function processOrder(Request $request)
-    {
-        $quantities = [
-            'option1' => (int) $request->input('option1', 0),
-            'option2' => (int) $request->input('option2', 0),
-            'option3' => (int) $request->input('option3', 0),
-        ];
-
-        $userData = [
-            'first_name' => $request->first_name,
-            'last_name' => $request->last_name,
-            'phone' => $request->phone,
-            'email' => $request->email,
-        ];
-
-        $items = [];
-        $totalAmount = 0;
-
-        foreach ($this->products as $key => $product) {
-            if ($quantities[$key] > 0) {
-                $items[] = [
-                    'name' => $product['name'],
-                    'quantity' => $quantities[$key],
-                    'unit_price' => $product['price'],
-                ];
-                $totalAmount += $product['price'] * $quantities[$key];
-            }
-        }
-
-        if ($totalAmount === 0) {
-            return back()->withErrors('Je moet minstens één boeket kiezen.');
-        }
-
-        Stripe::setApiKey(env('STRIPE_SECRET'));
-
-        $paymentIntent = PaymentIntent::create([
-            'amount' => $totalAmount,
-            'currency' => 'eur',
-            'payment_method_types' => ['bancontact'],
-            'description' => 'Boeket bestelling: ' . implode(', ', array_map(fn($i) => $i['name'].' x'.$i['quantity'], $items)),
-            'metadata' => [
-                'first_name' => $request->input('first_name'),
-                'phone' => $request->input('phone'),
-                'email' => $request->input('email'),
-                'pickup_day' => $request->input('day'),
-            ],
-        ]);
-
-        return view('bestelling.checkout', [
-            'clientSecret' => $paymentIntent->client_secret,
-            'items' => $items,
-            'totalAmount' => $totalAmount,
-            'userData' => $userData,
-        ]);
-
-    }
-
 
     public function success(Request $request)
     {
@@ -114,25 +51,6 @@ class PaymentController extends Controller
         $client = Client::find($clientId);
         $order = Order::find($orderId);
 
-
-        // STAP 2: CHECK EERST OF ORDER AL IS BETAALD GEWEEST (incl mail gestuurd dan)
-
-        $orderDate = Carbon::parse($order->day);
-        Carbon::setLocale('nl');
-        $weekday = $orderDate->translatedFormat('l'); // "vrijdag", "maandag", etc.
-        $formattedDate = $orderDate->translatedFormat('d F'); // "26 september"
-
-        if ($order->payed) {
-            return view('bestelling.succes', [
-                'paymentIntent' => $paymentIntent,
-                'status' => $paymentIntent->status,
-                'client' => $client,
-                'dag' => $weekday,
-                'datum' => $formattedDate,
-                'order' => $order,
-            ]);
-        }
-
         // STAP 2: BESTAANDE 5-BEURTENKAARTEN UPDATEN
         
         $turnVoucherIds = $metadata['turnVoucherIds'];
@@ -150,15 +68,6 @@ class PaymentController extends Controller
         ->where('name', 'magnifiek')
         ->orderBy('valid_date', 'asc')
         ->get();
-
-        $restKortingAbeurten = (int) $metadata['restKortingAbeurten'];
-        $restKortingBbeurten = (int) $metadata['restKortingBbeurten'];
-        $restKortingCbeurten = (int) $metadata['restKortingCbeurten'];
-
-        $this->deductFromTurnVoucher($schattigOldVouchers, $restKortingAbeurten);
-        $this->deductFromTurnVoucher($charmantOldVouchers, $restKortingBbeurten);
-        $this->deductFromTurnVoucher($magnifiekOldVouchers, $restKortingCbeurten);
-
 
         // STAP 3: NIEUWE 5-BEURTENKAARTEN UPDATEN
 
@@ -186,16 +95,90 @@ class PaymentController extends Controller
         ->orderBy('valid_date', 'asc')
         ->get();
 
+        $giftVoucherIds = $metadata['giftVoucherIds'];
+        $giftVoucherIdsArray = array_map('intval', explode(',', $giftVoucherIds));
+        $giftOldVouchers = GiftVoucher::whereIn('id', $giftVoucherIdsArray)
+        ->orderBy('valid_date', 'asc')
+        ->get();
+
+        // STAP 2: CHECK EERST OF ORDER AL IS BETAALD GEWEEST (incl mail gestuurd dan)
+
+        $orderDate = Carbon::parse($order->takeaway_date);
+        Carbon::setLocale('nl');
+        $weekday = $orderDate->translatedFormat('l'); // "vrijdag", "maandag", etc.
+        $formattedDate = $orderDate->translatedFormat('d F'); // "26 september"
+
+        $time_start = Carbon::parse($order->takeaway_start_time);
+
+        if ($time_start->minute === 0) {
+            $formattedStart = $time_start->format('H') . 'u';
+        } else {
+            $formattedStart = $time_start->format('H') . 'u' . $time->format('i');
+        }
+        $time_end = Carbon::parse($order->takeaway_end_time);
+
+        if ($time_end->minute === 0) {
+            $formattedEnd = $time_end->format('H') . 'u';
+        } else {
+            $formattedEnd = $time_end->format('H') . 'u' . $time->format('i');
+        }
+        $uren = $formattedStart . " - " . $formattedEnd;
+
+        if ($order->payed) {
+            return view('bestelling.succes', [
+                'paymentIntent' => $paymentIntent,
+                'status' => $paymentIntent->status,
+                'client' => $client,
+                'dag' => $weekday,
+                'datum' => $formattedDate,
+                'uren' => $uren,
+                'order' => $order,
+                'schattigNewVouchers' => $schattigNewVouchers,
+                'charmantNewVouchers' => $charmantNewVouchers,
+                'magnifiekNewVouchers' => $magnifiekNewVouchers,
+                'schattigOldVouchers' => $schattigOldVouchers,
+                'charmantOldVouchers' => $charmantOldVouchers,
+                'magnifiekOldVouchers' => $magnifiekOldVouchers,
+                'giftNewVoucher' => $order->giftVoucher,
+                'giftOldVouchers' => $giftOldVouchers,
+            ]);
+        }
+
         // dd($schattigNewVouchers);
+        if ($schattigOldVouchers->isNotEmpty()) {
+            $restKortingAbeurten = (int) $metadata['restKortingAbeurten'];
+            $this->deductFromTurnVoucher($schattigOldVouchers, $restKortingAbeurten);
+        }
+        if ($charmantOldVouchers->isNotEmpty()) {
+            $restKortingBbeurten = (int) $metadata['restKortingBbeurten'];
+            $this->deductFromTurnVoucher($charmantOldVouchers, $restKortingBbeurten);
+        }
+        if ($magnifiekOldVouchers->isNotEmpty()) {
+            $restKortingCbeurten = (int) $metadata['restKortingCbeurten'];
+            $this->deductFromTurnVoucher($magnifiekOldVouchers, $restKortingCbeurten);
+        }
 
-        $restNewKortingAbeurten = (int) $metadata['restKaartAbeurten'];
-        $restNewKortingBbeurten = (int) $metadata['restKaartBbeurten'];
-        $restNewKortingCbeurten = (int) $metadata['restKaartCbeurten'];
-
-        $this->deductFromTurnVoucher($schattigNewVouchers, $restNewKortingAbeurten);
-        $this->deductFromTurnVoucher($charmantNewVouchers, $restNewKortingBbeurten);
-        $this->deductFromTurnVoucher($magnifiekNewVouchers, $restNewKortingCbeurten);
+        if ($schattigNewVouchers->isNotEmpty()) {
+            $restNewKortingAbeurten = (int) $metadata['restKaartAbeurten'];
+            $this->deductFromTurnVoucher($schattigNewVouchers, $restNewKortingAbeurten);
+        }
+        if ($charmantNewVouchers->isNotEmpty()) {
+            $restNewKortingBbeurten = (int) $metadata['restKaartBbeurten'];
+            $this->deductFromTurnVoucher($charmantNewVouchers, $restNewKortingBbeurten);
+        }
+        if ($magnifiekNewVouchers->isNotEmpty()) {
+            $restNewKortingCbeurten = (int) $metadata['restKaartCbeurten'];
+            $this->deductFromTurnVoucher($magnifiekNewVouchers, $restNewKortingCbeurten);
+        }
         
+        
+        // STAP 4: BETAANDE CADEAUBONNEN GEBRUIKEN
+
+
+        $restCadeauBon = $metadata['restKortingCadeau'];
+
+        $this->deductFromGiftVoucher($giftVouchers, $restCadeauBon);
+
 
         //STAP 5: KEUR BETALING GOED EN STUUR MAIL
 
@@ -213,6 +196,15 @@ class PaymentController extends Controller
             'dag' => $weekday,
             'datum' => $formattedDate,
             'order' => $order,
+            'schattigNewVouchers' => $schattigNewVouchers,
+            'charmantNewVouchers' => $charmantNewVouchers,
+            'magnifiekNewVouchers' => $magnifiekNewVouchers,
+            'schattigOldVouchers' => $schattigOldVouchers,
+            'charmantOldVouchers' => $charmantOldVouchers,
+            'magnifiekOldVouchers' => $magnifiekOldVouchers,
+            'giftNewVouchers' => $giftVouchers,
+            'giftOldVouchers' => $giftVouchers,
+
         ]);
     }
     
@@ -274,6 +266,114 @@ class PaymentController extends Controller
         }
     }
 
+    public function deductFromGiftVoucher($vouchers, $restBon) {
+
+        // Step 1: Calculate total of all optionX's
+        $totalBonnen = $vouchers->sum('amount');
+
+        // Step 2: Determine how much we need to reduce
+        $reductionAmount = $totalBonnen - $restBon;
+
+        if ($reductionAmount < 0) {
+            abort(403, 'Voor de één of de andere reden heb je nu minder beurten over dan voorheen de betaling! Dit zou absoluut niet mogen kunnen. Wilt u aub contact opnemen met gustave.curtil@tutanota.com, dan bekijken we samen hoe we dit kunnen oplossen');
+        }
+
+        if ($reductionAmount === 0) {
+            // No reduction needed, total is already less than or equal to restKortingAbeurten
+            return;
+        }
+
+        // Step 3: Reduce option1's starting from the oldest
+        foreach ($vouchers as $voucher) {
+
+            $voucherAmount = (int)$voucher->amount;
+
+            if ($reductionAmount < 0) {
+                abort(403, 'VOor de één of de andere reden heb je nu minder beurten over dan voorheen de betaling! Dit zou absoluut niet mogen kunnen. Wilt u aub contact opnemen met gustave.curtil@tutanota.com, dan bekijken we samen hoe we dit kunnen oplossen');
+            }
+
+            if ($reductionAmount === 0) {
+                break; // done reducing
+            }
+
+            if ($voucherAmount >= $reductionAmount) {
+                // Reduce this voucher partially
+                $voucher->amount = $voucherAmount - $reductionAmount;
+                $voucher->save();
+                $reductionAmount = 0;
+                break;
+            } else {
+                // Deplete this voucher completely
+                $voucher->amount = 0;
+                $voucher->save();
+                $reductionAmount -= $voucherAmount;
+            }
+        }
+    }
+
+    // protected $products = [
+    //     'option1' => ['name' => 'Schattige boeketten', 'price' => 2900], 
+    //     'option2' => ['name' => 'Charmante boeketten', 'price' => 3900],
+    //     'option3' => ['name' => 'Magnifieke boeketten', 'price' => 4900],
+    // ];
+
+
+    // public function processOrder(Request $request)
+    // {
+    //     $quantities = [
+    //         'option1' => (int) $request->input('option1', 0),
+    //         'option2' => (int) $request->input('option2', 0),
+    //         'option3' => (int) $request->input('option3', 0),
+    //     ];
+
+    //     $userData = [
+    //         'first_name' => $request->first_name,
+    //         'last_name' => $request->last_name,
+    //         'phone' => $request->phone,
+    //         'email' => $request->email,
+    //     ];
+
+    //     $items = [];
+    //     $totalAmount = 0;
+
+    //     foreach ($this->products as $key => $product) {
+    //         if ($quantities[$key] > 0) {
+    //             $items[] = [
+    //                 'name' => $product['name'],
+    //                 'quantity' => $quantities[$key],
+    //                 'unit_price' => $product['price'],
+    //             ];
+    //             $totalAmount += $product['price'] * $quantities[$key];
+    //         }
+    //     }
+
+    //     if ($totalAmount === 0) {
+    //         return back()->withErrors('Je moet minstens één boeket kiezen.');
+    //     }
+
+    //     Stripe::setApiKey(env('STRIPE_SECRET'));
+
+    //     $paymentIntent = PaymentIntent::create([
+    //         'amount' => $totalAmount,
+    //         'currency' => 'eur',
+    //         'payment_method_types' => ['bancontact'],
+    //         'description' => 'Boeket bestelling: ' . implode(', ', array_map(fn($i) => $i['name'].' x'.$i['quantity'], $items)),
+    //         'metadata' => [
+    //             'first_name' => $request->input('first_name'),
+    //             'phone' => $request->input('phone'),
+    //             'email' => $request->input('email'),
+    //             'pickup_day' => $request->input('day'),
+    //         ],
+    //     ]);
+
+    //     return view('bestelling.checkout', [
+    //         'clientSecret' => $paymentIntent->client_secret,
+    //         'items' => $items,
+    //         'totalAmount' => $totalAmount,
+    //         'userData' => $userData,
+    //     ]);
+
+    // }
 
 
 
