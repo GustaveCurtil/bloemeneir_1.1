@@ -142,11 +142,8 @@ class OrderController extends Controller
         $order = $orderId ? Order::find($orderId) : null;
 
         // Check bestaande order
-        if ($order) {
-            if ($order->payed) {
-                abort(403, 'Bestelling al betaald. Wil je aub contact opnemen met gustave.curtil@tutanota.com met een printscreen van het voorgaande scherm aub?');
-            }
-
+        if ($order && !$order->payed) {
+ 
             // Update bestaande order
             $order->update([
                 'client_id'             => $client->id,
@@ -186,13 +183,15 @@ class OrderController extends Controller
         $giftCard = $order->setGiftVoucher($validated['cadeau']);
 
 
-        // STAP 5: maak of update NIEUWE 5-BEURTENKAARTEN
+        // STAP 6: maak of update NIEUWE 5-BEURTENKAARTEN
 
         $turnCardsA = $order->setTurnVouchers($validated['kaart_A'], 'schattig');
         $turnCardsB = $order->setTurnVouchers($validated['kaart_B'], 'charmant');
         $turnCardsC = $order->setTurnVouchers($validated['kaart_C'], 'magnifiek');
 
-        // STAP 6: METADATA PREPAREREN;
+
+        // STAP 7: METADATA PREPAREREN;
+
         $turnCardAIds = $turnCardsA->pluck('id')->toArray();
         $turnCardBIds = $turnCardsB->pluck('id')->toArray();
         $turnCardCIds = $turnCardsC->pluck('id')->toArray();
@@ -201,9 +200,9 @@ class OrderController extends Controller
         $giftCardIds = $giftCards->pluck('id')->toArray();
 
 
-        // STAP 7: HOP NAAR STRIPE
+        // STAP 8: HOP NAAR STRIPE
 
-        Stripe::setApiKey(env('STRIPE_SECRET'));
+        \Stripe\Stripe::setApiKey(config('services.stripe.secret'));
 
         $customer = \Stripe\Customer::create([
             'name' => $validated['first_name'] . " " . $validated['last_name'],
@@ -212,7 +211,7 @@ class OrderController extends Controller
 
         // Create Stripe Checkout Session
         $session = Session::create([
-            'payment_method_types' => ['bancontact', 'card'], // Bancontact enabled
+            'payment_method_types' => ['bancontact'], // Bancontact enabled
             'mode' => 'payment',
 
             'line_items' => [[

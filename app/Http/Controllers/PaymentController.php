@@ -112,7 +112,7 @@ class PaymentController extends Controller
         }
 
         $client = Client::find($clientId);
-        $order = Order::with('client')->findOrFail($orderId);
+        $order = Order::find($orderId);
 
 
         // STAP 2: CHECK EERST OF ORDER AL IS BETAALD GEWEEST (incl mail gestuurd dan)
@@ -202,11 +202,9 @@ class PaymentController extends Controller
         $order->payed = true;
         $order->save();
 
-        Mail::to($order->client->email)
-            ->queue(
-                (new OrderConfirmed($order, $weekday, $formattedDate))
-                    ->onQueue('confirmation_emails')
-            );
+        Mail::to($order->client->email)->queue(new OrderConfirmed($order, $weekday, $formattedDate));
+
+        $request->session()->forget('order_id');
         
         return view('bestelling.succes', [
             'paymentIntent' => $paymentIntent,

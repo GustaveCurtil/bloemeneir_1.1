@@ -6,14 +6,14 @@
     <li>Charmant boeket x {{ $order->option2 }}</li>
     <li>Magnifiek boeket x {{ $order->option3 }}</li>
 </ul>
-<p>We verwachten jou <b>{{$weekday}} {{$formattedDate}}
+{{-- <p>We verwachten jou <b>{{$weekday}} {{$formattedDate}}
     @if ($weekday === 'vrijdag')
     (tussen 15u en 19u)
     @else
     (tussen 10u en 13u)
     @endif
     </b>
-</p>
+</p> --}}
 
 <p>Fleurige groeten, <br>
 Anne-Sophie & Petra</p>
