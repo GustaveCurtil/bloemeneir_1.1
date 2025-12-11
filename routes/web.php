@@ -1,5 +1,9 @@
 <?php
 
+use App\Models\Order;
+use App\Mail\OrderConfirmed;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\LoginController;
@@ -15,6 +19,7 @@ use App\Http\Controllers\DashboardController;
 // WAT DE KLANT ZIEN
 Route::get('/', function () {
     return view('over');
+
 })->name('over');
 
 Route::get('/winkel', function () {

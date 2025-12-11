@@ -244,6 +244,9 @@ class OrderController extends Controller
                 'restKortingBbeurten' => $orderInfo['restKortingBbeurten'],
                 'restKortingCbeurten' => $orderInfo['restKortingCbeurten'],
                 'restKortingCadeau'   => $orderInfo['restKortingCadeau'],
+
+                'total'   => $orderInfo['total'],
+                'subtotal'   => $orderInfo['subtotal'],
             ],
 
             'customer' => $customer->id,
@@ -375,7 +378,7 @@ class OrderController extends Controller
         if (!$validated['inzetten_C']) {
             $kaartCbeurten = $kaartCaantal * 5;
         }
-        
+
         return [
             'restKaartAbeurten' => $kaartAbeurten,
             'restKaartBbeurten' => $kaartBbeurten,

@@ -20,6 +20,7 @@
     <section>
         <h2>TEST-gegevens</h2> 
         <p>(die de klant in mail gaan krijgen -> werkt nog niet)</p>
+        <p>Dus voor de testing van de nieuwe 5 beurtenkaarten en bon -> code even noteren</p>
         <br>
         @if ($order->option1 || $order->option2 || $order->option3)
             <h3>Boeketten</h3>

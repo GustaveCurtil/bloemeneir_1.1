@@ -19,8 +19,11 @@ class PaymentController extends Controller
 
     public function success(Request $request)
     {
-
-        // STAP 1: COLLECTEREN VAN STRIPE GEGEVENS
+        //// --------------------------------------------------------------------------
+        //// DEEL 1
+        //// --------------------------------------------------------------------------
+        
+        // STAP 1.1: COLLECTEREN VAN STRIPE GEGEVENS
 
         \Stripe\Stripe::setApiKey(env('STRIPE_SECRET'));
 
@@ -30,16 +33,20 @@ class PaymentController extends Controller
         }
         $session = \Stripe\Checkout\Session::retrieve($sessionId);
         $paymentIntentId = $session->payment_intent;
-        if (!$paymentIntentId) {
-            return "Geen payment intent ID gevonden.";
-        }
-        $paymentIntent = \Stripe\PaymentIntent::retrieve($paymentIntentId);
-
-        if ($paymentIntent->status !== 'succeeded') {
-            dd('status: "' . $paymentIntent->status . '" => Excuseer voor deze foutmelding: gelieve contact op te nemen met gustave.curtil@tutanota.com om dit probleem op te lossen.');
-        }
 
         $metadata = $session->metadata;
+    
+        if ((int) $metadata->total !== 0) {
+            if (!$paymentIntentId) {
+                return "Geen payment intent ID gevonden.";
+            }
+            $paymentIntent = \Stripe\PaymentIntent::retrieve($paymentIntentId);
+
+            if ($paymentIntent->status !== 'succeeded') {
+                dd('status: "' . $paymentIntent->status . '" => Excuseer voor deze foutmelding: gelieve contact op te nemen met gustave.curtil@tutanota.com om dit probleem op te lossen.');
+            }
+        }
+        
 
         $clientId = $session->metadata->clientId ?? null;
         $orderId  = $session->metadata->orderId ?? null;
@@ -51,7 +58,8 @@ class PaymentController extends Controller
         $client = Client::find($clientId);
         $order = Order::find($orderId);
 
-        // STAP 2: BESTAANDE 5-BEURTENKAARTEN UPDATEN
+
+        // STAP 1.2: BESTAANDE 5-BEURTENKAARTEN OPHALEN
         
         $turnVoucherIds = $metadata['turnVoucherIds'];
         $turnVoucherIdsArray = array_map('intval', explode(',', $turnVoucherIds));
@@ -69,7 +77,8 @@ class PaymentController extends Controller
         ->orderBy('valid_date', 'asc')
         ->get();
 
-        // STAP 3: NIEUWE 5-BEURTENKAARTEN UPDATEN
+
+        // STAP 1.3: NIEUWE 5-BEURTENKAARTEN OPHALEN
 
         $schattigNewVoucherIds = $metadata['turnCardAIds'];
         $schattigNewVoucherIdsArray = array_map('intval', explode(',', $schattigNewVoucherIds));
@@ -79,8 +88,6 @@ class PaymentController extends Controller
 
         $magnifiekNewVoucherIds = $metadata['turnCardAIds'];
         $magnifiekNewVoucherIdsArray = array_map('intval', explode(',', $magnifiekNewVoucherIds));
-
-        // dd($schattigNewVoucherIds);
 
         $schattigNewVouchers = TurnVoucher::whereIn('id', $schattigNewVoucherIdsArray)
         ->where('name', 'schattig')
@@ -95,13 +102,17 @@ class PaymentController extends Controller
         ->orderBy('valid_date', 'asc')
         ->get();
 
+
+        // STAP 1.4: BESTAANDE CADEAUBONNEN OPHALEN
+
         $giftVoucherIds = $metadata['giftVoucherIds'];
         $giftVoucherIdsArray = array_map('intval', explode(',', $giftVoucherIds));
         $giftOldVouchers = GiftVoucher::whereIn('id', $giftVoucherIdsArray)
         ->orderBy('valid_date', 'asc')
         ->get();
 
-        // STAP 2: CHECK EERST OF ORDER AL IS BETAALD GEWEEST (incl mail gestuurd dan)
+
+        // STAP 1.5 DATUMS GOEDZETTEN
 
         $orderDate = Carbon::parse($order->takeaway_date);
         Carbon::setLocale('nl');
@@ -113,21 +124,26 @@ class PaymentController extends Controller
         if ($time_start->minute === 0) {
             $formattedStart = $time_start->format('H') . 'u';
         } else {
-            $formattedStart = $time_start->format('H') . 'u' . $time->format('i');
+            $formattedStart = $time_start->format('H') . 'u' . $time_start->format('i');
         }
         $time_end = Carbon::parse($order->takeaway_end_time);
 
         if ($time_end->minute === 0) {
             $formattedEnd = $time_end->format('H') . 'u';
         } else {
-            $formattedEnd = $time_end->format('H') . 'u' . $time->format('i');
+            $formattedEnd = $time_end->format('H') . 'u' . $time_end->format('i');
         }
-        $uren = $formattedStart . " - " . $formattedEnd;
+        $uren = $formattedStart . " tot " . $formattedEnd;
+
+
+        //// --------------------------------------------------------------------------
+        //// DEEL 2: CHECK EERST OF ORDER AL IS BETAALD GEWEEST (incl mail gestuurd dan)
+        //// --------------------------------------------------------------------------
+
+        // STAP 2.1: INDIEN ALREEDS BETAALD, HERLEID NAAR SUCCES-PAGINA
 
         if ($order->payed) {
             return view('bestelling.succes', [
-                'paymentIntent' => $paymentIntent,
-                'status' => $paymentIntent->status,
                 'client' => $client,
                 'dag' => $weekday,
                 'datum' => $formattedDate,
@@ -144,7 +160,11 @@ class PaymentController extends Controller
             ]);
         }
 
-        // dd($schattigNewVouchers);
+
+        // STAP 2.2: INDIEN NIET BETAALD: PAS KORTINGEN TOE OP NIEUWE EN BESTAANDE KAATEN EN BONNEN
+
+        // op bestaande 5-beurtenkaarten
+
         if ($schattigOldVouchers->isNotEmpty()) {
             $restKortingAbeurten = (int) $metadata['restKortingAbeurten'];
             $this->deductFromTurnVoucher($schattigOldVouchers, $restKortingAbeurten);
@@ -157,6 +177,8 @@ class PaymentController extends Controller
             $restKortingCbeurten = (int) $metadata['restKortingCbeurten'];
             $this->deductFromTurnVoucher($magnifiekOldVouchers, $restKortingCbeurten);
         }
+
+        // op nieuwe 5-beurtenkaarten
 
         if ($schattigNewVouchers->isNotEmpty()) {
             $restNewKortingAbeurten = (int) $metadata['restKaartAbeurten'];
@@ -171,30 +193,30 @@ class PaymentController extends Controller
             $this->deductFromTurnVoucher($magnifiekNewVouchers, $restNewKortingCbeurten);
         }
         
-        
-        // STAP 4: BETAANDE CADEAUBONNEN GEBRUIKEN
-
+        // op bestaande cadeaubonnen
 
         $restCadeauBon = $metadata['restKortingCadeau'];
 
-        $this->deductFromGiftVoucher($giftVouchers, $restCadeauBon);
+        $this->deductFromGiftVoucher($giftOldVouchers, $restCadeauBon);
 
 
-        //STAP 5: KEUR BETALING GOED EN STUUR MAIL
+        //STAP 2.3: KEUR BETALING GOED EN STUUR MAIL
 
         $order->payed = true;
         $order->save();
 
         Mail::to($order->client->email)->queue(new OrderConfirmed($order, $weekday, $formattedDate));
 
+
+        //STAP 2.4: vergeet de gegevens van de bestelling en breng ons naar succespagina
+
         $request->session()->forget('order_id');
         
         return view('bestelling.succes', [
-            'paymentIntent' => $paymentIntent,
-            'status' => $paymentIntent->status,
             'client' => $client,
             'dag' => $weekday,
             'datum' => $formattedDate,
+            'uren' => $uren,
             'order' => $order,
             'schattigNewVouchers' => $schattigNewVouchers,
             'charmantNewVouchers' => $charmantNewVouchers,
@@ -202,8 +224,8 @@ class PaymentController extends Controller
             'schattigOldVouchers' => $schattigOldVouchers,
             'charmantOldVouchers' => $charmantOldVouchers,
             'magnifiekOldVouchers' => $magnifiekOldVouchers,
-            'giftNewVouchers' => $giftVouchers,
-            'giftOldVouchers' => $giftVouchers,
+            'giftNewVoucher' => $order->giftVoucher,
+            'giftOldVouchers' => $giftOldVouchers,
 
         ]);
     }
