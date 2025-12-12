@@ -205,13 +205,27 @@ class PaymentController extends Controller
         $order->payed = true;
         $order->save();
 
-        Mail::to($order->client->email)->queue(new OrderConfirmed($order, $weekday, $formattedDate));
+        Mail::to($order->client->email)->queue(new OrderConfirmed(
+            $order,
+            $weekday,
+            $formattedDate,
+            $uren,
+            $schattigNewVouchers,
+            $charmantNewVouchers,
+            $magnifiekNewVouchers,
+            $schattigOldVouchers,
+            $charmantOldVouchers,
+            $magnifiekOldVouchers,
+            $order->giftVoucher,
+            $giftOldVouchers
+        ));
 
 
         //STAP 2.4: vergeet de gegevens van de bestelling en breng ons naar succespagina
 
         $request->session()->forget('order_id');
-        
+        $request->session()->forget('previousCodes');
+
         return view('bestelling.succes', [
             'client' => $client,
             'dag' => $weekday,
@@ -226,7 +240,6 @@ class PaymentController extends Controller
             'magnifiekOldVouchers' => $magnifiekOldVouchers,
             'giftNewVoucher' => $order->giftVoucher,
             'giftOldVouchers' => $giftOldVouchers,
-
         ]);
     }
     

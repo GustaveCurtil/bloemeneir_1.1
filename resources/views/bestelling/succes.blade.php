@@ -93,6 +93,8 @@
         let bestelUrl = localStorage.getItem('huidigBestelPad');
         if (bestelUrl) {
             bestelFlowLink.href = bestelUrl;
+        } else {
+            bestelFlowLink.href = '/winkel'
         }
     })
 </script>

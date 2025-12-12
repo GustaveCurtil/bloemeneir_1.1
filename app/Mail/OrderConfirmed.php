@@ -17,15 +17,45 @@ class OrderConfirmed extends Mailable implements ShouldQueue
     public $order;
     public $weekday;
     public $formattedDate;
+    public $uren;
+    public $schattigNewVouchers;
+    public $charmantNewVouchers;
+    public $magnifiekNewVouchers;
+    public $schattigOldVouchers;
+    public $charmantOldVouchers;
+    public $magnifiekOldVouchers;
+    public $giftNewVoucher;
+    public $giftOldVouchers;
 
     /**
      * Create a new message instance.
      */
-    public function __construct(Order $order, $weekday, $formattedDate)
-    {
+public function __construct(
+        $order,
+        $weekday,
+        $formattedDate,
+        $uren,
+        $schattigNewVouchers,
+        $charmantNewVouchers,
+        $magnifiekNewVouchers,
+        $schattigOldVouchers,
+        $charmantOldVouchers,
+        $magnifiekOldVouchers,
+        $giftNewVoucher,
+        $giftOldVouchers
+    ) {
         $this->order = $order;
         $this->weekday = $weekday;
         $this->formattedDate = $formattedDate;
+        $this->uren = $uren;
+        $this->schattigNewVouchers = $schattigNewVouchers;
+        $this->charmantNewVouchers = $charmantNewVouchers;
+        $this->magnifiekNewVouchers = $magnifiekNewVouchers;
+        $this->schattigOldVouchers = $schattigOldVouchers;
+        $this->charmantOldVouchers = $charmantOldVouchers;
+        $this->magnifiekOldVouchers = $magnifiekOldVouchers;
+        $this->giftNewVoucher = $giftNewVoucher;
+        $this->giftOldVouchers = $giftOldVouchers;
     }
 
     /**
