@@ -36,7 +36,7 @@ class MailPetrannesophie extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: '❀ Nieuwe bestelling ❀',
+            subject: '❀ Nieuwe bestelling van '. $this->order->client->first_name .' ❀',
         );
     }
 

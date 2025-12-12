@@ -11,6 +11,9 @@ const klikbaren = document.querySelectorAll('[data-aanbod]');
     });
 });
 
+const steps = [29, 39, 49, 58, 68, 78, 88, 98, 100, 0];
+let index = 0;
+
 function updateInkopen(target, richting) {
     let aanbod = target.dataset.aanbod; // e.g., "boeket_A"
     console.log(aanbod)
@@ -18,7 +21,8 @@ function updateInkopen(target, richting) {
     if(inkoopMap.hasOwnProperty(aanbod)) {
         // Increment in the map
         if (aanbod === "cadeau") {
-            inkoopMap[aanbod]+= 20;
+            inkoopMap[aanbod] = steps[index];
+            index = (index + 1) % steps.length;
         } else {
             if (richting === "boven") {
                 inkoopMap[aanbod]++;

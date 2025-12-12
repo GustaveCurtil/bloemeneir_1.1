@@ -28,14 +28,14 @@
             @foreach ($turnCards as $card)
             <div data-name="{{$card->name}}">
                 <div><span>▰ 5-beurtenkaart <span style="font-size: 0.7rem">(code: '{{$card->code}}')</span></span><form action="{{ route('delete-code') }}" method="POST"  class="verwijderen">@csrf<input type="hidden" name="code" value="{{$card->code}}"><input type="submit" value="x"></form></div>
-                <p>&nbsp;⤷  geldig tot {{$card->valid_date}}</p>
+                <p>&nbsp;⤷  geldig tot {{\Carbon\Carbon::parse($card->valid_date)->format('d/m/Y') }}</p>
                 <p>&nbsp;⤷  <span>{{ $card->option1 ?? $card->option2 ?? $card->option3 ?? 0 }}</span> resterende {{$card->name}}e boeketten</p>
             </div>
             @endforeach
             @foreach ($giftCards as $card)
             <div data-name="cadeau">
                 <div><span>▩ cadeaubon van €{{$card->original_amount}},00 <span style="font-size: 0.7rem">(code: '{{$card->code}}')</span></span><form action="{{ route('delete-code') }}" method="POST"  class="verwijderen">@csrf<input type="hidden" name="code" value="{{$card->code}}"><input type="submit" value="x"></form></div>
-                <p>&nbsp;⤷  geldig tot {{$card->valid_date}}</p>
+                <p>&nbsp;⤷  geldig tot {{\Carbon\Carbon::parse($card->valid_date)->format('d/m/Y') }}</p>
                 <p>&nbsp;⤷  <span>€<span>{{$card->amount}}</span>,00</span> over</p>
             </div>
             @endforeach

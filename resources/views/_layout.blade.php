@@ -19,7 +19,7 @@
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
     <link rel="shortcut icon" href="{{ asset('media/logo.png') }}" type="image/x-icon">
     <script src="{{asset('/js/resetLocalStorage.js')}}" defer></script>
-    @if (!request()->routeIs('winkel') && !request()->routeIs('shopping-basket') && !request()->routeIs('afrekenen') && !request()->routeIs('succes'))
+    @if (!request()->routeIs('winkel') && !request()->routeIs('shopping-basket') && !request()->routeIs('afrekenen') && !request()->routeIs('checkout.success'))
     <script src="{{asset('/js/bestellingenFlow.js')}}" defer></script>
     @endif
     @yield('links')
