@@ -11,11 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('order_gift_vouchers', function (Blueprint $table) {
+        Schema::table('order_gift_voucher', function (Blueprint $table) {
             $table->integer('amount_used')->default(0);
         });
 
-        Schema::table('order_turn_vouchers', function (Blueprint $table) {
+        Schema::table('order_turn_voucher', function (Blueprint $table) {
             $table->integer('amount_used')->default(0);
         });
     }
@@ -25,11 +25,11 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('order_gift_vouchers', function (Blueprint $table) {
+        Schema::table('order_gift_voucher', function (Blueprint $table) {
             $table->dropColumn('amount_used');
         });
 
-        Schema::table('order_turn_vouchers', function (Blueprint $table) {
+        Schema::table('order_turn_voucher', function (Blueprint $table) {
             $table->dropColumn('amount_used');
         });
     }
