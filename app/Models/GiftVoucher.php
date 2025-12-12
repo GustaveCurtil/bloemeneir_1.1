@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class GiftVoucher extends Model
 {
@@ -15,10 +17,17 @@ class GiftVoucher extends Model
     ];
 
 
-    public function order()
+    public function order(): BelongsTo
     {
         return $this->belongsTo(Order::class);
     } 
+
+    public function ordersThatUsedThisGiftVouchers(): BelongsToMany 
+    {
+        return $this->belongsToMany(Order::class, 'order_gift_voucher')
+            ->withPivot('amount_used')
+            ->withTimestamps();
+    }
 
     public function isPayed(): bool
     {

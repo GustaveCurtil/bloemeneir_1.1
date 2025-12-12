@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class TurnVoucher extends Model
 {
@@ -24,6 +25,13 @@ class TurnVoucher extends Model
     {
         return $this->belongsTo(Order::class);
     } 
+
+    public function ordersThatUsedThisTurnVoucher(): BelongsToMany
+    {
+        return $this->belongsToMany(Order::class, 'order_turn_voucher')
+            ->withPivot('amount_used')
+            ->withTimestamps();
+    }
 
     protected $appends = ['valid_till'];
 
