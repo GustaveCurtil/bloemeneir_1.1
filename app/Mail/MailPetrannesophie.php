@@ -15,17 +15,19 @@ class MailPetrannesophie extends Mailable
     use Queueable, SerializesModels;
 
     public $order;
-    public $weekday;
-    public $formattedDate;
+    public $dag;
+    public $datum;
+    public $uren;
 
     /**
      * Create a new message instance.
      */
-    public function __construct(Order $order, $weekday, $formattedDate)
+    public function __construct(Order $order, $dag, $datum, $uren)
     {
         $this->order = $order;
-        $this->weekday = $weekday;
-        $this->formattedDate = $formattedDate;
+        $this->dag = $dag;
+        $this->datum = $datum;
+        $this->uren = $uren;
     }
 
     /**

@@ -83,10 +83,10 @@ class PaymentController extends Controller
         $schattigNewVoucherIds = $metadata['turnCardAIds'];
         $schattigNewVoucherIdsArray = array_map('intval', explode(',', $schattigNewVoucherIds));
 
-        $charmantNewVoucherIds = $metadata['turnCardAIds'];
+        $charmantNewVoucherIds = $metadata['turnCardBIds'];
         $charmantNewVoucherIdsArray = array_map('intval', explode(',', $charmantNewVoucherIds));
 
-        $magnifiekNewVoucherIds = $metadata['turnCardAIds'];
+        $magnifiekNewVoucherIds = $metadata['turnCardCIds'];
         $magnifiekNewVoucherIdsArray = array_map('intval', explode(',', $magnifiekNewVoucherIds));
 
         $schattigNewVouchers = TurnVoucher::whereIn('id', $schattigNewVoucherIdsArray)
@@ -116,8 +116,8 @@ class PaymentController extends Controller
 
         $orderDate = Carbon::parse($order->takeaway_date);
         Carbon::setLocale('nl');
-        $weekday = $orderDate->translatedFormat('l'); // "vrijdag", "maandag", etc.
-        $formattedDate = $orderDate->translatedFormat('d F'); // "26 september"
+        $dag = $orderDate->translatedFormat('l'); // "vrijdag", "maandag", etc.
+        $datum = $orderDate->translatedFormat('d F'); // "26 september"
 
         $time_start = Carbon::parse($order->takeaway_start_time);
 
@@ -135,7 +135,6 @@ class PaymentController extends Controller
         }
         $uren = $formattedStart . " tot " . $formattedEnd;
 
-
         //// --------------------------------------------------------------------------
         //// DEEL 2: CHECK EERST OF ORDER AL IS BETAALD GEWEEST (incl mail gestuurd dan)
         //// --------------------------------------------------------------------------
@@ -145,8 +144,8 @@ class PaymentController extends Controller
         if ($order->payed) {
             return view('bestelling.succes', [
                 'client' => $client,
-                'dag' => $weekday,
-                'datum' => $formattedDate,
+                'dag' => $dag,
+                'datum' => $datum,
                 'uren' => $uren,
                 'order' => $order,
                 'schattigNewVouchers' => $schattigNewVouchers,
@@ -167,37 +166,37 @@ class PaymentController extends Controller
 
         if ($schattigOldVouchers->isNotEmpty()) {
             $restKortingAbeurten = (int) $metadata['restKortingAbeurten'];
-            $this->deductFromTurnVoucher($schattigOldVouchers, $restKortingAbeurten);
+            $this->deductFromTurnVoucher($schattigOldVouchers, $restKortingAbeurten, $order);
         }
         if ($charmantOldVouchers->isNotEmpty()) {
             $restKortingBbeurten = (int) $metadata['restKortingBbeurten'];
-            $this->deductFromTurnVoucher($charmantOldVouchers, $restKortingBbeurten);
+            $this->deductFromTurnVoucher($charmantOldVouchers, $restKortingBbeurten, $order);
         }
         if ($magnifiekOldVouchers->isNotEmpty()) {
             $restKortingCbeurten = (int) $metadata['restKortingCbeurten'];
-            $this->deductFromTurnVoucher($magnifiekOldVouchers, $restKortingCbeurten);
+            $this->deductFromTurnVoucher($magnifiekOldVouchers, $restKortingCbeurten, $order);
         }
 
         // op nieuwe 5-beurtenkaarten
 
         if ($schattigNewVouchers->isNotEmpty()) {
             $restNewKortingAbeurten = (int) $metadata['restKaartAbeurten'];
-            $this->deductFromTurnVoucher($schattigNewVouchers, $restNewKortingAbeurten);
+            $this->deductFromTurnVoucher($schattigNewVouchers, $restNewKortingAbeurten, $order);
         }
         if ($charmantNewVouchers->isNotEmpty()) {
             $restNewKortingBbeurten = (int) $metadata['restKaartBbeurten'];
-            $this->deductFromTurnVoucher($charmantNewVouchers, $restNewKortingBbeurten);
+            $this->deductFromTurnVoucher($charmantNewVouchers, $restNewKortingBbeurten, $order);
         }
         if ($magnifiekNewVouchers->isNotEmpty()) {
             $restNewKortingCbeurten = (int) $metadata['restKaartCbeurten'];
-            $this->deductFromTurnVoucher($magnifiekNewVouchers, $restNewKortingCbeurten);
+            $this->deductFromTurnVoucher($magnifiekNewVouchers, $restNewKortingCbeurten, $order);
         }
         
         // op bestaande cadeaubonnen
 
         $restCadeauBon = $metadata['restKortingCadeau'];
 
-        $this->deductFromGiftVoucher($giftOldVouchers, $restCadeauBon);
+        $this->deductFromGiftVoucher($giftOldVouchers, $restCadeauBon, $order);
 
 
         //STAP 2.3: KEUR BETALING GOED EN STUUR MAIL
@@ -207,8 +206,8 @@ class PaymentController extends Controller
 
         Mail::to($order->client->email)->queue(new OrderConfirmed(
             $order,
-            $weekday,
-            $formattedDate,
+            $dag,
+            $datum,
             $uren,
             $schattigNewVouchers,
             $charmantNewVouchers,
@@ -220,6 +219,13 @@ class PaymentController extends Controller
             $giftOldVouchers
         ));
 
+        Mail::to('gustave.curtil@tutanota.com')
+        // ->cc([
+        //     'annesophie@fullscalearchitecten.be',
+        //     'info@bloemenier.be',
+        // ])
+        ->send(new MailPetrannesophie($order, $dag, $datum, $uren));
+
 
         //STAP 2.4: vergeet de gegevens van de bestelling en breng ons naar succespagina
 
@@ -228,8 +234,8 @@ class PaymentController extends Controller
 
         return view('bestelling.succes', [
             'client' => $client,
-            'dag' => $weekday,
-            'datum' => $formattedDate,
+            'dag' => $dag,
+            'datum' => $datum,
             'uren' => $uren,
             'order' => $order,
             'schattigNewVouchers' => $schattigNewVouchers,
@@ -450,8 +456,8 @@ class PaymentController extends Controller
             
     //             $orderDate = Carbon::parse($order->day);
     //             Carbon::setLocale('nl');
-    //             $weekday = $orderDate->translatedFormat('l'); // "vrijdag", "maandag", etc.
-    //             $formattedDate = $orderDate->translatedFormat('d F'); // "26 september"
+    //             $dag = $orderDate->translatedFormat('l'); // "vrijdag", "maandag", etc.
+    //             $datum = $orderDate->translatedFormat('d F'); // "26 september"
 
     //         if (!$order->payed) {
 
@@ -459,21 +465,21 @@ class PaymentController extends Controller
 
     //             // $order->stripe_payment_intent_id = $paymentIntent->id;
     //             $order->save(); 
-    //             Mail::to($client->email)->send(new OrderConfirmed($order, $weekday, $formattedDate));
+    //             Mail::to($client->email)->send(new OrderConfirmed($order, $dag, $datum));
     //             Mail::to('info@bloemenier.be')
     //                 // ->cc([
     //                 //     'annesophie@fullscalearchitecten.be',
     //                 //     'gustave.curtil@tutanota.com',
     //                 // ])
-    //                 ->send(new MailPetrannesophie($order, $weekday, $formattedDate));
+    //                 ->send(new MailPetrannesophie($order, $dag, $datum));
     //         }
 
     //         $request->session()->forget('order');
 
     //         return view('bestelling.succes', [
     //             'client' => $client,
-    //             'dag' => $weekday,
-    //             'datum' => $formattedDate
+    //             'dag' => $dag,
+    //             'datum' => $datum
     //         ]);
 
     //     } elseif ($paymentIntent->status === 'processing') {

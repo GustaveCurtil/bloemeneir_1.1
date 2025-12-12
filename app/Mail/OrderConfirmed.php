@@ -15,8 +15,8 @@ class OrderConfirmed extends Mailable implements ShouldQueue
     use Queueable, SerializesModels;
 
     public $order;
-    public $weekday;
-    public $formattedDate;
+    public $dag;
+    public $datum;
     public $uren;
     public $schattigNewVouchers;
     public $charmantNewVouchers;
@@ -32,8 +32,8 @@ class OrderConfirmed extends Mailable implements ShouldQueue
      */
 public function __construct(
         $order,
-        $weekday,
-        $formattedDate,
+        $dag,
+        $datum,
         $uren,
         $schattigNewVouchers,
         $charmantNewVouchers,
@@ -45,8 +45,8 @@ public function __construct(
         $giftOldVouchers
     ) {
         $this->order = $order;
-        $this->weekday = $weekday;
-        $this->formattedDate = $formattedDate;
+        $this->dag = $dag;
+        $this->datum = $datum;
         $this->uren = $uren;
         $this->schattigNewVouchers = $schattigNewVouchers;
         $this->charmantNewVouchers = $charmantNewVouchers;

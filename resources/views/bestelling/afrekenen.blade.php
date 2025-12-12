@@ -23,6 +23,7 @@
             <p>TOTAAL:</p>
             <p class="prijs"></p></b>
         </div>
+        <br>
         <div>
             @foreach ($turnCards as $card)
             <div data-name="{{$card->name}}">
@@ -41,7 +42,7 @@
         </div> 
         <form action="{{ route('check-code') }}" method="POST" class="code">
                 @csrf
-                <input type="text" name="code" placeholder="code beurtenkaart of bon" required value="">
+                <input type="text" name="code" placeholder="gebruik beurtenkaart of bon (vul code in)" required value="">
                 <button type="submit">+</button>
         </form>  
         @error('code')
