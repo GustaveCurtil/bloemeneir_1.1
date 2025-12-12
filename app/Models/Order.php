@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Order extends Model
 {
@@ -32,6 +33,20 @@ class Order extends Model
     public function giftVoucher()
     {
         return $this->hasOne(GiftVoucher::class);
+    }
+
+    public function giftVoucherUsed(): BelongsToMany
+    {
+        return $this->belongsToMany(GiftVoucher::class, 'order_gift_voucher')
+            ->withPivot('amount_used')
+            ->withTimestamps();
+    }
+
+    public function turnVouchersUsed(): BelongsToMany
+    {
+        return $this->belongsToMany(TurnVoucher::class, 'order_turn_voucher')
+            ->withPivot('amount_used')
+            ->withTimestamps();
     }
 
     public function turnVouchers()

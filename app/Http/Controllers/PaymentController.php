@@ -243,7 +243,7 @@ class PaymentController extends Controller
         ]);
     }
     
-    public function deductFromTurnVoucher($vouchers , $restBeurten) {
+    public function deductFromTurnVoucher($vouchers , $restBeurten, $order) {
 
         $optionColumn = [
             'schattig'   => 'option1',
@@ -298,10 +298,15 @@ class PaymentController extends Controller
                 $voucher->save();
                 $reductionAmount -= $optionAmount;
             }
+
+            // TODO: Add voucher use in pivot table
+            $order->turnVouchersThatUsedThisTurnVoucher()->attach($voucher->id, [
+                'amount_used' => $reductionAmount,
+            ]);
         }
     }
 
-    public function deductFromGiftVoucher($vouchers, $restBon) {
+    public function deductFromGiftVoucher($vouchers, $restBon, $order) {
 
         // Step 1: Calculate total of all optionX's
         $totalBonnen = $vouchers->sum('amount');
@@ -343,6 +348,10 @@ class PaymentController extends Controller
                 $voucher->save();
                 $reductionAmount -= $voucherAmount;
             }
+
+            $order->giftVouchersThatUsedThisGiftVoucher()->attach($voucher->id, [
+                'amount_used' => $reductionAmount,
+            ]);
         }
     }
 
