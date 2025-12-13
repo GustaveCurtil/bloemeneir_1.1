@@ -19,6 +19,10 @@ return new class extends Migration
             $table->string('comment')->nullable();
             $table->integer('total_price');
             $table->integer('total_discount');
+            $table->boolean('factuur')->nullable();
+            $table->string('btw_nummer')->nullable();
+            $table->string('adres')->nullable();
+
         });
     }
 

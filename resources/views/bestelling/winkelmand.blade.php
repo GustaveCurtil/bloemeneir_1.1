@@ -113,7 +113,7 @@
                         <p>Bedrag naar keuze</p>
                     </label>
                     <div id="cadeau-prijs">
-                        € <input type="number" id="cadeau" data-aanbod="cadeau" placeholder="00" min="0">
+                        € <input type="number" id="cadeau" data-aanbod="cadeau" placeholder="00" min="20">
                     </div>                        
                 </div>
                 {{-- <label for="cadeaubon" class="mailing">

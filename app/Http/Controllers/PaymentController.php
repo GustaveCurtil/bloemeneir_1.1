@@ -294,20 +294,22 @@ class PaymentController extends Controller
 
             if ($optionAmount >= $reductionAmount) {
                 // Reduce this voucher partially
+                $deducted = $reductionAmount;
                 $voucher->$column = $optionAmount - $reductionAmount;
                 $voucher->save();
                 $reductionAmount = 0;
                 break;
             } else {
                 // Deplete this voucher completely
+                $deducted = $optionAmount;
                 $voucher->$column = 0;
                 $voucher->save();
                 $reductionAmount -= $optionAmount;
             }
 
             // TODO: Add voucher use in pivot table
-            $order->turnVouchersThatUsedThisTurnVoucher()->attach($voucher->id, [
-                'amount_used' => $reductionAmount,
+            $order->turnVouchersUsed()->attach($voucher->id, [
+                'amount_used' => $deducted,
             ]);
         }
     }
@@ -344,19 +346,21 @@ class PaymentController extends Controller
 
             if ($voucherAmount >= $reductionAmount) {
                 // Reduce this voucher partially
+                $deducted = $reductionAmount;
                 $voucher->amount = $voucherAmount - $reductionAmount;
                 $voucher->save();
                 $reductionAmount = 0;
                 break;
             } else {
                 // Deplete this voucher completely
+                $deducted = $voucherAmount;
                 $voucher->amount = 0;
                 $voucher->save();
                 $reductionAmount -= $voucherAmount;
             }
 
-            $order->giftVouchersThatUsedThisGiftVoucher()->attach($voucher->id, [
-                'amount_used' => $reductionAmount,
+            $order->giftVouchersUsed()->attach($voucher->id, [
+                'amount_used' => $deducted
             ]);
         }
     }

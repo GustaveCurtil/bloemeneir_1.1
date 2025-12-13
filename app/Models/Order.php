@@ -22,6 +22,9 @@ class Order extends Model
         'takeaway_date',
         'takeaway_start_time',
         'takeaway_end_time',
+        'factuur',
+        'btw_nummer',
+        'adres',
     ];
 
     // Each order belongs to one client
@@ -35,7 +38,7 @@ class Order extends Model
         return $this->hasOne(GiftVoucher::class);
     }
 
-    public function giftVoucherUsed(): BelongsToMany
+    public function giftVouchersUsed(): BelongsToMany
     {
         return $this->belongsToMany(GiftVoucher::class, 'order_gift_voucher')
             ->withPivot('amount_used')
@@ -69,6 +72,7 @@ class Order extends Model
                 'amount' => $amount,
                 'original_amount' => $amount,
                 'valid_date' => now()->addMonthsNoOverflow(6)->addDay(),
+                'has_used' => false,
             ]);
         } else {
             // Maak nieuwe voucher
@@ -78,6 +82,7 @@ class Order extends Model
                 'original_amount' => $amount,
                 'code' => $this->genereerGiftCode(),
                 'valid_date' => now()->addMonthsNoOverflow(6)->addDay(),
+                'has_used' => false,
             ]);
         }
 
@@ -146,7 +151,8 @@ class Order extends Model
                 'code'                      => $this->genereerTurnCode(),
                 $column_name                => 5,
                 $column_name . '_original'  => 5,
-                'valid_date'                => now()->addMonthsNoOverflow(6)->addDay()
+                'valid_date'                => now()->addMonthsNoOverflow(6)->addDay(),
+                'has_used'                  => false,
             ]);
         }
 

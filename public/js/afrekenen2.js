@@ -1,7 +1,7 @@
 // -----------------------------
 // Helpers
 // -----------------------------
-const getNumber = key => Number(localStorage.getItem(key)) || 0;
+const getNumber = key => Number(localStorage.getItem(key));
 const getBool = key => JSON.parse(localStorage.getItem(key)) ?? false;
 
 function formatEuro(value) {

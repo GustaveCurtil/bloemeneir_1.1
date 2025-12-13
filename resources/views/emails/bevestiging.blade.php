@@ -1,10 +1,7 @@
 <p>Beste <span style="text-transform: capitalize;">{{ $order->client->first_name }}</span>,</p>
 <br>
-<p>We hebben je bestelling goed ontvangen:</p>
+<p>We hebben jouw bestelling goed ontvangen:</p>
 @if ($order->option1 || $order->option2 || $order->option3)
-<p>Boeket(ten)<br>
-    op te halen <b>{{$dag}} {{$datum}} van {{ $uren }}</b>. <br>
-    <i>adres: <a href="https://maps.app.goo.gl/qAkeHriBos8S4XMcA">Koning Albertlaan 77</a>, Kessel-Lo</i></p>
 @if ($order->option1)
 <p>❀ Schattig boeket x {{ $order->option1 }}</p>
 @endif
@@ -14,6 +11,7 @@
 @if ($order->option3)
 <p>❀ Magnifiek boeket x {{ $order->option3 }}</p>
 @endif
+<p>Op te halen <b>{{$dag}} {{$datum}} van {{ $uren }}</b> bij ons in <i>Kessel-Lo, <a href="https://maps.app.goo.gl/qAkeHriBos8S4XMcA">Koning Albertlaan 77</a></i></p>
 @endif
 @if ($giftNewVoucher)
 <p>▩ Cadeaubon</p>

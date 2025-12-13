@@ -27,7 +27,12 @@ class DashboardController extends Controller
 
     public function bestellingen()
     {
-        return view('dashboard.bestellingen');
+        $beginoftheweek = Carbon::now()->startOfWeek();
+        $bestellingen = Order::where('day', '>', $beginoftheweek)
+            ->orderBy('takeaway_date')
+            ->orderByDesc('created_at')
+            ->get();
+        return view('dashboard.bestellingen', ['bestellingen' => $bestellingen]);
     }
 
     public function bonnen()
