@@ -7,7 +7,7 @@
 @auth
     <section>
         <h2>Komende bestellingen</h2>
-        <p>OPM: pas vanaf 13/12/2025 staan de effectief betaalde prijs. Tot ervoor geldt '€0' is betaald, anders staar er een 'nee'</p>
+        <p>OPM: pas vanaf 13/12/2025 staan de effectief betaalde prijs. Tot ervoor geldt '€0' als 'is betaald', anders staar er een 'nee'.</p>
         <table>
             <thead>
                 <th>naam</th>

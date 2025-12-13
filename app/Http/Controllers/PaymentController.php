@@ -163,7 +163,6 @@ class PaymentController extends Controller
         // STAP 2.2: INDIEN NIET BETAALD: PAS KORTINGEN TOE OP NIEUWE EN BESTAANDE KAATEN EN BONNEN
 
         // op bestaande 5-beurtenkaarten
-
         if ($schattigOldVouchers->isNotEmpty()) {
             $restKortingAbeurten = (int) $metadata['restKortingAbeurten'];
             $this->deductFromTurnVoucher($schattigOldVouchers, $restKortingAbeurten, $order);
@@ -298,6 +297,9 @@ class PaymentController extends Controller
                 $voucher->$column = $optionAmount - $reductionAmount;
                 $voucher->save();
                 $reductionAmount = 0;
+                $order->turnVouchersUsed()->attach($voucher->id, [
+                    'amount_used' => $deducted,
+                ]);
                 break;
             } else {
                 // Deplete this voucher completely
@@ -305,12 +307,11 @@ class PaymentController extends Controller
                 $voucher->$column = 0;
                 $voucher->save();
                 $reductionAmount -= $optionAmount;
+    
+                $order->turnVouchersUsed()->attach($voucher->id, [
+                    'amount_used' => $deducted,
+                ]);
             }
-
-            // TODO: Add voucher use in pivot table
-            $order->turnVouchersUsed()->attach($voucher->id, [
-                'amount_used' => $deducted,
-            ]);
         }
     }
 
