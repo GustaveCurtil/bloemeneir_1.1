@@ -203,7 +203,7 @@ class PaymentController extends Controller
         $order->payed = true;
         $order->save();
 
-        Mail::to($order->client->email)->queue(new OrderConfirmed(
+        Mail::to($order->client->email)->send(new OrderConfirmed(
             $order,
             $dag,
             $datum,

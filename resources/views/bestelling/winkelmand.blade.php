@@ -119,8 +119,7 @@
                 {{-- <label for="cadeaubon" class="mailing">
                     <input type="checkbox" name="" id="cadeaubon">Stuur code door via mail <br class="mobile">(i.p.v. bon te komen halen)
                 </label> --}}
-                <br>
-                <p><i class="small">Codes van bonnen en beurtenkaarten worden via mail gestuurd en zijn 6 maanden geldig.</i></p>
+                <p style="margin-top: var(--gap-normal)"><i class="small">Codes van bonnen en beurtenkaarten worden via mail gestuurd en zijn 6 maanden geldig.</i></p>
             </fieldset>
             <fieldset class="vraag">
                 <p>Ik kom mijn bestelling ophalen op:</p>

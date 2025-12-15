@@ -638,9 +638,9 @@ fieldset.aantal input[type="number"] {
 fieldset.aantal input::placeholder {color: var(--color-text);}
 
 fieldset.aantal>div .plusmin {background-color: #efe5d9;}
-fieldset.aantal>div:nth-child(1) .plusmin>*, .fichkes.boeketten p:nth-child(1) button {border-color: #887f1e;}
-fieldset.aantal>div:nth-child(2) .plusmin>*, .fichkes.boeketten p:nth-child(2) button {border-color: #d0a965}
-fieldset.aantal>div:nth-child(3) .plusmin>*, .fichkes.boeketten p:nth-child(3) button {border-color: #9e3238;}
+fieldset.aantal>div:nth-of-type(1) .plusmin>*, .fichkes.boeketten p:nth-child(1) button {border-color: var(--color-schattig);}
+fieldset.aantal>div:nth-of-type(2) .plusmin>*, .fichkes.boeketten p:nth-child(2) button {border-color: var(--color-charmant)}
+fieldset.aantal>div:nth-of-type(3) .plusmin>*, .fichkes.boeketten p:nth-child(3) button {border-color: var(--color-magnifiek);}
 
 .aantal div.afbeelding {
     height: calc( (2* var(--height-line)));
@@ -667,6 +667,7 @@ label.inzetten:not(.active) {display: none;}
 
 fieldset.aantal #cadeau-prijs>input[type="number"] {
     width: calc(3 * var(--height-line));
+    border-color: var(--color-cadeau);
 }
 
 /* CHECKOUT */
