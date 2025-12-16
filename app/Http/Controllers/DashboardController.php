@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Carbon\Carbon;
 use App\Models\Order;
 use App\Models\Client;
+use App\Models\TurnVoucher;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 
@@ -42,12 +43,15 @@ class DashboardController extends Controller
 
     public function kaarten()
     {
-        return view('dashboard.kaarten');
+        $beurtenkaarten = TurnVoucher::all();
+        $cadeaubonnen = TurnVoucher::all();
+        return view('dashboard.kaarten', ['beurtenkaarten' => $beurtenkaarten, 'cadeaubonnen' => $cadeaubonnen]);
     }
 
     public function klanten()
     {
-        return view('dashboard.klanten');
+        $klanten = Client::all();
+        return view('dashboard.klanten', ['klanten' => $klanten]);
     }
 
     public function development()

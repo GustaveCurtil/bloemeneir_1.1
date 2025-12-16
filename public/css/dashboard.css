@@ -73,3 +73,11 @@ section.inloggen {
     align-items: center;
     justify-content: center;
 }
+
+section.text {
+    padding: var(--gap-small);
+}
+
+ul {
+    list-style-position: inside;
+}
