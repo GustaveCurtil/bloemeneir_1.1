@@ -43,7 +43,7 @@
         <form action="{{ route('check-code') }}" method="POST" class="code">
                 @csrf
                 <input type="text" name="code" placeholder="gebruik beurtenkaart of bon (vul code in)" required value="">
-                <button type="submit">+</button>
+                <button type="submit">voeg toe</button>
         </form>  
         @error('code')
         <p class="error active" style="font-size: 0.9rem; margin-top: var(--gap-mini)">{{ $message }}</p>

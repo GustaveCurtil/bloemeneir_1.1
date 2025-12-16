@@ -351,6 +351,9 @@ class PaymentController extends Controller
                 $voucher->amount = $voucherAmount - $reductionAmount;
                 $voucher->save();
                 $reductionAmount = 0;
+                $order->giftVouchersUsed()->attach($voucher->id, [
+                    'amount_used' => $deducted
+                ]);
                 break;
             } else {
                 // Deplete this voucher completely
@@ -358,11 +361,10 @@ class PaymentController extends Controller
                 $voucher->amount = 0;
                 $voucher->save();
                 $reductionAmount -= $voucherAmount;
+                $order->giftVouchersUsed()->attach($voucher->id, [
+                    'amount_used' => $deducted
+                ]);
             }
-
-            $order->giftVouchersUsed()->attach($voucher->id, [
-                'amount_used' => $deducted
-            ]);
         }
     }
 

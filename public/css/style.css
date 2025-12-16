@@ -713,6 +713,7 @@ button {
 
 .code {
     display: flex;
+    flex-wrap: wrap;
 
     margin-bottom: 0;
 }
@@ -726,10 +727,9 @@ button {
 }
 
 .code button {
-    background-color: #efe5d9;
+    background-color: var(--color-green);
     color: var(--color-text);
     font-family: var(--font2);
-    aspect-ratio: 1/1;
     cursor: url('../boeket-pointer2.cur'), auto;
 }
 

@@ -34,7 +34,7 @@
                     <td>{{$bestelling->schattigeVouchers->count()}}</td>
                     <td>{{$bestelling->charmanteVouchers->count()}}</td>
                     <td>{{$bestelling->magnifiekeVouchers->count()}}</td>
-                    <td>{{$bestelling->giftVoucher?->amount ?? "" }}</td>
+                    <td>{{$bestelling->giftVoucher?->original_amount ?? "" }}</td>
                     <td>{{
                             ($bestelling->giftVouchersUsed?->count() ?? 0)
                             +

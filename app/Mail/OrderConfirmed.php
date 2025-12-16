@@ -10,7 +10,7 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-class OrderConfirmed extends Mailable implements ShouldQueue
+class OrderConfirmed extends Mailable
 {
     use Queueable, SerializesModels;
 

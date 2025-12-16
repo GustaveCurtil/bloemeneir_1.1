@@ -17,7 +17,7 @@
 </ul>
 
 <p>Bestelling succesvol betaald.<br>
-    <a href="https://bloemenier.be//overzicht/bestellingen">Bekijk de bestelling hier</a></p>
+    <a href="https://bloemenier.be/overzicht/bestellingen">Bekijk de bestelling hier</a></p>
 
 <p>
 Digitale groeten, <br>

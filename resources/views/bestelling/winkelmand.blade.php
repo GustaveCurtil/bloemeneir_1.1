@@ -16,8 +16,8 @@
         </div>
         {{-- <p>Boeketten kunnen nog 2 dagen op voorhand tot 18u worden besteld.</p>
         <br> --}}
-        <p style="text-align: center">Het weekend van 12 en 13 december<br>werken we ten voordele van<br>🔥 de Warmste Week 🔥</p>
-        <br>
+        {{-- <p style="text-align: center">Het weekend van 12 en 13 december<br>werken we ten voordele van<br>🔥 de Warmste Week 🔥</p>
+        <br> --}}
         
         <form>
             <fieldset class="aantal" id="boeketten">
