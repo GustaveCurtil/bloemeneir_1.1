@@ -17,7 +17,8 @@ let datum = localStorage.getItem("datum") ?? null;
 let totaal = 0;
 
 let winkelmandje = document.querySelector('#shopping-card');
-const knoppen = document.querySelectorAll('button[data-aanbod]');
+const plusMinnen = document.querySelectorAll('span[data-aanbod]');
+const knoppen = document.querySelectorAll('span[data-aanbod]>button');
 
 let tekeningen = document.querySelectorAll('#shopping-card img')
 
@@ -53,12 +54,12 @@ function berekenTotaal() {
 }
 
 function updateMandjes() {
-    knoppen.forEach(knop => {
-        let span = knop.querySelector('span');
-        if (knop.dataset.aanbod === "cadeau") {
-            span.textContent = `(${inkoopMap[knop.dataset.aanbod] ?? 0} euro)`;
+    plusMinnen.forEach(plusMin => {
+        let span = plusMin.querySelector('span.what-in-basket>span');
+        if (plusMin.dataset.aanbod === "cadeau") {
+            span.textContent = `(${inkoopMap[plusMin.dataset.aanbod] ?? 0} euro)`;
         } else {
-            span.textContent = `(${inkoopMap[knop.dataset.aanbod] ?? 0})`;
+            span.textContent = `(${inkoopMap[plusMin.dataset.aanbod] ?? 0})`;
         }
         
     });

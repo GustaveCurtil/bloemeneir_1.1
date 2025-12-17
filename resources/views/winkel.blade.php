@@ -47,21 +47,33 @@
                     een tussendoortje voor jezelf<br>
                     of wie weet een eerste date.<br>
                     <br>
-                    <button class="add-to-basket" data-aanbod="boeket_A">+ <img src="{{asset('/media/winkel/winkelmandje1.png')}}" alt=""> <span></span></button>
+                    <span class="add-remove-basket" data-aanbod="boeket_A">
+                         <button class="add-to-basket min" data-aanbod="boeket_A">-</button>
+                        <span class="what-in-basket"><img src="{{asset('/media/winkel/winkelmandje1.png')}}" alt=""><span>(0)</span></span>
+                        <button class="add-to-basket plus" data-aanbod="boeket_A">+</button>
+                    </span>
                 </p>
                 <p>
                     Ons boeket gevuld <br>
                     met speelse elegantie<br>
                     een fleurige verwennerij.<br>
                     <br>
-                    <button class="add-to-basket" data-aanbod="boeket_B">+ <img src="{{asset('/media/winkel/winkelmandje1.png')}}" alt=""> <span></span></button>
+                    <span class="add-remove-basket" data-aanbod="boeket_B">
+                         <button class="add-to-basket min" data-aanbod="boeket_B">-</button>
+                        <span class="what-in-basket"><img src="{{asset('/media/winkel/winkelmandje1.png')}}" alt=""><span>(0)</span></span>
+                        <button class="add-to-basket plus" data-aanbod="boeket_B">+</button>
+                    </span>
                 </p>
                 <p>
                     Ons florissant boeket <br>
                     om mee uit te pakken, <br>
                     waarvan harten sneller slaan.<br>
                     <br>
-                    <button class="add-to-basket" data-aanbod="boeket_C">+ <img src="{{asset('/media/winkel/winkelmandje1.png')}}" alt=""> <span></span></button>
+                    <span class="add-remove-basket" data-aanbod="boeket_C">
+                         <button class="add-to-basket min" data-aanbod="boeket_C">-</button>
+                        <span class="what-in-basket"><img src="{{asset('/media/winkel/winkelmandje1.png')}}" alt=""><span>(0)</span></span>
+                        <button class="add-to-basket plus" data-aanbod="boeket_C">+</button>
+                    </span>
                 </p>
             </div>
         </section>
@@ -79,7 +91,11 @@
                     voor schattige boeketten<br>
                     met een gratis vaas cadeau.<br>
                     <br>
-                    <button class="add-to-basket" data-aanbod="kaart_A">+ <img src="{{asset('/media/winkel/winkelmandje1.png')}}" alt=""> <span></span></button>
+                    <span class="add-remove-basket" data-aanbod="kaart_A">
+                         <button class="add-to-basket min" data-aanbod="kaart_A">-</button>
+                        <span class="what-in-basket"><img src="{{asset('/media/winkel/winkelmandje1.png')}}" alt=""><span>(0)</span></span>
+                        <button class="add-to-basket plus" data-aanbod="kaart_A">+</button>
+                    </span>
                 </p>
             </div>
             <div>
@@ -92,7 +108,11 @@
                     voor charmante boeketten<br>
                     met een gratis vaas cadeau.<br>
                     <br>
-                    <button class="add-to-basket" data-aanbod="kaart_B">+ <img src="{{asset('/media/winkel/winkelmandje1.png')}}" alt=""> <span></span></button>
+                    <span class="add-remove-basket" data-aanbod="kaart_B">
+                         <button class="add-to-basket min" data-aanbod="kaart_B">-</button>
+                        <span class="what-in-basket"><img src="{{asset('/media/winkel/winkelmandje1.png')}}" alt=""><span>(0)</span></span>
+                        <button class="add-to-basket plus" data-aanbod="kaart_B">+</button>
+                    </span>
                 </p>
             </div>
             <div>
@@ -105,7 +125,11 @@
                     voor magnifieke boeketten<br>
                     met een gratis vaas cadeau.<br>
                     <br>
-                    <button class="add-to-basket" data-aanbod="kaart_C">+ <img src="{{asset('/media/winkel/winkelmandje1.png')}}" alt=""> <span></span></button>
+                    <span class="add-remove-basket" data-aanbod="kaart_C">
+                         <button class="add-to-basket min" data-aanbod="kaart_C">-</button>
+                        <span class="what-in-basket"><img src="{{asset('/media/winkel/winkelmandje1.png')}}" alt=""><span>(0)</span></span>
+                        <button class="add-to-basket plus" data-aanbod="kaart_C">+</button>
+                    </span>
                 </p>
             </div>
             <br>
@@ -118,7 +142,11 @@
                     kan ik plezieren<br>
                     met een cadeaubon.<br>
                     <br>
-                    <button class="add-to-basket" data-aanbod="cadeau">+ <img src="{{asset('/media/winkel/winkelmandje1.png')}}" alt=""> <span></span></button>
+                    <span class="add-remove-basket" data-aanbod="cadeau">
+                         <button class="add-to-basket min" data-aanbod="cadeau">-</button>
+                        <span class="what-in-basket"><img src="{{asset('/media/winkel/winkelmandje1.png')}}" alt=""><span>(0)</span></span>
+                        <button class="add-to-basket plus" data-aanbod="cadeau">+</button>
+                    </span>
                 </p>
             </div>
         </section>

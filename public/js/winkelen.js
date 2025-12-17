@@ -2,16 +2,24 @@
 
 // Wait for DOM to load
 document.addEventListener('DOMContentLoaded', () => {
-const klikbaren = document.querySelectorAll('[data-aanbod]');
+const optelbaren = document.querySelectorAll('[data-aanbod] button.plus');
+const aftrekbaren = document.querySelectorAll('[data-aanbod] button.min');
 
-    klikbaren.forEach(klikbare => {
-        klikbare.addEventListener('click', (e) => {
+    optelbaren.forEach(optelbare => {
+        optelbare.addEventListener('click', (e) => {
             updateInkopen(e.currentTarget, 'boven') 
+        });
+    });
+    
+    aftrekbaren.forEach(aftrekbare => {
+        
+        aftrekbare.addEventListener('click', (e) => {
+            updateInkopen(e.currentTarget, 'beneden') 
         });
     });
 });
 
-const steps = [29, 39, 49, 58, 68, 78, 88, 98, 100, 0];
+const steps = [29, 39, 49, 50, 75, 100, 150];
 let index = 0;
 
 function updateInkopen(target, richting) {
@@ -27,7 +35,10 @@ function updateInkopen(target, richting) {
             if (richting === "boven") {
                 inkoopMap[aanbod]++;
             } else {
-                inkoopMap[aanbod]--;
+                if (inkoopMap[aanbod] > 0) {
+                   inkoopMap[aanbod]--; 
+                }
+                
             }
         }
         

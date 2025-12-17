@@ -5,7 +5,10 @@
 @section('main')
 <main>
 @auth
-    <p>In constructie</p>
+<section class="inloggen">
+    <img src="{{asset('media/underconstruction.gif')}}" alt="" class="construction">
+</section>
+    
 @else
     @include('dashboard._login')
 @endauth

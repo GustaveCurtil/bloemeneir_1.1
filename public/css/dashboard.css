@@ -81,3 +81,7 @@ section.text {
 ul {
     list-style-position: inside;
 }
+
+.inloggen img {
+    max-width: 600px;
+}

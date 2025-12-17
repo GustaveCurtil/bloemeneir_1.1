@@ -1,3 +1,8 @@
+span.add-remove-basket {
+    display: inline-flex;
+    align-items: center;
+}
+
 button.add-to-basket{
     height: var(--height-line);
     width: auto;
@@ -7,9 +12,29 @@ button.add-to-basket{
     justify-content: center;
     align-items: center;
     padding-top: 0.1rem;
+    aspect-ratio: 1/1;
 }
 
 button.add-to-basket img {
+    height: var(--height-line);
+    width: auto;
+    padding: 0.3rem;
+    margin: 0 0.1rem;
+}
+
+span.what-in-basket {
+    height: var(--height-line);
+    width: auto;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    padding-right: var(--gap-small);
+    padding-left: var(--gap-mini);
+    font-size: 1.1rem;
+    padding-top: 0.1rem;
+}
+
+span.what-in-basket img {
     height: var(--height-line);
     width: auto;
     padding: 0.3rem;
