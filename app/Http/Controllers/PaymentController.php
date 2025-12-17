@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\DateFormattingHelper;
 use Stripe\Stripe;
 use App\Models\Order;
 use App\Models\Client;
@@ -12,7 +13,9 @@ use App\Mail\OrderConfirmed;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use App\Mail\MailPetrannesophie;
+use App\Repositories\TurnVoucherRepository;
 use Illuminate\Support\Facades\Mail;
+use Stripe\Exception\ApiErrorException;
 
 class PaymentController extends Controller
 {
@@ -31,9 +34,14 @@ class PaymentController extends Controller
         if (!$sessionId) {
             return "Geen betaling gevonden (geen session_id).";
         }
-        $session = \Stripe\Checkout\Session::retrieve($sessionId);
-        $paymentIntentId = $session->payment_intent;
 
+        try{
+            $session = \Stripe\Checkout\Session::retrieve($sessionId);
+        } catch (ApiErrorException  $e) {
+            return "Geen betaling gevonden (ongeldige session_id).";
+        }
+
+        $paymentIntentId = $session->payment_intent;
         $metadata = $session->metadata;
     
         if ((int) $metadata->total !== 0) {
@@ -46,8 +54,8 @@ class PaymentController extends Controller
                 dd('status: "' . $paymentIntent->status . '" => Excuseer voor deze foutmelding: gelieve contact op te nemen met gustave.curtil@tutanota.com om dit probleem op te lossen.');
             }
         }
-        
 
+        // Alles vanaf hier doet geen beroep meer op Stripe, maar op onze eigen database.
         $clientId = $session->metadata->clientId ?? null;
         $orderId  = $session->metadata->orderId ?? null;
 
@@ -60,26 +68,16 @@ class PaymentController extends Controller
 
 
         // STAP 1.2: BESTAANDE 5-BEURTENKAARTEN OPHALEN
-        
+        $turnVoucherRepository = new TurnVoucherRepository();
+
         $turnVoucherIds = $metadata['turnVoucherIds'];
         $turnVoucherIdsArray = array_map('intval', explode(',', $turnVoucherIds));
 
-        $schattigOldVouchers = TurnVoucher::whereIn('id', $turnVoucherIdsArray)
-        ->where('name', 'schattig')
-        ->orderBy('valid_date', 'asc') // zodat eerst de kaarten worden opgebruikt die nog het minst lang geldig zijn.
-        ->get();
-        $charmantOldVouchers = TurnVoucher::whereIn('id', $turnVoucherIdsArray)
-        ->where('name', 'charmant')
-        ->orderBy('valid_date', 'asc')
-        ->get();
-        $magnifiekOldVouchers = TurnVoucher::whereIn('id', $turnVoucherIdsArray)
-        ->where('name', 'magnifiek')
-        ->orderBy('valid_date', 'asc')
-        ->get();
-
+        $schattigOldVouchers = $turnVoucherRepository->retrieveTurnVouchersByIdsAndName($turnVoucherIdsArray, TurnVoucher::SCHATTIG);
+        $charmantOldVouchers = $turnVoucherRepository->retrieveTurnVouchersByIdsAndName($turnVoucherIdsArray, TurnVoucher::CHARMANT);
+        $magnifiekOldVouchers = $turnVoucherRepository->retrieveTurnVouchersByIdsAndName($turnVoucherIdsArray, TurnVoucher::MAGNIFIEK);
 
         // STAP 1.3: NIEUWE 5-BEURTENKAARTEN OPHALEN
-
         $schattigNewVoucherIds = $metadata['turnCardAIds'];
         $schattigNewVoucherIdsArray = array_map('intval', explode(',', $schattigNewVoucherIds));
 
@@ -89,58 +87,30 @@ class PaymentController extends Controller
         $magnifiekNewVoucherIds = $metadata['turnCardCIds'];
         $magnifiekNewVoucherIdsArray = array_map('intval', explode(',', $magnifiekNewVoucherIds));
 
-        $schattigNewVouchers = TurnVoucher::whereIn('id', $schattigNewVoucherIdsArray)
-        ->where('name', 'schattig')
-        ->orderBy('valid_date', 'asc')
-        ->get();
-        $charmantNewVouchers = TurnVoucher::whereIn('id', $charmantNewVoucherIdsArray)
-        ->where('name', 'charmant')
-        ->orderBy('valid_date', 'asc')
-        ->get();
-        $magnifiekNewVouchers = TurnVoucher::whereIn('id', $magnifiekNewVoucherIdsArray)
-        ->where('name', 'magnifiek')
-        ->orderBy('valid_date', 'asc')
-        ->get();
-
+        $schattigNewVouchers = $turnVoucherRepository->retrieveTurnVouchersByIdsAndName($schattigNewVoucherIdsArray, TurnVoucher::SCHATTIG);
+        $charmantNewVouchers = $turnVoucherRepository->retrieveTurnVouchersByIdsAndName($charmantNewVoucherIdsArray, TurnVoucher::CHARMANT);
+        $magnifiekNewVouchers = $turnVoucherRepository->retrieveTurnVouchersByIdsAndName($magnifiekNewVoucherIdsArray, TurnVoucher::MAGNIFIEK);
 
         // STAP 1.4: BESTAANDE CADEAUBONNEN OPHALEN
-
         $giftVoucherIds = $metadata['giftVoucherIds'];
         $giftVoucherIdsArray = array_map('intval', explode(',', $giftVoucherIds));
         $giftOldVouchers = GiftVoucher::whereIn('id', $giftVoucherIdsArray)
-        ->orderBy('valid_date', 'asc')
-        ->get();
+            ->orderBy('valid_date', 'asc')
+            ->get();
 
 
         // STAP 1.5 DATUMS GOEDZETTEN
-
         $orderDate = Carbon::parse($order->takeaway_date);
         Carbon::setLocale('nl');
         $dag = $orderDate->translatedFormat('l'); // "vrijdag", "maandag", etc.
         $datum = $orderDate->translatedFormat('d F'); // "26 september"
-
-        $time_start = Carbon::parse($order->takeaway_start_time);
-
-        if ($time_start->minute === 0) {
-            $formattedStart = $time_start->format('H') . 'u';
-        } else {
-            $formattedStart = $time_start->format('H') . 'u' . $time_start->format('i');
-        }
-        $time_end = Carbon::parse($order->takeaway_end_time);
-
-        if ($time_end->minute === 0) {
-            $formattedEnd = $time_end->format('H') . 'u';
-        } else {
-            $formattedEnd = $time_end->format('H') . 'u' . $time_end->format('i');
-        }
-        $uren = $formattedStart . " tot " . $formattedEnd;
+        $uren = DateFormattingHelper::formatOrderToHours($order, 'nl');
 
         //// --------------------------------------------------------------------------
         //// DEEL 2: CHECK EERST OF ORDER AL IS BETAALD GEWEEST (incl mail gestuurd dan)
         //// --------------------------------------------------------------------------
 
         // STAP 2.1: INDIEN ALREEDS BETAALD, HERLEID NAAR SUCCES-PAGINA
-
         if ($order->payed) {
             return view('bestelling.succes', [
                 'client' => $client,
