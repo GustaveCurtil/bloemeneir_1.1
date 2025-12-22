@@ -7,6 +7,10 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class TurnVoucher extends Model
 {
+    public const SCHATTIG = "schattig";
+    public const CHARMANT = "charmant";
+    public const MAGNIFIEK = "magnifiek";
+
     protected $fillable = [
         'order_id',
         'name',
