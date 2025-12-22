@@ -17,6 +17,45 @@ use Illuminate\Support\Facades\Mail;
 class PageController extends Controller
 {
 
+    public function winkel()
+    {
+       $now = Carbon::now();
+
+        $data = Date::where('is_public', true)
+            ->whereDate('takeaway_date', '>=', $now)
+            ->where(function ($query) use ($now) {
+                $query->where('last_order_date', '>', $now->toDateString())
+                    ->orWhere(function ($q) use ($now) {
+                        $q->where('last_order_date', $now->toDateString())
+                            ->where('last_order_time', '>=', $now->toTimeString());
+                    });
+                })
+            ->orderBy('takeaway_date', 'asc')
+            ->get()
+            ->map(function ($item) {
+                Carbon::setLocale('nl');
+
+                // Date: di 23 december
+                $item->display_date = str_replace('.', '', 
+                    Carbon::parse($item->takeaway_date)->translatedFormat('D d F')
+                );
+
+                // Times: 15u tot 19u
+                $start = Carbon::parse($item->takeaway_start_time)->format('G');
+                $end   = Carbon::parse($item->takeaway_end_time)->format('G');
+
+                $item->display_time = "{$start}u tot {$end}u";
+
+                // Group key (same last order moment)
+                $item->group_key = $item->last_order_date . '|' . $item->last_order_time;
+
+                return $item;
+            })
+            ->groupBy('group_key');
+
+        return view('winkel', compact('data'));
+    }
+
     public function bestellen()
     {
        $now = Carbon::now();

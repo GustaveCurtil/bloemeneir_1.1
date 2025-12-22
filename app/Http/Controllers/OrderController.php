@@ -212,6 +212,9 @@ class OrderController extends Controller
         // Create Stripe Checkout Session
         $session = Session::create([
             'payment_method_types' => ['bancontact'], // Bancontact enabled
+            'payment_intent_data' => [
+                'description' => 'Bestelling nr.' . $order->id . ' ❀ klant: ' . $client->first_name,
+            ],
             'mode' => 'payment',
 
             'line_items' => [[
@@ -220,7 +223,7 @@ class OrderController extends Controller
                     'currency' => 'eur',
                     'unit_amount' => $total * 100,
                     'product_data' => [
-                        'name' => 'Bloemen & kaarten order #' . $order->id,
+                        'name' => 'Bloemen & kaarten ❀ bestelling #' . $order->id,
                     ],
                 ],
             ]],

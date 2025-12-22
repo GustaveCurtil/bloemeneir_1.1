@@ -27,7 +27,7 @@ class LoginController extends Controller
         $wachtwoord = $request->input('wachtwoord');
 
         if (Auth::attempt(['name' => $naam, 'password' => $wachtwoord])) {
-            return redirect()->route('overzicht');
+            return redirect()->back();
         }
 
         return back()->withErrors(['login' => 'Naam of wachtwoord is onjuist.']);

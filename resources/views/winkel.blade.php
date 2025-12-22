@@ -157,18 +157,21 @@
                 <div>
                     <p>Extra openingsdagen tijdens<br>❄ de kerstperiode ❄</p>
                     <div class="data">
+                    @foreach ($data as $group)
                         <div class="group">
-                            <div data-datum="2025-12-23"><span><span>di 23 december</span></span><span>15u tot 19u</span></div>
-                            <div data-datum="2025-12-24"><span><span>wo 24 december</span></span><span>10u tot 13u</span></div>
+                            @foreach ($group as $datum)
+                                <div data-datum="{{ $datum->takeaway_date }}">
+                                    <span>
+                                         @if ($datum->emoji)
+                                        {{$datum->emoji}}
+                                        @endif
+                                        <span>{{ $datum->display_date }}</span>
+                                    </span>
+                                    <span>{{ $datum->display_time }}</span>
+                                </div>
+                            @endforeach
                         </div>
-                        <div class="group">
-                            <div data-datum="2025-12-26"><span><span>vr 26 december</span></span><span>15u tot 19u</span></div>
-                            <div data-datum="2025-12-27"><span><span>za 27 december</span></span><span>10u tot 13u</span></div> 
-                        </div>
-                        <div class="group">
-                            <div data-datum="2025-12-30"><span><span>di 30 december</span></span><span>15u tot 19u</span></div>
-                            <div data-datum="2025-12-31"><span><span>wo 31 december</span></span><span>10u tot 13u</span></div>
-                        </div>
+                    @endforeach
                     </div>
                     <br>
                     <p style="font-style: italic; font-size: 0.9rem;">gesloten van 1/1/26 tot en met 24/1/26</p>

@@ -200,9 +200,6 @@ class PaymentController extends Controller
 
         //STAP 2.3: KEUR BETALING GOED EN STUUR MAIL
 
-        $order->payed = true;
-        $order->save();
-
         Mail::to($order->client->email)->send(new OrderConfirmed(
             $order,
             $dag,
@@ -218,14 +215,15 @@ class PaymentController extends Controller
             $giftOldVouchers
         ));
 
-        Mail::to('gustave.curtil@tutanota.com')
-        // ->cc([
-        //     'annesophie@fullscalearchitecten.be',
-        //     'info@bloemenier.be',
-        // ])
+        Mail::to('info@bloemenier.be')
+        ->cc([
+            'gustave.curtil@tutanota.com'
+        ])
         ->send(new MailPetrannesophie($order, $dag, $datum, $uren));
 
-
+        $order->payed = true;
+        $order->save();
+        
         //STAP 2.4: vergeet de gegevens van de bestelling en breng ons naar succespagina
 
         $request->session()->forget('order_id');

@@ -22,9 +22,7 @@ Route::get('/', function () {
 
 })->name('over');
 
-Route::get('/winkel', function () {
-    return view('winkel');
-})->name('winkel');
+Route::get('/winkel', [PageController::class, 'winkel'])->name('winkel');
 
 Route::get('/info', function () {
     return view('contact');

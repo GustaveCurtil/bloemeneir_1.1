@@ -1,5 +1,5 @@
     <section class="inloggen">
-        <form action="login" method="post">
+        <form action="{{ route('login') }}" method="post">
             @csrf
             <h3>aanmelden</h3>
             <fieldset>

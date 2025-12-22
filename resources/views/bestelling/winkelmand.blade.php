@@ -19,7 +19,7 @@
         {{-- <p style="text-align: center">Het weekend van 12 en 13 december<br>werken we ten voordele van<br>🔥 de Warmste Week 🔥</p>
         <br> --}}
         
-        <form>
+        <form  id="checkoutForm">
             <fieldset class="aantal" id="boeketten">
                 <div>
                     <img src="{{asset('/media/winkel/boeket_schattig.png')}}">
@@ -142,7 +142,7 @@
             </fieldset>
             <p class="error lege-bestelling">⚠️ <b>Je hebt nog geen bestelling gemaakt.</b></p>
             <p class="error geen-moment">⚠️ <b>Je hebt nog afhaalmoment opgegeven.</b></p>
-            <input type="button" value="afrekenen" onclick="gaNaarBetaling()">
+            <input type="submit" value="afrekenen">
         </form>
 </main>
 

@@ -77,7 +77,7 @@
                     </p>
                 </div> 
             </div>
-            <div onclick="resetWinkelwagen()">x</div>
+            <div onclick="resetWinkelwagen()"></div>
         </div>
     </div>
     @endif

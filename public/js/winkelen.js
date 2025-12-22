@@ -19,7 +19,7 @@ const aftrekbaren = document.querySelectorAll('[data-aanbod] button.min');
     });
 });
 
-const steps = [29, 39, 49, 50, 75, 100, 150];
+const steps = [0, 29, 39, 49, 50, 75, 100, 150];
 let index = 0;
 
 function updateInkopen(target, richting) {
@@ -29,8 +29,33 @@ function updateInkopen(target, richting) {
     if(inkoopMap.hasOwnProperty(aanbod)) {
         // Increment in the map
         if (aanbod === "cadeau") {
+            const number = inkoopMap[aanbod];
+
+            // Find index if it exists
+            index = steps.indexOf(number);
+
+            if (index === -1) {
+            // Not found → insert and keep array sorted
+            steps.push(number);
+            steps.sort((a, b) => a - b);
+
+            // Get the new index
+            index = steps.indexOf(number);
+            }
+
+            console.log(index);
+
+            if (richting === 'boven') {
+                if (index + 1 < steps.length) {
+                   index = (index + 1); 
+                }
+            } else {
+                if (index > 0) {
+                   index = (index - 1); 
+                }
+            }
             inkoopMap[aanbod] = steps[index];
-            index = (index + 1) % steps.length;
+            
         } else {
             if (richting === "boven") {
                 inkoopMap[aanbod]++;

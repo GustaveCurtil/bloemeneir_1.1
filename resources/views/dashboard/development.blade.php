@@ -25,6 +25,8 @@
         <li>momenteel is het nog niet mogelijk om handmatig af te melden van dit 'overzichtspaneel' (gebeurt na verloop van tijd wel, maar dus niet wanneer je bv op 'terug naar website' klikt)</li>
         <li>heb de database heel orderlijk herontworpen, zodanig dat ik in de toekomst jullie relatief makkelijk zelf jullie ophaalmomenten (incl. speciallekes, het ingeven van de laatst mogelijke tijdstip van bestellen, symbooltje indien gewenst, welke data al zichtbaar zullen zijn, etc.)</li>
         <li>overzicht bestellingen kan nog een pak duidelijker en met mogelijkheid tot doorklikken naar kaarten en bonnen (met daar ook telkens een overzicht van wie de voucher heeft gekocht en wie die wanneer heeft gebruikt)</li>
+        <li><s>bugg bij inloggen (voor het overzicht)</s> ✅</li>
+        <li><s>in 'winkel': data's moeten nog automatisch gelinkt worden met de database en gegroepeerd per bestelling bij de groothandel (met gelijkaardige 'laatst mogelijke bestelmoment'</s> ✅</li>
     </ul>
     <br>
     <p><b>✨ Ideëen:</b></p>

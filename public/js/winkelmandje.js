@@ -85,23 +85,29 @@ document.addEventListener('DOMContentLoaded', () => {
     
 })
 
-function gaNaarBetaling() {
+document.getElementById('checkoutForm').addEventListener('submit', function (e) {
     totaal = berekenTotaal();
+    e.preventDefault();
+    console.log("test")
     if (totaal === 0) {
+        console.log("totaal is nul")
         let legeBestelling = document.querySelector('.lege-bestelling');
         legeBestelling.classList.add('active')
-        return false;
+        e.preventDefault();
+        return;
     } else {
         if (!momentGekozen) {
+            console.log('geen moment gekozen')
             let geenMoment = document.querySelector('.geen-moment');
             geenMoment.classList.add('active')
-            return false; 
+            e.preventDefault();
+            return; 
         } else {
             window.location.href = '/winkel/afrekenen';
-            return true;
+            return
         } 
     }
-}
+});
 
 function updateGebruikCheckboxen() {
     for (let i = 0; i < kaartInputten.length; i++) {

@@ -4,7 +4,7 @@ let boeket_C = Number(localStorage.getItem("boeket_C")) || 0;
 let kaart_A = Number(localStorage.getItem("kaart_A")) || 0;
 let kaart_B = Number(localStorage.getItem("kaart_B")) || 0;
 let kaart_C = Number(localStorage.getItem("kaart_C")) || 0;
-let cadeau = Number(localStorage.getItem("cadeau")) || 0;
+let cadeau = Number(localStorage.getItem("cadeau")) || null;
 
 let inkoopMap = { boeket_A, boeket_B, boeket_C, kaart_A, kaart_B, kaart_C, cadeau };
 
@@ -58,6 +58,7 @@ function updateMandjes() {
         let span = plusMin.querySelector('span.what-in-basket>span');
         if (plusMin.dataset.aanbod === "cadeau") {
             span.textContent = `(${inkoopMap[plusMin.dataset.aanbod] ?? 0} euro)`;
+            console.log(inkoopMap[plusMin.dataset.aanbod]);
         } else {
             span.textContent = `(${inkoopMap[plusMin.dataset.aanbod] ?? 0})`;
         }
