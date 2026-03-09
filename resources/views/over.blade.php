@@ -22,7 +22,7 @@
             <img src="{{asset('media/bloemen/bloemen1.png')}}" alt=""  class="horizontaal">
         </section>
         <section class="fototekst">
-                <img src="{{asset('media/over/bloemenier-51.jpg')}}" alt="">  
+                <img src="{{asset('media/over/bloemenier-48.jpg')}}" alt="">  
                 <div>
                     <p>
                         Dit zijn wij, Bloemenier. <br>

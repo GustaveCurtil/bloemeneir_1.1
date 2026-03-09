@@ -1,4 +1,4 @@
-<p>Dag Petra & Anne-Sophie,</p>
+<p>Dag Anne-Sophie,</p>
 
 <p>Er is net een nieuwe bestelling doorgekomen:</p>
 <p>Voor <b>{{$dag}} {{$datum}} van {{ $uren }}</b></p>

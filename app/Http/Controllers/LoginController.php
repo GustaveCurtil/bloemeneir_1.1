@@ -16,13 +16,6 @@ class LoginController extends Controller
             'wachtwoord' => 'required',
         ]);
 
-        // Define allowed users (hardcoded)
-        $users = [
-            'anne-sophie' => 'tampopo',  // username => password
-            'petra'  => 'tampopo',
-            'test' => 'test',
-        ];
-
         $naam = $request->input('naam');
         $wachtwoord = $request->input('wachtwoord');
 
@@ -35,8 +28,8 @@ class LoginController extends Controller
 
     public function createUser() {
         User::create([
-            'name' => 'test',
-            'password' => bcrypt('test'),
+            'name' => 'anne-sophie',
+            'password' => bcrypt('lavendel'),
             'role' => 'patron'
         ]);
     }

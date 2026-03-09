@@ -90,7 +90,7 @@
 
 <br>
 <p>Fleurige groeten, <br>
-Anne-Sophie & Petra</p>
+Anne-Sophie</p>
 
 <p>Bloemenier VOF<br>
 BE 1028 201 978<br>

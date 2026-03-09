@@ -26,8 +26,10 @@
 
 @section('main')
     <main>
-         <h2 style="text-align: center">Boeketten</h2>
-         <p style="text-align: center">We werken alleen op bestelling om overschotten en afval zoveel mogelijk te beperken.</p>
+        <h2 style="text-align: center">Boeketten</h2>
+        <p style="text-align: center">We werken alleen op bestelling om overschotten en afval zoveel mogelijk te beperken.</p>
+        <br>
+        {{-- <p style="text-align: center; font-style: italic; font-size: 0.9rem;">gesloten van 1/1/26 tot en met 24/1/26</p> --}}
         <section class="fichkes boeketten">
             <div>
                 <a>
@@ -80,7 +82,8 @@
         <section class="fichkes bonnen">
             <br>
             <h2 style="text-align: center">5-beurtenkaarten en bonnen</h2>
-            
+            <p style="text-align: center">Bij het bestellen van enkel 5-beurtenkaarten of een cadeaubon, mag je een willekeurige datum aanduiden. Je krijgt de code(s) via mail binnen!</p>
+            <br>
             <div>
                 <a data-aanbod="kaart_A">
                     <img src="{{asset('/media/winkel/kaart_schattig1.png')}}" alt="" srcset="">
@@ -155,7 +158,8 @@
             
             <div>
                 <div>
-                    <p>Extra openingsdagen tijdens<br>❄ de kerstperiode ❄</p>
+                    {{-- <p>Extra openingsdagen tijdens<br>❄ de kerstperiode ❄</p> --}}
+                    {{-- <p>gesloten van 1/1/26 tot en met 24/1/26</p> --}}
                     <div class="data">
                     @foreach ($data as $group)
                         <div class="group">
@@ -174,7 +178,6 @@
                     @endforeach
                     </div>
                     <br>
-                    <p style="font-style: italic; font-size: 0.9rem;">gesloten van 1/1/26 tot en met 24/1/26</p>
                 </div>
             </div>
             

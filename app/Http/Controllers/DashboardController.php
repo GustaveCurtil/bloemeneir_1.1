@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use Carbon\Carbon;
-use App\Models\Order;
 use App\Models\Client;
+use App\Models\GiftVoucher;
+use App\Models\Order;
 use App\Models\TurnVoucher;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 
@@ -38,14 +39,16 @@ class DashboardController extends Controller
 
     public function bonnen()
     {
-        return view('dashboard.bonnen');
+        $bonnen = GiftVoucher::all();
+        return view('dashboard.bonnen', ['bonnen' => $bonnen]);
     }
 
     public function kaarten()
     {
-        $beurtenkaarten = TurnVoucher::all();
-        $cadeaubonnen = TurnVoucher::all();
-        return view('dashboard.kaarten', ['beurtenkaarten' => $beurtenkaarten, 'cadeaubonnen' => $cadeaubonnen]);
+        $beurtenkaarten = TurnVoucher::whereHas('order', function ($query) {
+     $query->where('payed', true);
+})->get();
+        return view('dashboard.kaarten', ['kaarten' => $beurtenkaarten]);
     }
 
     public function klanten()

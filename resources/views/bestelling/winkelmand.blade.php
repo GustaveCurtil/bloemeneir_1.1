@@ -137,6 +137,7 @@
                         </option>
                         @endforeach                      
                 </select>
+                <p><i class="small">Bij het bestellen van enkel 5-beurtenkaarten of een cadeaubon, mag je een willekeurige datum aanduiden. Je krijgt de code(s) via mail binnen!</i></p>
                 <p><i class="small">Adres: <a href="https://maps.app.goo.gl/qAkeHriBos8S4XMcA" target="_blank">Koning Albertlaan 77</a> in Kessel-Lo</i></p>
                 <p><i class="small">Je ontvangt nog een mail met alle informatie.</i></p>
             </fieldset>
