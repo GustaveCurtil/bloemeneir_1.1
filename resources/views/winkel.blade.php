@@ -27,7 +27,7 @@
 @section('main')
     <main>
         <h2 style="text-align: center">Boeketten</h2>
-        <p style="text-align: center">We werken alleen op bestelling om overschotten en afval zoveel mogelijk te beperken.</p>
+        <p style="text-align: center">We werken op bestelling om overschotten en afval zoveel mogelijk te beperken.</p>
         <br>
         {{-- <p style="text-align: center; font-style: italic; font-size: 0.9rem;">gesloten van 1/1/26 tot en met 24/1/26</p> --}}
         <section class="fichkes boeketten">
