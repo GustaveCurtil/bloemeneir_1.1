@@ -34,7 +34,11 @@ class DashboardController extends Controller
             ->orderBy('takeaway_date')
             ->orderByDesc('created_at')
             ->get();
-        return view('dashboard.bestellingen', ['bestellingen' => $bestellingen]);
+        $bestellingenOud = Order::where('day', '<=', $beginoftheweek)
+            ->orderBy('takeaway_date', 'desc')
+            ->orderBy('created_at', 'asc')
+            ->get();
+        return view('dashboard.bestellingen', ['bestellingen' => $bestellingen, 'bestellingenOud' => $bestellingenOud]);
     }
 
     public function bonnen()

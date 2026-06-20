@@ -22,14 +22,14 @@
             <img src="{{asset('media/bloemen/bloemen1.png')}}" alt=""  class="horizontaal">
         </section>
         <section class="fototekst">
-                <img src="{{asset('media/over/bloemenier-48.jpg')}}" alt="">  
+                <img src="{{asset('media/over/annsophie.jpg')}}" alt="">  
                 <div>
-                    <p>
+                    {{-- <p>
                         Dit zijn wij, Bloemenier. <br>
                         Anne-Sophie en Petra.<br>
                         Welkom.
                     </p>
-                    <br>
+                    <br> --}}
                     <p>
                         We werken enkel op <a href="{{ route('winkel') }}">bestelling</a><br>
                         zo beperken we overschot en afval.<br>
@@ -43,7 +43,7 @@
         </section>
         <section class="gallerij">
             <img src="{{asset('media/over/bloemenier-68.jpg')}}" alt="" class="verticaal">
-            <img src="{{asset('media/over/bloemenier-71.jpg')}}" alt=""  class="verticaal">
+            <img src="{{asset('media/over/bloemenier-64.jpg')}}" alt=""  class="verticaal">
             <img src="{{asset('media/over/bloemenier-120.jpg')}}" alt=""  class="horizontaal">
         </section>
         <section class="fototekst">

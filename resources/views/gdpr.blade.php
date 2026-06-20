@@ -10,7 +10,7 @@
             <h2>1. Wie zijn we?</h2>
             <p>Bloemenier</p>
             <p>E-mail: info@bloemenier.be</p>
-            <p>Bloemenier VDK BE60 8940 0146 7370</p>
+            <p>Bloemenier KBC BE69 7390 3072 7678</p>
             <p>Ondernemingsnummer: BE 1028 201 978</p>
             <p>Adres: Koning Albertlaan 77, Kessel-Lo</p>
         </section>

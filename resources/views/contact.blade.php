@@ -40,7 +40,7 @@
             <p><u onclick="copy('info@bloemenier.be', 'info@bloemenier.be')">info@bloemenier.be</u></p>
             <p><a href="https://www.instagram.com/bloemenier/#" target="_blank">instagram-pagina</a></p>
             <br>
-            <p>Bloemenier VDK BE60 8940 0146 7370</p>
+            <p>Bloemenier KBC BE69 7390 3072 7678</p>
             <p>Ondernemersnummer: 1028 201 978</p>
             <p>RPR Leuven</p>
         </section>
